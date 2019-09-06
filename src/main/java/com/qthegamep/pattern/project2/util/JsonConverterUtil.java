@@ -1,24 +1,24 @@
 package com.qthegamep.pattern.project2.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.qthegamep.pattern.project2.adapter.IsoDateJsonAdapter;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
+import com.qthegamep.pattern.project2.adapter.IsoDateModuleAdapter;
 
-import java.util.Date;
+import java.io.IOException;
 
 public class JsonConverterUtil {
 
-    private static final Gson GSON = new GsonBuilder()
-            .setPrettyPrinting()
-            .disableHtmlEscaping()
-            .registerTypeAdapter(Date.class, new IsoDateJsonAdapter())
-            .create();
+    private static final ObjectMapper JSON = new ObjectMapper()
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            .configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true)
+            .registerModule(new IsoDateModuleAdapter().buildModule());
 
-    public static <T> T fromJson(String entity, Class<T> modelClass) {
-        return GSON.fromJson(entity, modelClass);
+    public static <T> T fromJson(String entity, Class<T> modelClass) throws IOException {
+        return JSON.readValue(entity, modelClass);
     }
 
-    public static String toJson(Object model) {
-        return GSON.toJson(model);
+    public static String toJson(Object model) throws JsonProcessingException {
+        return JSON.writeValueAsString(model);
     }
 }
