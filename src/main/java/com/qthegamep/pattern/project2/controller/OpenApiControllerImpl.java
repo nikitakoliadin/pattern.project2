@@ -32,7 +32,7 @@ import java.net.URI;
         type = SecuritySchemeType.APIKEY,
         in = SecuritySchemeIn.HEADER,
         paramName = "Authorization")
-public class OpenApiController extends BaseOpenApiResource {
+public class OpenApiControllerImpl extends BaseOpenApiResource {
 
     @Context
     private ServletConfig servletConfig;
@@ -40,9 +40,8 @@ public class OpenApiController extends BaseOpenApiResource {
     @Context
     private Application application;
 
-    public OpenApiController() {
+    public OpenApiControllerImpl() {
         openApiConfiguration = new SwaggerConfiguration()
-                .prettyPrint(true)
                 .openAPI(new OpenAPI())
                 .prettyPrint(true);
     }
