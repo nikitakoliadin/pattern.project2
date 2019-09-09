@@ -38,7 +38,7 @@
         console.log(location);
         var path = location.href;
         var index = path.lastIndexOf("docs");
-        var url = path.substring(0, index) + "openapi.json";
+        var url = path.substring(0, index) + "swagger/openapi.json";
         // Begin Swagger UI call region
         window.ui = SwaggerUIBundle({
             url: url,
