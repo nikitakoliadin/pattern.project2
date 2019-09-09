@@ -22,7 +22,6 @@ public class Application {
         String applicationContext = System.getProperty("application.context", "");
         String applicationUrl = "http://" + host + ":" + port + applicationContext;
         HttpServer httpServer = startServer(applicationUrl);
-        LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         addSwaggerUIMapping(httpServer, applicationContext + swaggerUrl);
     }
@@ -32,7 +31,9 @@ public class Application {
         ResourceConfig resourceConfig = new ResourceConfig()
                 .packages(Application.class.getPackage().getName())
                 .register(ApplicationBinder.class);
-        return GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig);
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig);
+        LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
+        return httpServer;
     }
 
     private static void addSwaggerUIMapping(HttpServer httpServer, String contextPath) {
