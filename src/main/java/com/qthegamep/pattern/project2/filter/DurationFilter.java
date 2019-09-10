@@ -1,12 +1,10 @@
 package com.qthegamep.pattern.project2.filter;
 
-import org.glassfish.grizzly.http.server.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
 import javax.ws.rs.container.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
@@ -16,9 +14,6 @@ import javax.ws.rs.ext.Provider;
 public class DurationFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DurationFilter.class);
-
-    @Context
-    private javax.inject.Provider<Request> requestProvider;
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) {
