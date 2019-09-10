@@ -7,7 +7,13 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
+import java.util.Optional;
 import java.util.Properties;
 
 public class ApplicationConfig {
@@ -19,6 +25,7 @@ public class ApplicationConfig {
 
     public static void init() throws ApplicationConfigException {
         try {
+            loadServerIp();
             String configPath = System.getProperty("config.properties");
             if (configPath == null) {
                 LOG.info("Load default config properties!");
@@ -31,6 +38,42 @@ public class ApplicationConfig {
             LOG.error("ERROR", e);
             throw new ApplicationConfigException(e);
         }
+    }
+
+    private static void loadServerIp() throws SocketException {
+        Optional<String> serverIpOptional = getServerIp();
+        if (serverIpOptional.isPresent()) {
+            String serverIp = serverIpOptional.get();
+            LOG.info("Server IP: {}", serverIp);
+            System.setProperty("serverIp", serverIp);
+        } else {
+            LOG.warn("Server IP is not defined!");
+        }
+    }
+
+    private static Optional<String> getServerIp() throws SocketException {
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        while (networkInterfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = networkInterfaces.nextElement();
+            LOG.debug("Interface display name: {}", networkInterface.getDisplayName());
+            if (networkInterface.isLoopback()
+                    || !networkInterface.isUp()
+                    || networkInterface.isVirtual()
+                    || networkInterface.isPointToPoint()
+                    || networkInterface.getDisplayName().contains("docker")) {
+                continue;
+            }
+            Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+            while (inetAddresses.hasMoreElements()) {
+                InetAddress inetAddress = inetAddresses.nextElement();
+                String hostAddress = inetAddress.getHostAddress();
+                LOG.debug("Interface display name: {} host address: {}", networkInterface.getDisplayName(), hostAddress);
+                if (Inet4Address.class == inetAddress.getClass()) {
+                    return Optional.of(hostAddress);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     private static void loadProperties(String path) throws Exception {
