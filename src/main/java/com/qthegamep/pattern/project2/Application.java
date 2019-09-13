@@ -30,7 +30,7 @@ public class Application {
         URI applicationUri = URI.create(applicationUrl);
         ResourceConfig resourceConfig = new ResourceConfig()
                 .packages(Application.class.getPackage().getName())
-                .register(ApplicationBinder.class);
+                .register(ApplicationBinder.builder().build());
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig);
         LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
         return httpServer;
