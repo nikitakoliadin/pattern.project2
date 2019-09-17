@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.filter;
 
+import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,15 +21,15 @@ public class DurationFilter implements ContainerRequestFilter, ContainerResponse
         MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
         String startTime = String.valueOf(System.currentTimeMillis());
         LOG.debug("StartTime: {}", startTime);
-        headers.add("startTime", startTime);
+        headers.add(Constants.START_TIME_HEADER.getValue(), startTime);
     }
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) {
-        String startTime = containerRequestContext.getHeaderString("startTime");
+        String startTime = containerRequestContext.getHeaderString(Constants.START_TIME_HEADER.getValue());
         long duration = System.currentTimeMillis() - Long.parseLong(startTime);
         LOG.debug("Duration: {}", duration);
         MultivaluedMap<String, Object> headers = containerResponseContext.getHeaders();
-        headers.add("duration", duration);
+        headers.add(Constants.DURATION_HEADER.getValue(), duration);
     }
 }
