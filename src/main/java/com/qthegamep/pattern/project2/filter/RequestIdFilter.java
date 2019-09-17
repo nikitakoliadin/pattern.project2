@@ -1,6 +1,7 @@
 package com.qthegamep.pattern.project2.filter;
 
 import com.qthegamep.pattern.project2.service.GenerationService;
+import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +29,11 @@ public class RequestIdFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) {
-        String requestId = containerRequestContext.getHeaderString("x-request-id") == null
+        String requestId = containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue()) == null
                 ? generationService.generateUniqueId(10L)
-                : containerRequestContext.getHeaderString("x-request-id");
+                : containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue());
         LOG.debug("RequestId: {}", requestId);
         MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
-        headers.add("requestId", requestId);
+        headers.add(Constants.REQUEST_ID_HEADER.getValue(), requestId);
     }
 }

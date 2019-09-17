@@ -6,7 +6,9 @@ public enum Constants {
     MONGO_UTC_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ss.SSS"),
     JSON_DATE_FIELD_NAME("$date"),
     START_TIME_HEADER("startTime"),
-    DURATION_HEADER("duration");
+    DURATION_HEADER("duration"),
+    X_REQUEST_ID_HEADER("x-request-id"),
+    REQUEST_ID_HEADER("requestId");
 
     private String value;
 
