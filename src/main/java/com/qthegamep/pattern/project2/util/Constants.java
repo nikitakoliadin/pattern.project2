@@ -8,7 +8,8 @@ public enum Constants {
     START_TIME_HEADER("startTime"),
     DURATION_HEADER("duration"),
     X_REQUEST_ID_HEADER("x-request-id"),
-    REQUEST_ID_HEADER("requestId");
+    REQUEST_ID_HEADER("requestId"),
+    X_FORWARDED_FOR_HEADER("X-Forwarded-For");
 
     private String value;
 
