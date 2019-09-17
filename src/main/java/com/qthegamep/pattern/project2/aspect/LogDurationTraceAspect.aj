@@ -16,11 +16,12 @@ public aspect LogDurationTraceAspect {
 
     Object around(): all() {
         Signature signature = thisJoinPoint.getSignature();
+        Object[] args = thisJoinPoint.getArgs();
         LocalDateTime startDateTime = LocalDateTime.now();
         Object result = proceed();
         LocalDateTime endDateTime = LocalDateTime.now();
         long duration = MILLIS.between(startDateTime, endDateTime);
-        LOG.trace("{} : {} ms", signature, duration);
+        LOG.trace("{} : {} : {} : {} ms", signature, args, result, duration);
         return result;
     }
 }
