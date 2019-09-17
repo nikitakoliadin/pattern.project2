@@ -18,7 +18,7 @@ class IsoDateJsonDeserializer extends JsonDeserializer<Date> {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.MONGO_UTC_DATE_FORMAT.getValue());
             JsonNode jsonNode = jsonParser.readValueAsTree();
-            String isoDate = jsonNode.get("$date").asText();
+            String isoDate = jsonNode.get(Constants.JSON_DATE_FIELD_NAME.getValue()).asText();
             return simpleDateFormat.parse(isoDate);
         } catch (ParseException e) {
             return null;

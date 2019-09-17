@@ -2,7 +2,8 @@ package com.qthegamep.pattern.project2.util;
 
 public enum Constants {
 
-    MONGO_UTC_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    MONGO_UTC_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+    JSON_DATE_FIELD_NAME("$date");
 
     private String value;
 
