@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2.mapper;
 
 import com.qthegamep.pattern.project2.dto.ErrorResponseDTO;
 import com.qthegamep.pattern.project2.model.ResponseCode;
+import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public class BaseExceptionMapper implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(Exception exception) {
-        String requestId = httpHeaders.getHeaderString("requestId");
+        String requestId = httpHeaders.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
         ResponseCode responseCode = ResponseCode.INTERNAL_ERROR;
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO();
         errorResponseDTO.setRequestId(requestId);
