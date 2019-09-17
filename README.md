@@ -18,7 +18,7 @@ Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Ni
 ## Urls
 
 * /pattern/project2/test
-* /pattern/project2/docs
+* /pattern/project2/docs/
 
 ## Contact Information
 * **Author:** Koliadin Nikita
