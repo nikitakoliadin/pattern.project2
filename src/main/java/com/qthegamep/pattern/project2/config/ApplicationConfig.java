@@ -1,6 +1,7 @@
 package com.qthegamep.pattern.project2.config;
 
 import com.qthegamep.pattern.project2.exception.ApplicationConfigException;
+import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -20,19 +22,16 @@ public class ApplicationConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationConfig.class);
 
-    private ApplicationConfig() {
-    }
-
-    public static void init() throws ApplicationConfigException {
+    public void init() throws ApplicationConfigException {
         try {
             loadServerIp();
             String configPath = System.getProperty("config.properties");
-            if (configPath == null) {
+            if (Objects.isNull(configPath)) {
                 LOG.info("Load default config properties!");
                 loadDefaultProperties();
             } else {
-                LOG.info("Load config properties! config.properties: {}", configPath);
-                loadProperties(configPath);
+                LOG.info("Load custom config properties! config.properties: {}", configPath);
+                loadCustomProperties(configPath);
             }
         } catch (Exception e) {
             LOG.error("ERROR", e);
@@ -40,7 +39,7 @@ public class ApplicationConfig {
         }
     }
 
-    private static void loadServerIp() throws SocketException {
+    private void loadServerIp() throws SocketException {
         Optional<String> serverIpOptional = getServerIp();
         if (serverIpOptional.isPresent()) {
             String serverIp = serverIpOptional.get();
@@ -51,7 +50,7 @@ public class ApplicationConfig {
         }
     }
 
-    private static Optional<String> getServerIp() throws SocketException {
+    private Optional<String> getServerIp() throws SocketException {
         Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
         while (networkInterfaces.hasMoreElements()) {
             NetworkInterface networkInterface = networkInterfaces.nextElement();
@@ -76,23 +75,23 @@ public class ApplicationConfig {
         return Optional.empty();
     }
 
-    private static void loadProperties(String path) throws Exception {
+    private void loadDefaultProperties() throws Exception {
+        Properties properties = new Properties();
+        try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(Constants.DEFAULT_CONFIG_PROPERTIES_PATH.getValue())) {
+            properties.load(inputStream);
+            loadProperties(properties);
+        }
+    }
+
+    private void loadCustomProperties(String path) throws Exception {
         Properties properties = new Properties();
         try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8)) {
             properties.load(inputStreamReader);
-            load(properties);
+            loadProperties(properties);
         }
     }
 
-    private static void loadDefaultProperties() throws Exception {
-        Properties properties = new Properties();
-        try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream("/config.properties")) {
-            properties.load(inputStream);
-            load(properties);
-        }
-    }
-
-    private static void load(Properties properties) {
+    private void loadProperties(Properties properties) {
         properties.stringPropertyNames()
                 .stream()
                 .sorted()

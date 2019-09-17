@@ -16,7 +16,7 @@ public class Application {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) throws ApplicationConfigException {
-        ApplicationConfig.init();
+        initConfigs();
         String host = System.getProperty("application.host", "0.0.0.0");
         String port = System.getProperty("application.port", "8080");
         String applicationContext = System.getProperty("application.context", "");
@@ -24,6 +24,11 @@ public class Application {
         HttpServer httpServer = startServer(applicationUrl);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         addSwaggerUIMapping(httpServer, applicationContext + swaggerUrl);
+    }
+
+    private static void initConfigs() throws ApplicationConfigException {
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        applicationConfig.init();
     }
 
     private static HttpServer startServer(String applicationUrl) {
