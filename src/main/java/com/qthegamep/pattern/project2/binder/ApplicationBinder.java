@@ -7,7 +7,6 @@ import com.qthegamep.pattern.project2.service.ConverterServiceImpl;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
 import javax.inject.Singleton;
-import java.util.Objects;
 
 public class ApplicationBinder extends AbstractBinder {
 
@@ -38,7 +37,7 @@ public class ApplicationBinder extends AbstractBinder {
     }
 
     private void bindConverterService() {
-        if (Objects.isNull(converterService)) {
+        if (converterService == null) {
             bind(ConverterServiceImpl.class).to(ConverterService.class).in(Singleton.class);
         } else {
             bind(converterService).to(ConverterService.class).in(Singleton.class);
@@ -46,7 +45,7 @@ public class ApplicationBinder extends AbstractBinder {
     }
 
     private void bindGenerationService() {
-        if (Objects.isNull(generationService)) {
+        if (generationService == null) {
             bind(GenerationServiceImpl.class).to(GenerationService.class).in(Singleton.class);
         } else {
             bind(generationService).to(GenerationService.class).in(Singleton.class);

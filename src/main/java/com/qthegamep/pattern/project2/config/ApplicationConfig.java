@@ -14,7 +14,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -26,7 +25,7 @@ public class ApplicationConfig {
         try {
             loadServerIp();
             String configPath = System.getProperty("config.properties");
-            if (Objects.isNull(configPath)) {
+            if (configPath == null) {
                 LOG.info("Load default config properties!");
                 loadDefaultProperties();
             } else {
