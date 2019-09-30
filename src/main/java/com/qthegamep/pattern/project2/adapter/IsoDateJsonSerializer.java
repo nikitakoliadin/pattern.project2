@@ -17,5 +17,6 @@ class IsoDateJsonSerializer extends JsonSerializer<Date> {
         String isoDate = simpleDateFormat.format(date);
         jsonGenerator.writeStartObject(Constants.JSON_DATE_FIELD_NAME.getValue());
         jsonGenerator.writeObjectField(Constants.JSON_DATE_FIELD_NAME.getValue(), isoDate);
+        jsonGenerator.writeEndObject();
     }
 }
