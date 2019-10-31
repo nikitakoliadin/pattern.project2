@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletConfig;
 import javax.ws.rs.GET;
@@ -27,6 +28,7 @@ public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenAp
     private ServletConfig servletConfig;
     private Application application;
 
+    @Inject
     public OpenApiControllerImpl(@Context ServletConfig servletConfig, @Context Application application) {
         this.servletConfig = servletConfig;
         this.application = application;
