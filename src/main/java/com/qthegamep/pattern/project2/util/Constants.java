@@ -13,7 +13,9 @@ public enum Constants {
     UK_LANGUAGE("uk"),
     RU_LANGUAGE("ru"),
     DEFAULT_LANGUAGE("uk"),
-    ERROR_MESSAGES_LOCALIZATION("localization.error_messages");
+    ERROR_MESSAGES_LOCALIZATION("localization.error_messages"),
+    GRIZZLY("grizzly"),
+    GRIZZLY_POOL_NAME("grizzly-worker-thread-");
 
     private String value;
 
