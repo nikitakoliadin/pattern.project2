@@ -1,7 +1,6 @@
 # Folders
 .idea/
 target/
-.allure/
 
 # Files
 *.iml
