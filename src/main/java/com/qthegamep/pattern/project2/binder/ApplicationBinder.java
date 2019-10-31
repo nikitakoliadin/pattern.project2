@@ -1,9 +1,6 @@
 package com.qthegamep.pattern.project2.binder;
 
-import com.qthegamep.pattern.project2.service.GenerationService;
-import com.qthegamep.pattern.project2.service.GenerationServiceImpl;
-import com.qthegamep.pattern.project2.service.ConverterService;
-import com.qthegamep.pattern.project2.service.ConverterServiceImpl;
+import com.qthegamep.pattern.project2.service.*;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
 import javax.inject.Singleton;
@@ -12,10 +9,12 @@ public class ApplicationBinder extends AbstractBinder {
 
     private ConverterService converterService;
     private GenerationService generationService;
+    private ErrorResponseBuilderService errorResponseBuilderService;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService) {
         this.converterService = converterService;
         this.generationService = generationService;
+        this.errorResponseBuilderService = errorResponseBuilderService;
     }
 
     public ConverterService getConverterService() {
@@ -26,6 +25,10 @@ public class ApplicationBinder extends AbstractBinder {
         return generationService;
     }
 
+    public ErrorResponseBuilderService getErrorResponseBuilderService() {
+        return errorResponseBuilderService;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -34,6 +37,7 @@ public class ApplicationBinder extends AbstractBinder {
     protected void configure() {
         bindConverterService();
         bindGenerationService();
+        bindErrorResponseBuilderService();
     }
 
     private void bindConverterService() {
@@ -52,10 +56,19 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindErrorResponseBuilderService() {
+        if (errorResponseBuilderService == null) {
+            bind(ErrorResponseBuilderServiceImpl.class).to(ErrorResponseBuilderService.class).in(Singleton.class);
+        } else {
+            bind(errorResponseBuilderService).to(ErrorResponseBuilderService.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
         private GenerationService generationService;
+        private ErrorResponseBuilderService errorResponseBuilderService;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -67,8 +80,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder errorResponseBuilderService(ErrorResponseBuilderService errorResponseBuilderService) {
+            this.errorResponseBuilderService = errorResponseBuilderService;
+            return this;
+        }
+
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService);
         }
     }
 }

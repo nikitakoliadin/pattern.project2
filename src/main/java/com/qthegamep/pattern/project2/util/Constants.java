@@ -9,7 +9,9 @@ public enum Constants {
     DURATION_HEADER("duration"),
     X_REQUEST_ID_HEADER("x-request-id"),
     REQUEST_ID_HEADER("requestId"),
-    X_FORWARDED_FOR_HEADER("X-Forwarded-For");
+    X_FORWARDED_FOR_HEADER("X-Forwarded-For"),
+    DEFAULT_LANGUAGE("uk"),
+    ERROR_MESSAGES_LOCALIZATION("localization.error_messages");
 
     private String value;
 
