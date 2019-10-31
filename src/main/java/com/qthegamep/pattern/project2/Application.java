@@ -23,7 +23,7 @@ public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    public static void main(String[] args) throws ApplicationConfigInitializationException {
+    public static void main(String[] args) throws ApplicationConfigInitializationException, InterruptedException {
         initConfigs();
         String host = System.getProperty("application.host", "0.0.0.0");
         String port = System.getProperty("application.port", "8080");
@@ -32,6 +32,7 @@ public class Application {
         HttpServer httpServer = startServer(applicationUrl);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         addSwaggerUIMapping(httpServer, applicationContext + swaggerUrl);
+        Thread.currentThread().join();
     }
 
     private static void initConfigs() throws ApplicationConfigInitializationException {
