@@ -10,6 +10,8 @@ public enum Constants {
     X_REQUEST_ID_HEADER("x-request-id"),
     REQUEST_ID_HEADER("requestId"),
     X_FORWARDED_FOR_HEADER("X-Forwarded-For"),
+    UK_LANGUAGE("uk"),
+    RU_LANGUAGE("ru"),
     DEFAULT_LANGUAGE("uk"),
     ERROR_MESSAGES_LOCALIZATION("localization.error_messages");
 

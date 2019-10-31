@@ -16,8 +16,8 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
     private final List<Locale> availableLocales = new ArrayList<>();
 
     public ErrorResponseBuilderServiceImpl() {
-        availableLocales.add(new Locale("uk"));
-        availableLocales.add(new Locale("ru"));
+        availableLocales.add(new Locale(Constants.UK_LANGUAGE.getValue()));
+        availableLocales.add(new Locale(Constants.RU_LANGUAGE.getValue()));
     }
 
     @Override
