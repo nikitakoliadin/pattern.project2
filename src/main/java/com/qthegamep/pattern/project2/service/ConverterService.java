@@ -1,12 +1,16 @@
 package com.qthegamep.pattern.project2.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.io.IOException;
+import java.io.InputStream;
 
 public interface ConverterService {
 
-    <T> T fromJson(String entity, Class<T> modelClass) throws IOException;
+    <T> T fromJson(String entity, Class<T> modelClass);
 
-    String toJson(Object model) throws JsonProcessingException;
+    String toJson(Object model);
+
+    <T> T fromXml(String entity, Class<T> modelClass);
+
+    String toXml(Object model);
+
+    String toString(InputStream inputStream);
 }

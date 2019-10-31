@@ -4,7 +4,9 @@ public enum ErrorType {
 
     INTERNAL_ERROR(500),
     OPEN_API_ERROR(501),
-    UNKNOWN_ERROR(502);
+    UNKNOWN_ERROR(502),
+    JSON_CONVERTER_ERROR(503),
+    XML_CONVERTER_ERROR(504);
 
     private int errorCode;
 
