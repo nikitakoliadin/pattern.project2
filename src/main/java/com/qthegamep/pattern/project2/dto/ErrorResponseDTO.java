@@ -1,7 +1,6 @@
 package com.qthegamep.pattern.project2.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.qthegamep.pattern.project2.model.ResponseCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Objects;
@@ -10,36 +9,36 @@ import java.util.Objects;
         description = "This is error response object")
 public class ErrorResponseDTO {
 
-    @Schema(description = "Request ID",
+    @Schema(description = "Error code",
             required = true,
-            example = "WYAtQAwLqb")
+            example = "500")
     @JsonProperty(
-            value = "requestId",
+            value = "errorCode",
             required = true)
-    private String requestId;
+    private int errorCode;
 
-    @Schema(description = "Response code",
+    @Schema(description = "Error message",
             required = true,
             example = "INTERNAL_ERROR")
     @JsonProperty(
-            value = "responseCode",
+            value = "errorMessage",
             required = true)
-    private ResponseCode responseCode;
+    private String errorMessage;
 
-    public String getRequestId() {
-        return requestId;
+    public int getErrorCode() {
+        return errorCode;
     }
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
     }
 
-    public ResponseCode getResponseCode() {
-        return responseCode;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setResponseCode(ResponseCode responseCode) {
-        this.responseCode = responseCode;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     @Override
@@ -47,20 +46,20 @@ public class ErrorResponseDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ErrorResponseDTO that = (ErrorResponseDTO) o;
-        return Objects.equals(requestId, that.requestId) &&
-                responseCode == that.responseCode;
+        return errorCode == that.errorCode &&
+                Objects.equals(errorMessage, that.errorMessage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(requestId, responseCode);
+        return Objects.hash(errorCode, errorMessage);
     }
 
     @Override
     public String toString() {
         return "ErrorResponseDTO{" +
-                "requestId='" + requestId + '\'' +
-                ", responseCode=" + responseCode +
+                "errorCode=" + errorCode +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
 }
