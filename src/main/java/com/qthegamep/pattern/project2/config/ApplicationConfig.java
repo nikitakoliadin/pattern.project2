@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
-import com.qthegamep.pattern.project2.exception.ApplicationConfigException;
+import com.qthegamep.pattern.project2.exception.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class ApplicationConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationConfig.class);
 
-    public void init() throws ApplicationConfigException {
+    public void init() throws ApplicationConfigInitializationException {
         try {
             loadServerIp();
             String configPath = System.getProperty("config.properties");
@@ -34,7 +34,7 @@ public class ApplicationConfig {
             }
         } catch (Exception e) {
             LOG.error("ERROR", e);
-            throw new ApplicationConfigException(e);
+            throw new ApplicationConfigInitializationException(e);
         }
     }
 
