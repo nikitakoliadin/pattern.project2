@@ -6,10 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.container.PreMatching;
+import javax.inject.Inject;
+import javax.ws.rs.container.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
@@ -20,8 +18,12 @@ public class ResponseLogFilter implements ContainerResponseFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResponseLogFilter.class);
 
-    @Context
     private javax.inject.Provider<Request> requestProvider;
+
+    @Inject
+    public ResponseLogFilter(@Context javax.inject.Provider<Request> requestProvider) {
+        this.requestProvider = requestProvider;
+    }
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) {

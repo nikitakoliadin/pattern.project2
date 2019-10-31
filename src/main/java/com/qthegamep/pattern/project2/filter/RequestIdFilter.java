@@ -7,15 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.PreMatching;
+import javax.ws.rs.container.*;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 @Provider
 @PreMatching
-@Priority(5)
+@Priority(10)
 public class RequestIdFilter implements ContainerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(RequestIdFilter.class);
@@ -29,11 +27,16 @@ public class RequestIdFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) {
-        String requestId = containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue()) == null
-                ? generationService.generateUniqueId(10L)
-                : containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue());
-        LOG.debug("RequestId: {}", requestId);
-        MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
-        headers.add(Constants.REQUEST_ID_HEADER.getValue(), requestId);
+        String requestIdHeader = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
+        if (requestIdHeader == null || requestIdHeader.isEmpty()) {
+            String requestId = containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue()) == null
+                    ? generationService.generateUniqueId(10L)
+                    : containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue());
+            LOG.debug("RequestId: {}", requestId);
+            MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
+            headers.add(Constants.REQUEST_ID_HEADER.getValue(), requestId);
+        } else {
+            LOG.debug("RequestId header: {}", requestIdHeader);
+        }
     }
 }
