@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2.controller;
 
 import com.qthegamep.pattern.project2.exception.OpenApiException;
 import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.util.Paths;
 import io.swagger.v3.jaxrs2.integration.resources.BaseOpenApiResource;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -20,7 +21,7 @@ import javax.ws.rs.core.*;
 import java.net.URI;
 
 @Singleton
-@Path("/swagger")
+@Path(Paths.SWAGGER_PATH)
 public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenApiController {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenApiControllerImpl.class);
