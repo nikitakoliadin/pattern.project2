@@ -17,7 +17,8 @@ public enum Constants {
     GRIZZLY("grizzly"),
     APPLICATION_GRIZZLY_POOL_NAME("application-grizzly-worker-thread-"),
     TASK_QUEUE_SIZE_METRICS("task.queue.size"),
-    PROMETHEUS_GRIZZLY_POOL_NAME("prometheus-grizzly-worker-thread-");
+    PROMETHEUS_GRIZZLY_POOL_NAME("prometheus-grizzly-worker-thread-"),
+    HTTP("http://");
 
     private String value;
 
