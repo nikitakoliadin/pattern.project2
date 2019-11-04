@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2;
 
 import com.qthegamep.pattern.project2.binder.ApplicationBinder;
 import com.qthegamep.pattern.project2.config.ApplicationConfig;
+import com.qthegamep.pattern.project2.config.GrizzlyServersShutdownHook;
 import com.qthegamep.pattern.project2.config.IOStrategyFactory;
 import com.qthegamep.pattern.project2.config.TaskQueueSizeProbe;
 import com.qthegamep.pattern.project2.exception.ApplicationConfigInitializationException;
@@ -33,12 +34,13 @@ public class Application {
         String port = System.getProperty("application.port", "8080");
         String applicationContext = System.getProperty("application.context", "");
         String applicationUrl = Constants.HTTP.getValue() + host + ":" + port + applicationContext;
-        HttpServer httpServer = startServer(applicationUrl);
+        HttpServer applicationHttpServer = startServer(applicationUrl);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
-        String swaggerPath = addSwaggerUIMapping(httpServer, applicationContext + swaggerUrl);
+        String swaggerPath = addSwaggerUIMapping(applicationHttpServer, applicationContext + swaggerUrl);
         String metricsPort = System.getProperty("application.metrics.port", "8081");
         String metricsUrl = Constants.HTTP.getValue() + host + ":" + metricsPort;
-        startMetricsServer(metricsUrl);
+        HttpServer metricsHttpServer = startMetricsServer(metricsUrl);
+        Runtime.getRuntime().addShutdownHook(new GrizzlyServersShutdownHook(applicationHttpServer, metricsHttpServer));
         LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
         LOG.info("Swagger openApi available at {}", swaggerPath);
         LOG.info("Metrics started at {}", metricsUrl);
@@ -109,10 +111,11 @@ public class Application {
         return Constants.HTTP.getValue() + grizzlyListener.getHost() + ":" + grizzlyListener.getPort() + contextPath + urlPattern;
     }
 
-    private static void startMetricsServer(String metricsUrl) {
+    private static HttpServer startMetricsServer(String metricsUrl) {
         URI metricsUri = URI.create(metricsUrl);
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(metricsUri, false);
         configMetricsServer(httpServer);
+        return httpServer;
     }
 
     private static void configMetricsServer(HttpServer httpServer) {
