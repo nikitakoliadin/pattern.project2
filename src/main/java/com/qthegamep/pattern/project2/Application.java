@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2;
 import com.qthegamep.pattern.project2.binder.ApplicationBinder;
 import com.qthegamep.pattern.project2.config.ApplicationConfig;
 import com.qthegamep.pattern.project2.config.IOStrategyFactory;
-import com.qthegamep.pattern.project2.config.TaskQueueSizeLogProbe;
+import com.qthegamep.pattern.project2.config.TaskQueueSizeProbe;
 import com.qthegamep.pattern.project2.exception.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.model.IoStrategyType;
 import com.qthegamep.pattern.project2.util.Constants;
@@ -81,7 +81,7 @@ public class Application {
 
     private static void addProbes(TCPNIOTransport grizzlyTransport) {
         MonitoringConfig<ThreadPoolProbe> threadPoolMonitoringConfig = grizzlyTransport.getThreadPoolMonitoringConfig();
-        threadPoolMonitoringConfig.addProbes(new TaskQueueSizeLogProbe());
+        threadPoolMonitoringConfig.addProbes(new TaskQueueSizeProbe());
         LOG.info("Probes was added");
     }
 
