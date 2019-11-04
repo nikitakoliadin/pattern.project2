@@ -7,9 +7,13 @@ import com.qthegamep.pattern.project2.config.TaskQueueSizeProbe;
 import com.qthegamep.pattern.project2.exception.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.model.IoStrategyType;
 import com.qthegamep.pattern.project2.util.Constants;
+import com.qthegamep.pattern.project2.util.Paths;
+import io.prometheus.client.exporter.MetricsServlet;
 import org.glassfish.grizzly.http.server.*;
 import org.glassfish.grizzly.monitoring.MonitoringConfig;
 import org.glassfish.grizzly.nio.transport.TCPNIOTransport;
+import org.glassfish.grizzly.servlet.ServletRegistration;
+import org.glassfish.grizzly.servlet.WebappContext;
 import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 import org.glassfish.grizzly.threadpool.ThreadPoolProbe;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -28,10 +32,16 @@ public class Application {
         String host = System.getProperty("application.host", "0.0.0.0");
         String port = System.getProperty("application.port", "8080");
         String applicationContext = System.getProperty("application.context", "");
-        String applicationUrl = "http://" + host + ":" + port + applicationContext;
+        String applicationUrl = Constants.HTTP.getValue() + host + ":" + port + applicationContext;
         HttpServer httpServer = startServer(applicationUrl);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
-        addSwaggerUIMapping(httpServer, applicationContext + swaggerUrl);
+        String swaggerPath = addSwaggerUIMapping(httpServer, applicationContext + swaggerUrl);
+        String metricsPort = System.getProperty("application.metrics.port", "8081");
+        String metricsUrl = Constants.HTTP.getValue() + host + ":" + metricsPort;
+        startMetricsServer(metricsUrl);
+        LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
+        LOG.info("Swagger openApi available at {}", swaggerPath);
+        LOG.info("Metrics started at {}", metricsUrl);
         Thread.currentThread().join();
     }
 
@@ -46,17 +56,17 @@ public class Application {
                 .packages(Application.class.getPackage().getName())
                 .register(ApplicationBinder.builder().build());
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig, false);
-        configServer(httpServer, applicationUrl);
+        configServer(httpServer);
         return httpServer;
     }
 
-    private static void configServer(HttpServer httpServer, String applicationUrl) {
+    private static void configServer(HttpServer httpServer) {
         try {
             ServerConfiguration serverConfiguration = httpServer.getServerConfiguration();
             serverConfiguration.setJmxEnabled(true);
             TCPNIOTransport grizzlyTransport = httpServer.getListener(Constants.GRIZZLY.getValue()).getTransport();
             ThreadPoolConfig threadPoolConfig = ThreadPoolConfig.defaultConfig()
-                    .setPoolName(Constants.GRIZZLY_POOL_NAME.getValue())
+                    .setPoolName(Constants.APPLICATION_GRIZZLY_POOL_NAME.getValue())
                     .setCorePoolSize(32)
                     .setMaxPoolSize(32)
                     .setQueueLimit(-1);
@@ -73,7 +83,6 @@ public class Application {
                     grizzlyTransport.getWorkerThreadPoolConfig().getCorePoolSize(),
                     grizzlyTransport.getKernelThreadPoolConfig().getCorePoolSize(),
                     grizzlyTransport.getWorkerThreadPoolConfig().getQueueLimit());
-            LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
         } catch (Exception e) {
             LOG.error("Error", e);
         }
@@ -85,7 +94,7 @@ public class Application {
         LOG.info("Probes was added");
     }
 
-    private static void addSwaggerUIMapping(HttpServer httpServer, String contextPath) {
+    private static String addSwaggerUIMapping(HttpServer httpServer, String contextPath) {
         ClassLoader classLoader = Application.class.getClassLoader();
         CLStaticHttpHandler docsStaticHttpHandler = new CLStaticHttpHandler(classLoader, "swagger-ui/");
         docsStaticHttpHandler.setFileCacheEnabled(false);
@@ -97,7 +106,41 @@ public class Application {
         ServerConfiguration serverConfiguration = httpServer.getServerConfiguration();
         serverConfiguration.addHttpHandler(docsStaticHttpHandler, httpHandlerRegistration);
         NetworkListener grizzlyListener = httpServer.getListener(Constants.GRIZZLY.getValue());
-        String swaggerPath = "http://" + grizzlyListener.getHost() + ":" + grizzlyListener.getPort() + contextPath + urlPattern;
-        LOG.info("Swagger openApi available at {}", swaggerPath);
+        return Constants.HTTP.getValue() + grizzlyListener.getHost() + ":" + grizzlyListener.getPort() + contextPath + urlPattern;
+    }
+
+    private static void startMetricsServer(String metricsUrl) {
+        URI metricsUri = URI.create(metricsUrl);
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(metricsUri, false);
+        configMetricsServer(httpServer);
+    }
+
+    private static void configMetricsServer(HttpServer httpServer) {
+        try {
+            TCPNIOTransport grizzlyTransport = httpServer.getListener(Constants.GRIZZLY.getValue()).getTransport();
+            ThreadPoolConfig threadPoolConfig = ThreadPoolConfig.defaultConfig()
+                    .setPoolName(Constants.PROMETHEUS_GRIZZLY_POOL_NAME.getValue())
+                    .setCorePoolSize(32)
+                    .setMaxPoolSize(32)
+                    .setQueueLimit(-1);
+            grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * 4);
+            grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
+            grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
+            grizzlyTransport.setIOStrategy(new IOStrategyFactory().createIOStrategy(IoStrategyType.DYNAMIC_IO_STRATEGY));
+            WebappContext webappContext = new WebappContext("Prometheus metrics");
+            ServletRegistration prometheusMetricsServlet = webappContext.addServlet("Prometheus metrics servlet", new MetricsServlet());
+            prometheusMetricsServlet.addMapping(Paths.METRICS_PATH);
+            webappContext.deploy(httpServer);
+            httpServer.start();
+            LOG.info("\nBlocking Transport(T/F): {}\nNum SelectorRunners: {}\nNum WorkerThreads: {}\nNum KernelThreadPool: {}\nQueue limit: {}",
+                    grizzlyTransport.isBlocking(),
+                    grizzlyTransport.getSelectorRunnersCount(),
+                    grizzlyTransport.getWorkerThreadPoolConfig().getCorePoolSize(),
+                    grizzlyTransport.getKernelThreadPoolConfig().getCorePoolSize(),
+                    grizzlyTransport.getWorkerThreadPoolConfig().getQueueLimit());
+
+        } catch (Exception e) {
+            LOG.error("Error", e);
+        }
     }
 }
