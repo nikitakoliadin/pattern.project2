@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2.model;
 
 public enum ErrorType {
 
+    PAGE_NOT_FOUND_ERROR(404),
     INTERNAL_ERROR(500),
     OPEN_API_ERROR(501),
     UNKNOWN_ERROR(502),
