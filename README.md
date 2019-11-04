@@ -11,9 +11,9 @@
 
 ### Start
 
-Run jar: `java -D"log.level"=[your_level] -D"config.properties"=[your_path] -jar .\pattern.project2-1.0.10.jar`
+Run jar: `java -D"log.level"=[your_level] -D"config.properties"=[your_path] -jar .\pattern.project2-1.0.11.jar`
 
-Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Nikita\IdeaProjects\pattern.project2\src\main\resources\config.properties" -jar .\pattern.project2-1.0.10.jar`
+Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Nikita\IdeaProjects\pattern.project2\src\main\resources\config.properties" -jar .\pattern.project2-1.0.11.jar`
 
 ## Urls
 
