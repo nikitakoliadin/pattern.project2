@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -41,18 +42,30 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
         LOG.error("Error. RequestId: {}", requestId, exception);
         ErrorResponseDTO errorResponseDTO = errorResponseBuilderService.buildResponse(errorType, requestLocales, requestId);
         errorResponseDTO.setErrorMessage(errorResponseDTO.getErrorMessage() + " Request ID: " + requestId);
-        String contentType = getContentType(httpHeaders);
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .header(HttpHeaders.CONTENT_TYPE, contentType)
-                .entity(errorResponseDTO)
-                .build();
+        return buildResponse(errorResponseDTO);
     }
 
     private ErrorType getErrorType(Exception exception) {
         if (exception instanceof ServiceException) {
             return ((ServiceException) exception).getErrorType();
+        } else if (exception instanceof NotFoundException) {
+            return ErrorType.PAGE_NOT_FOUND_ERROR;
         } else {
             return ErrorType.INTERNAL_ERROR;
+        }
+    }
+
+    private Response buildResponse(ErrorResponseDTO errorResponseDTO) {
+        String contentType = getContentType(httpHeaders);
+        if (errorResponseDTO.getErrorCode() == ErrorType.PAGE_NOT_FOUND_ERROR.getErrorCode()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .header(HttpHeaders.CONTENT_TYPE, contentType)
+                    .build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .header(HttpHeaders.CONTENT_TYPE, contentType)
+                    .entity(errorResponseDTO)
+                    .build();
         }
     }
 
