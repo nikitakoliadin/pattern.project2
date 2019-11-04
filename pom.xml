@@ -84,6 +84,10 @@
         <!-- Swagger -->
         <swagger.version>2.0.6</swagger.version>
 
+        <!-- Prometheus -->
+        <prometheus.simpleclient.version>0.8.0</prometheus.simpleclient.version>
+        <prometheus.micrometer-registry-prometheus.version>1.3.0</prometheus.micrometer-registry-prometheus.version>
+
         <!-- Test -->
         <test.org-jacoco-agent.version>0.8.2</test.org-jacoco-agent.version>
 
@@ -322,6 +326,21 @@
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>${swagger.version}</version>
+        </dependency>
+
+        <!-- Prometheus -->
+        <!-- https://mvnrepository.com/artifact/io.prometheus/simpleclient -->
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
+            <version>${prometheus.simpleclient.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${prometheus.micrometer-registry-prometheus.version}</version>
         </dependency>
 
         <!-- Test -->
