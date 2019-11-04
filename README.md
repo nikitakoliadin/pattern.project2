@@ -19,6 +19,7 @@ Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Ni
 
 * /pattern/project2/test
 * /pattern/project2/docs/
+* /cloud/api/back/prometheus/metrics
 
 ## Contact Information
 * **Author:** Koliadin Nikita
