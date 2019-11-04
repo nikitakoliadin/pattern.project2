@@ -3,11 +3,8 @@ package com.qthegamep.pattern.project2.binder;
 import com.qthegamep.pattern.project2.metrics.TaskQueueSizeMetrics;
 import com.qthegamep.pattern.project2.service.*;
 import io.micrometer.core.instrument.Clock;
-import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
-import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
-import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
-import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
-import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
+import io.micrometer.core.instrument.binder.jvm.*;
+import io.micrometer.core.instrument.binder.system.*;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.CollectorRegistry;
@@ -85,10 +82,11 @@ public class ApplicationBinder extends AbstractBinder {
         if (prometheusMeterRegistry == null) {
             PrometheusMeterRegistry newPrometheusMeterRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT, CollectorRegistry.defaultRegistry, Clock.SYSTEM);
             new ClassLoaderMetrics().bindTo(newPrometheusMeterRegistry);
-            new JvmMemoryMetrics().bindTo(newPrometheusMeterRegistry);
             new JvmGcMetrics().bindTo(newPrometheusMeterRegistry);
-            new ProcessorMetrics().bindTo(newPrometheusMeterRegistry);
+            new JvmMemoryMetrics().bindTo(newPrometheusMeterRegistry);
             new JvmThreadMetrics().bindTo(newPrometheusMeterRegistry);
+            new ProcessorMetrics().bindTo(newPrometheusMeterRegistry);
+            new UptimeMetrics().bindTo(newPrometheusMeterRegistry);
             new TaskQueueSizeMetrics().bindTo(newPrometheusMeterRegistry);
             bind(newPrometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
         } else {
