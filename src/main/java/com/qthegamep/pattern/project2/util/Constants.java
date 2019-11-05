@@ -16,7 +16,6 @@ public enum Constants {
     ERROR_MESSAGES_LOCALIZATION("localization.error_messages"),
     GRIZZLY("grizzly"),
     APPLICATION_GRIZZLY_POOL_NAME("application-grizzly-worker-thread-"),
-    TASK_QUEUE_SIZE_METRICS("task.queue.size"),
     PROMETHEUS_GRIZZLY_POOL_NAME("prometheus-grizzly-worker-thread-"),
     HTTP("http://");
 
