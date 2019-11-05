@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
+import com.qthegamep.pattern.project2.metrics.Metrics;
 import org.glassfish.grizzly.threadpool.AbstractThreadPool;
 import org.glassfish.grizzly.threadpool.ThreadPoolProbe;
 import org.slf4j.Logger;
@@ -18,15 +19,15 @@ public class TaskQueueSizeProbe extends ThreadPoolProbe.Adapter {
     public void onTaskQueueEvent(AbstractThreadPool threadPool, Runnable task) {
         Queue<Runnable> taskQueue = threadPool.getQueue();
         LOG.info("--->>> New task in queue. Task queue size: {}", taskQueue.size());
-        TASK_QUEUE_SIZE.set(taskQueue.size());
-        LOG.debug("Atomic task queue size: {}", TASK_QUEUE_SIZE.get());
+        Metrics.TASK_QUEUE_SIZE_METRIC.set(taskQueue.size());
+        LOG.debug("Atomic task queue size: {}", Metrics.TASK_QUEUE_SIZE_METRIC.get());
     }
 
     @Override
     public void onTaskDequeueEvent(AbstractThreadPool threadPool, Runnable task) {
         Queue<Runnable> taskQueue = threadPool.getQueue();
         LOG.info("--->>> Task pooled from queue. Task queue size: {}", taskQueue.size());
-        TASK_QUEUE_SIZE.set(taskQueue.size());
-        LOG.debug("Atomic task queue size: {}", TASK_QUEUE_SIZE.get());
+        Metrics.TASK_QUEUE_SIZE_METRIC.set(taskQueue.size());
+        LOG.debug("Atomic task queue size: {}", Metrics.TASK_QUEUE_SIZE_METRIC.get());
     }
 }
