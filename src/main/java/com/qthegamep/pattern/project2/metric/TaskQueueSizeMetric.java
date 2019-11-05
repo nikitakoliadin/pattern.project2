@@ -1,11 +1,11 @@
-package com.qthegamep.pattern.project2.metrics;
+package com.qthegamep.pattern.project2.metric;
 
 import com.qthegamep.pattern.project2.util.Constants;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 
-public class TaskQueueSizeMetrics implements MeterBinder {
+public class TaskQueueSizeMetric implements MeterBinder {
 
     private static final String TASK_QUEUE_SIZE = "task.queue.size";
     private static final String TASK_QUEUE_LIMIT = "task.queue.limit";

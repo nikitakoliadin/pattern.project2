@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.probe;
 
-import com.qthegamep.pattern.project2.metrics.Metrics;
+import com.qthegamep.pattern.project2.metric.Metrics;
 import org.glassfish.grizzly.threadpool.AbstractThreadPool;
 import org.glassfish.grizzly.threadpool.ThreadPoolProbe;
 import org.slf4j.Logger;

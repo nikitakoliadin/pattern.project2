@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.binder;
 
-import com.qthegamep.pattern.project2.metrics.GrizzlyThreadPoolMetrics;
-import com.qthegamep.pattern.project2.metrics.TaskQueueSizeMetrics;
+import com.qthegamep.pattern.project2.metric.GrizzlyThreadPoolMetric;
+import com.qthegamep.pattern.project2.metric.TaskQueueSizeMetric;
 import com.qthegamep.pattern.project2.service.*;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.binder.jvm.*;
@@ -88,8 +88,8 @@ public class ApplicationBinder extends AbstractBinder {
             new JvmThreadMetrics().bindTo(newPrometheusMeterRegistry);
             new ProcessorMetrics().bindTo(newPrometheusMeterRegistry);
             new UptimeMetrics().bindTo(newPrometheusMeterRegistry);
-            new TaskQueueSizeMetrics().bindTo(newPrometheusMeterRegistry);
-            new GrizzlyThreadPoolMetrics().bindTo(newPrometheusMeterRegistry);
+            new TaskQueueSizeMetric().bindTo(newPrometheusMeterRegistry);
+            new GrizzlyThreadPoolMetric().bindTo(newPrometheusMeterRegistry);
             bind(newPrometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
         } else {
             bind(prometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);

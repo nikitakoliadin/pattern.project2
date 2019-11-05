@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.metrics;
+package com.qthegamep.pattern.project2.metric;
 
 import java.util.concurrent.atomic.AtomicLong;
 

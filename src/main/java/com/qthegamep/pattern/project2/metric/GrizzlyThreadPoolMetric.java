@@ -1,11 +1,11 @@
-package com.qthegamep.pattern.project2.metrics;
+package com.qthegamep.pattern.project2.metric;
 
 import com.qthegamep.pattern.project2.util.Constants;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 
-public class GrizzlyThreadPoolMetrics implements MeterBinder {
+public class GrizzlyThreadPoolMetric implements MeterBinder {
 
     private static final String CORE_POOL_SIZE = "core.pool.size";
     private static final String MAX_POOL_SIZE = "max.pool.size";
