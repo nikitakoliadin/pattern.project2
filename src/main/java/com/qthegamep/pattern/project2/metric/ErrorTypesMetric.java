@@ -16,8 +16,8 @@ public class ErrorTypesMetric implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        PlatformManagedObject errorTypesPlatformManagedObject = () -> Util.newObjectName("error.types");
-        Metrics.ERROR_TYPES_METRIC.forEach((key, value) -> Gauge.builder(ERROR_TYPES, errorTypesPlatformManagedObject, (platformManagedObject) -> value.get())
+        PlatformManagedObject errorTypesPlatformManagedObject = () -> Util.newObjectName(ERROR_TYPES);
+        Metrics.ERROR_TYPES_METRIC.forEach((key, value) -> Gauge.builder(ERROR_TYPES, errorTypesPlatformManagedObject, platformManagedObject -> value.get())
                 .description("The error response types")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .tags(Tags.of(ERROR_CODE_TAG, key))
