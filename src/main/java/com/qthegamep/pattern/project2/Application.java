@@ -13,7 +13,6 @@ import io.prometheus.client.exporter.MetricsServlet;
 import org.glassfish.grizzly.http.server.*;
 import org.glassfish.grizzly.monitoring.MonitoringConfig;
 import org.glassfish.grizzly.nio.transport.TCPNIOTransport;
-import org.glassfish.grizzly.servlet.ServletRegistration;
 import org.glassfish.grizzly.servlet.WebappContext;
 import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 import org.glassfish.grizzly.threadpool.ThreadPoolProbe;
@@ -38,7 +37,8 @@ public class Application {
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         String swaggerPath = addSwaggerUIMapping(applicationHttpServer, applicationContext + swaggerUrl);
         String metricsPort = System.getProperty("application.metrics.port", "8081");
-        String metricsUrl = Constants.HTTP.getValue() + host + ":" + metricsPort;
+        String metricsContext = System.getProperty("application.metrics.context", "/metrics");
+        String metricsUrl = Constants.HTTP.getValue() + host + ":" + metricsPort + metricsContext;
         HttpServer metricsHttpServer = startMetricsServer(metricsUrl);
         Runtime.getRuntime().addShutdownHook(new GrizzlyServersShutdownHook(applicationHttpServer, metricsHttpServer));
         LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
@@ -130,9 +130,8 @@ public class Application {
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setIOStrategy(new IOStrategyFactory().createIOStrategy(IoStrategyType.DYNAMIC_IO_STRATEGY));
-            WebappContext webappContext = new WebappContext("Prometheus metrics");
-            ServletRegistration prometheusMetricsServlet = webappContext.addServlet("Prometheus metrics servlet", new MetricsServlet());
-            prometheusMetricsServlet.addMapping(Paths.METRICS_PATH);
+            WebappContext webappContext = new WebappContext("Prometheus metrics", Paths.METRICS_PATH);
+            webappContext.addServlet("Prometheus metrics servlet", new MetricsServlet());
             webappContext.deploy(httpServer);
             httpServer.start();
             LOG.info("\nBlocking Transport(T/F): {}\nNum SelectorRunners: {}\nNum WorkerThreads: {}\nNum KernelThreadPool: {}\nQueue limit: {}",
