@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.config;
+package com.qthegamep.pattern.project2.probe;
 
 import com.qthegamep.pattern.project2.metrics.Metrics;
 import org.glassfish.grizzly.threadpool.AbstractThreadPool;
@@ -7,13 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class TaskQueueSizeProbe extends ThreadPoolProbe.Adapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(TaskQueueSizeProbe.class);
-
-    public static final AtomicLong TASK_QUEUE_SIZE = new AtomicLong();
 
     @Override
     public void onTaskQueueEvent(AbstractThreadPool threadPool, Runnable task) {
