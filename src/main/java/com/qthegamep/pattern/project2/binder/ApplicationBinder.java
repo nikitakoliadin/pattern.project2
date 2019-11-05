@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.binder;
 
+import com.qthegamep.pattern.project2.metric.ErrorTypesMetric;
 import com.qthegamep.pattern.project2.metric.GrizzlyThreadPoolMetric;
 import com.qthegamep.pattern.project2.metric.TaskQueueSizeMetric;
 import com.qthegamep.pattern.project2.service.*;
@@ -90,6 +91,7 @@ public class ApplicationBinder extends AbstractBinder {
             new UptimeMetrics().bindTo(newPrometheusMeterRegistry);
             new TaskQueueSizeMetric().bindTo(newPrometheusMeterRegistry);
             new GrizzlyThreadPoolMetric().bindTo(newPrometheusMeterRegistry);
+            new ErrorTypesMetric().bindTo(newPrometheusMeterRegistry);
             bind(newPrometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
         } else {
             bind(prometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
