@@ -22,6 +22,7 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
         String requestId = requestContext.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
         registerResponseStatusMetric(responseContext, requestId);
         registerRequestCounterMetric(requestContext, requestId);
+        registerRequestTimeMetric(requestContext, responseContext, requestId);
     }
 
     private void registerResponseStatusMetric(ContainerResponseContext responseContext, String requestId) {
@@ -35,6 +36,17 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
         if (Metrics.REQUEST_COUNTER_METRIC.containsKey(path)) {
             long requestCount = Metrics.REQUEST_COUNTER_METRIC.get(path).incrementAndGet();
             LOG.debug("Path: [{}] Count: {} RequestId: {}", path, requestCount, requestId);
+        } else {
+            LOG.debug("Path: [{}] not exists. RequestId: {}", path, requestId);
+        }
+    }
+
+    private void registerRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
+        String path = "/" + requestContext.getUriInfo().getPath();
+        if (Metrics.REQUEST_TIME_METRIC.containsKey(path)) {
+            long duration = Long.parseLong(responseContext.getHeaderString(Constants.DURATION_HEADER.getValue()));
+            Metrics.REQUEST_TIME_METRIC.get(path).add(duration);
+            LOG.debug("Path: [{}] Duration: {} RequestId: {}", path, duration, requestId);
         } else {
             LOG.debug("Path: [{}] not exists. RequestId: {}", path, requestId);
         }
