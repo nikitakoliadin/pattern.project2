@@ -12,7 +12,7 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 @PreMatching
-@Priority(30)
+@Priority(20)
 public class ResponseStatusMetricFilter implements ContainerResponseFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResponseStatusMetricFilter.class);

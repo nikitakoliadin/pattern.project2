@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 @PreMatching
-@Priority(20)
+@Priority(30)
 public class DurationResponseFilter implements ContainerResponseFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DurationResponseFilter.class);
