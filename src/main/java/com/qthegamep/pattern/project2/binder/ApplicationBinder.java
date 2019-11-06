@@ -92,6 +92,7 @@ public class ApplicationBinder extends AbstractBinder {
             new ErrorTypesMetric().bindTo(newPrometheusMeterRegistry);
             new ResponseStatusMetric().bindTo(newPrometheusMeterRegistry);
             new RequestCounterMetric().bindTo(newPrometheusMeterRegistry);
+            new RequestTimeMetric().bindTo(newPrometheusMeterRegistry);
             bind(newPrometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
         } else {
             bind(prometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
