@@ -1,6 +1,7 @@
 package com.qthegamep.pattern.project2.metric;
 
 import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.util.Paths;
 
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
@@ -20,6 +21,16 @@ public class Metrics {
 
     public static final Map<String, AtomicLong> RESPONSE_STATUS_METRIC = Arrays.stream(Response.Status.values())
             .collect(Collectors.toMap(value -> String.valueOf(value.getStatusCode()), value -> new AtomicLong(), (a, b) -> b, ConcurrentHashMap::new));
+
+    public static final Map<String, AtomicLong> REQUEST_COUNTER_METRIC = Arrays.stream(Paths.class.getFields())
+            .map(field -> {
+                try {
+                    return String.valueOf(field.get(null));
+                } catch (IllegalAccessException e) {
+                    return null;
+                }
+            })
+            .collect(Collectors.toMap(value -> value, value -> new AtomicLong(), (a, b) -> b, ConcurrentHashMap::new));
 
     private Metrics() {
     }
