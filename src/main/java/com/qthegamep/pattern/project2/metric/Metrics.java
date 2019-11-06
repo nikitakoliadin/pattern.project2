@@ -5,8 +5,10 @@ import com.qthegamep.pattern.project2.util.Paths;
 
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,16 @@ public class Metrics {
                 }
             })
             .collect(Collectors.toMap(value -> value, value -> new AtomicLong(), (a, b) -> b, ConcurrentHashMap::new));
+
+    public static final Map<String, List<Long>> REQUEST_TIME_METRIC = Arrays.stream(Paths.class.getFields())
+            .map(field -> {
+                try {
+                    return String.valueOf(field.get(null));
+                } catch (IllegalAccessException e) {
+                    return null;
+                }
+            })
+            .collect(Collectors.toMap(value -> value, value -> new CopyOnWriteArrayList<>(), (a, b) -> b, ConcurrentHashMap::new));
 
     private Metrics() {
     }
