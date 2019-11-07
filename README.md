@@ -20,6 +20,7 @@ Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Ni
 * /metrics
 * /pattern/project2/test
 * /pattern/project2/docs/
+* /pattern/project2/swagger/openapi.json
 
 ## Contact Information
 * **Author:** Koliadin Nikita
