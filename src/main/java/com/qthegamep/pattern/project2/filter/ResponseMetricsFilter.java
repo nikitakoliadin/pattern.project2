@@ -9,6 +9,7 @@ import javax.annotation.Priority;
 import javax.ws.rs.container.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Provider
 @PreMatching
@@ -44,7 +45,7 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
     private void registerRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
         String path = "/" + requestContext.getUriInfo().getPath();
         if (Metrics.REQUEST_TIME_METRIC.containsKey(path)) {
-            long duration = Long.parseLong(responseContext.getHeaderString(Constants.DURATION_HEADER.getValue()));
+            AtomicLong duration = new AtomicLong(Long.parseLong(responseContext.getHeaderString(Constants.DURATION_HEADER.getValue())));
             Metrics.REQUEST_TIME_METRIC.get(path).add(duration);
             LOG.debug("Path: [{}] Duration: {} RequestId: {}", path, duration, requestId);
         } else {

@@ -46,7 +46,7 @@ public class Metrics {
                     (a, b) -> b,
                     ConcurrentHashMap::new));
 
-    public static final Map<String, List<Long>> REQUEST_TIME_METRIC = Arrays.stream(Paths.class.getFields())
+    public static final Map<String, List<AtomicLong>> REQUEST_TIME_METRIC = Arrays.stream(Paths.class.getFields())
             .map(field -> {
                 try {
                     return String.valueOf(field.get(null));

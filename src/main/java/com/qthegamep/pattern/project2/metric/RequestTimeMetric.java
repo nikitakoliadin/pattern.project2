@@ -7,6 +7,7 @@ import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.binder.MeterBinder;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class RequestTimeMetric implements MeterBinder {
 
@@ -18,7 +19,7 @@ public class RequestTimeMetric implements MeterBinder {
         Metrics.REQUEST_TIME_METRIC.forEach((key, value) -> Gauge.builder(REQUEST_TIME,
                 () -> {
                     double result = Arrays.stream(value.toArray())
-                            .mapToLong(num -> (long) num)
+                            .mapToLong(num -> ((AtomicLong) num).get())
                             .average()
                             .orElse(0.0);
                     value.clear();
