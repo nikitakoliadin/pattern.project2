@@ -5,9 +5,6 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.binder.MeterBinder;
-import sun.management.Util;
-
-import java.lang.management.PlatformManagedObject;
 
 public class RequestCounterMetric implements MeterBinder {
 
@@ -16,8 +13,7 @@ public class RequestCounterMetric implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        PlatformManagedObject errorTypesPlatformManagedObject = () -> Util.newObjectName(REQUEST_COUNTER);
-        Metrics.REQUEST_COUNTER_METRIC.forEach((key, value) -> Gauge.builder(REQUEST_COUNTER, errorTypesPlatformManagedObject, platformManagedObject -> value.get())
+        Metrics.REQUEST_COUNTER_METRIC.forEach((key, value) -> Gauge.builder(REQUEST_COUNTER, value::get)
                 .description("The request counter")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .tags(Tags.of(PATH_TAG, key))

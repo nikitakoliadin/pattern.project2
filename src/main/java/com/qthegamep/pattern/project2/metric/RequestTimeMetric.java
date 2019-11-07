@@ -5,9 +5,7 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.binder.MeterBinder;
-import sun.management.Util;
 
-import java.lang.management.PlatformManagedObject;
 import java.util.Arrays;
 
 public class RequestTimeMetric implements MeterBinder {
@@ -17,9 +15,8 @@ public class RequestTimeMetric implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        PlatformManagedObject errorTypesPlatformManagedObject = () -> Util.newObjectName(REQUEST_TIME);
-        Metrics.REQUEST_TIME_METRIC.forEach((key, value) -> Gauge.builder(REQUEST_TIME, errorTypesPlatformManagedObject,
-                platformManagedObject -> {
+        Metrics.REQUEST_TIME_METRIC.forEach((key, value) -> Gauge.builder(REQUEST_TIME,
+                () -> {
                     double result = Arrays.stream(value.toArray())
                             .mapToLong(num -> (long) num)
                             .average()
