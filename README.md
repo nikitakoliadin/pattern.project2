@@ -21,6 +21,7 @@ Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Ni
 * /pattern/project2/test
 * /pattern/project2/docs/
 * /pattern/project2/swagger/openapi.json
+* /pattern/project2/swagger/openapi.yaml
 
 ## Contact Information
 * **Author:** Koliadin Nikita
