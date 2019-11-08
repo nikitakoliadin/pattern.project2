@@ -17,7 +17,8 @@ public enum Constants {
     GRIZZLY("grizzly"),
     APPLICATION_GRIZZLY_POOL_NAME("application-grizzly-worker-thread-"),
     PROMETHEUS_GRIZZLY_POOL_NAME("prometheus-grizzly-worker-thread-"),
-    HTTP("http://");
+    HTTP("http://"),
+    JSON_OBJECT_ID_FIELD_NAME("$oid");
 
     private String value;
 
