@@ -81,6 +81,9 @@
         <!-- JSON -->
         <json.jackson-dataformat-xml.version>2.9.10</json.jackson-dataformat-xml.version>
 
+        <!-- DB -->
+        <db.mongo-java-driver.version>3.2.2</db.mongo-java-driver.version>
+
         <!-- Swagger -->
         <swagger.version>2.0.6</swagger.version>
 
@@ -312,6 +315,14 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${json.jackson-dataformat-xml.version}</version>
+        </dependency>
+
+        <!-- DB -->
+        <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${db.mongo-java-driver.version}</version>
         </dependency>
 
         <!-- Swagger -->
