@@ -8,6 +8,7 @@ import com.qthegamep.pattern.project2.probe.GrizzlyThreadPoolProbe;
 import com.qthegamep.pattern.project2.probe.TaskQueueSizeProbe;
 import com.qthegamep.pattern.project2.exception.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.model.IoStrategyType;
+import com.qthegamep.pattern.project2.servlet.HealthCheckerServletImpl;
 import com.qthegamep.pattern.project2.util.Constants;
 import com.qthegamep.pattern.project2.util.Paths;
 import io.prometheus.client.exporter.MetricsServlet;
@@ -131,9 +132,7 @@ public class Application {
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setIOStrategy(new IOStrategyFactory().createIOStrategy(IoStrategyType.DYNAMIC_IO_STRATEGY));
-            WebappContext webappContext = new WebappContext("Prometheus metrics", Paths.METRICS_PATH);
-            webappContext.addServlet("Prometheus metrics servlet", new MetricsServlet());
-            webappContext.deploy(httpServer);
+            mapServlets(httpServer);
             httpServer.start();
             LOG.info("\nBlocking Transport(T/F): {}\nNum SelectorRunners: {}\nNum WorkerThreads: {}\nNum KernelThreadPool: {}\nQueue limit: {}",
                     grizzlyTransport.isBlocking(),
@@ -145,5 +144,14 @@ public class Application {
         } catch (Exception e) {
             LOG.error("Error", e);
         }
+    }
+
+    private static void mapServlets(HttpServer httpServer) {
+        WebappContext metricsContext = new WebappContext("Prometheus metrics", Paths.METRICS_PATH);
+        metricsContext.addServlet("Prometheus metrics servlet", new MetricsServlet());
+        metricsContext.deploy(httpServer);
+        WebappContext healthCheckerContext = new WebappContext("Health checker", Paths.TEST_PATH);
+        healthCheckerContext.addServlet("Health checker servlet", new HealthCheckerServletImpl());
+        healthCheckerContext.deploy(httpServer);
     }
 }
