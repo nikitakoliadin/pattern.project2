@@ -82,7 +82,8 @@
         <json.jackson-dataformat-xml.version>2.9.10</json.jackson-dataformat-xml.version>
 
         <!-- DB -->
-        <db.mongo-java-driver.version>3.2.2</db.mongo-java-driver.version>
+        <db.mongo-java-driver.version>3.5.0</db.mongo-java-driver.version>
+        <db.mongodb-driver-async.version>3.5.0</db.mongodb-driver-async.version>
 
         <!-- Swagger -->
         <swagger.version>2.0.6</swagger.version>
@@ -323,6 +324,13 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>${db.mongo-java-driver.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-async -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-async</artifactId>
+            <version>${db.mongodb-driver-async.version}</version>
         </dependency>
 
         <!-- Swagger -->
