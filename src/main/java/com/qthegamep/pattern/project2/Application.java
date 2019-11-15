@@ -38,14 +38,14 @@ public class Application {
         HttpServer applicationHttpServer = startServer(applicationUrl);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         String swaggerPath = addSwaggerUIMapping(applicationHttpServer, applicationContext + swaggerUrl);
-        String metricsPort = System.getProperty("application.metrics.port", "8081");
-        String metricsContext = System.getProperty("application.metrics.context", "/metrics");
-        String metricsUrl = Constants.HTTP.getValue() + host + ":" + metricsPort + metricsContext;
-        HttpServer metricsHttpServer = startMetricsServer(metricsUrl);
-        Runtime.getRuntime().addShutdownHook(new GrizzlyServersShutdownHook(applicationHttpServer, metricsHttpServer));
+        String monitoringPort = System.getProperty("application.monitoring.port", "8081");
+        String monitoringContext = System.getProperty("application.monitoring.context", "/");
+        String monitoringUrl = Constants.HTTP.getValue() + host + ":" + monitoringPort + monitoringContext;
+        HttpServer monitoringHttpServer = startMonitoringServer(monitoringUrl);
+        Runtime.getRuntime().addShutdownHook(new GrizzlyServersShutdownHook(applicationHttpServer, monitoringHttpServer));
         LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
         LOG.info("Swagger openApi available at {}", swaggerPath);
-        LOG.info("Metrics started at {}", metricsUrl);
+        LOG.info("Monitoring started at {}", monitoringUrl);
         Thread.currentThread().join();
     }
 
@@ -113,14 +113,14 @@ public class Application {
         return Constants.HTTP.getValue() + grizzlyListener.getHost() + ":" + grizzlyListener.getPort() + contextPath + urlPattern;
     }
 
-    private static HttpServer startMetricsServer(String metricsUrl) {
-        URI metricsUri = URI.create(metricsUrl);
-        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(metricsUri, false);
-        configMetricsServer(httpServer);
+    private static HttpServer startMonitoringServer(String monitoringUrl) {
+        URI monitoringUri = URI.create(monitoringUrl);
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(monitoringUri, false);
+        configMonitoringServer(httpServer);
         return httpServer;
     }
 
-    private static void configMetricsServer(HttpServer httpServer) {
+    private static void configMonitoringServer(HttpServer httpServer) {
         try {
             TCPNIOTransport grizzlyTransport = httpServer.getListener(Constants.GRIZZLY.getValue()).getTransport();
             ThreadPoolConfig threadPoolConfig = ThreadPoolConfig.defaultConfig()
