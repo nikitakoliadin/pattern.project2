@@ -11,26 +11,32 @@ import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.CollectorRegistry;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 
 public class ApplicationBinder extends AbstractBinder {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationBinder.class);
 
     private ConverterService converterService;
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
     private PrometheusMeterRegistry prometheusMeterRegistry;
     private DatabaseConnector databaseConnector;
+    private com.mongodb.client.MongoDatabase syncMongoDatabase;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
         this.prometheusMeterRegistry = prometheusMeterRegistry;
         this.databaseConnector = databaseConnector;
+        this.syncMongoDatabase = syncMongoDatabase;
     }
 
     public ConverterService getConverterService() {
@@ -53,6 +59,10 @@ public class ApplicationBinder extends AbstractBinder {
         return databaseConnector;
     }
 
+    public com.mongodb.client.MongoDatabase getSyncMongoDatabase() {
+        return syncMongoDatabase;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -64,6 +74,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindErrorResponseBuilderService();
         bindPrometheusMeterRegistry();
         bindDatabaseConnector();
+        bindSyncMongoDatabase();
     }
 
     private void bindConverterService() {
@@ -122,6 +133,23 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindSyncMongoDatabase() {
+        if (syncMongoDatabase == null) {
+            String syncMongoDbEnabled = System.getProperty("sync.mongodb.enabled");
+            LOG.debug("Sync MongoDB enabled: {}", syncMongoDbEnabled);
+            if (Boolean.parseBoolean(syncMongoDbEnabled)) {
+                String syncMongoDbType = System.getProperty("sync.mongodb.type");
+                LOG.info("Sync MongoDB type: {}", syncMongoDbType);
+                com.mongodb.client.MongoDatabase syncMongoDatabase = databaseConnector.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, syncMongoDbType);
+                bind(syncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
+            } else {
+                LOG.warn("Sync MongoDB disabled");
+            }
+        } else {
+            bind(syncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
@@ -129,6 +157,7 @@ public class ApplicationBinder extends AbstractBinder {
         private ErrorResponseBuilderService errorResponseBuilderService;
         private PrometheusMeterRegistry prometheusMeterRegistry;
         private DatabaseConnector databaseConnector;
+        private com.mongodb.client.MongoDatabase syncMongoDatabase;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -155,8 +184,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setSyncMongoDatabase(com.mongodb.client.MongoDatabase syncMongoDatabase) {
+            this.syncMongoDatabase = syncMongoDatabase;
+            return this;
+        }
+
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase);
         }
     }
 }
