@@ -20,15 +20,17 @@ public class ApplicationBinder extends AbstractBinder {
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
     private PrometheusMeterRegistry prometheusMeterRegistry;
+    private DatabaseConnector databaseConnector;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
         this.prometheusMeterRegistry = prometheusMeterRegistry;
+        this.databaseConnector = databaseConnector;
     }
 
     public ConverterService getConverterService() {
@@ -47,6 +49,10 @@ public class ApplicationBinder extends AbstractBinder {
         return prometheusMeterRegistry;
     }
 
+    public DatabaseConnector getDatabaseConnector() {
+        return databaseConnector;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -57,6 +63,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindGenerationService();
         bindErrorResponseBuilderService();
         bindPrometheusMeterRegistry();
+        bindDatabaseConnector();
     }
 
     private void bindConverterService() {
@@ -106,12 +113,22 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindDatabaseConnector() {
+        if (databaseConnector == null) {
+            databaseConnector = new DatabaseConnectorImpl();
+            bind(databaseConnector).to(DatabaseConnector.class).in(Singleton.class);
+        } else {
+            bind(databaseConnector).to(DatabaseConnector.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
         private GenerationService generationService;
         private ErrorResponseBuilderService errorResponseBuilderService;
         private PrometheusMeterRegistry prometheusMeterRegistry;
+        private DatabaseConnector databaseConnector;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -133,8 +150,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setDatabaseConnector(DatabaseConnector databaseConnector) {
+            this.databaseConnector = databaseConnector;
+            return this;
+        }
+
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector);
         }
     }
 }
