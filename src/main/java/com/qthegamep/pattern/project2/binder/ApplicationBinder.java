@@ -13,6 +13,7 @@ import io.prometheus.client.CollectorRegistry;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.JedisPool;
 
 import javax.inject.Singleton;
 
@@ -27,11 +28,12 @@ public class ApplicationBinder extends AbstractBinder {
     private DatabaseConnector databaseConnector;
     private com.mongodb.client.MongoDatabase syncMongoDatabase;
     private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
+    private JedisPool jedisPool;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -39,6 +41,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.databaseConnector = databaseConnector;
         this.syncMongoDatabase = syncMongoDatabase;
         this.asyncMongoDatabase = asyncMongoDatabase;
+        this.jedisPool = jedisPool;
     }
 
     public ConverterService getConverterService() {
@@ -69,6 +72,10 @@ public class ApplicationBinder extends AbstractBinder {
         return asyncMongoDatabase;
     }
 
+    public JedisPool getJedisPool() {
+        return jedisPool;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -82,6 +89,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindDatabaseConnector();
         bindSyncMongoDatabase();
         bindAsyncMongoDatabase();
+        bindJedisPool();
     }
 
     private void bindConverterService() {
@@ -174,6 +182,21 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindJedisPool() {
+        if (jedisPool == null) {
+            String redisPoolEnabled = System.getProperty("redis.pool.enabled");
+            LOG.debug("Redis pool enabled: {}", redisPoolEnabled);
+            if (Boolean.parseBoolean(redisPoolEnabled)) {
+                JedisPool newJedisPool = databaseConnector.connectToPoolRedis();
+                bind(newJedisPool).to(JedisPool.class).in(Singleton.class);
+            } else {
+                LOG.warn("Redis pool disabled");
+            }
+        } else {
+            bind(jedisPool).to(JedisPool.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
@@ -183,6 +206,7 @@ public class ApplicationBinder extends AbstractBinder {
         private DatabaseConnector databaseConnector;
         private com.mongodb.client.MongoDatabase syncMongoDatabase;
         private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
+        private JedisPool jedisPool;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -219,8 +243,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setJedisPool(JedisPool jedisPool) {
+            this.jedisPool = jedisPool;
+            return this;
+        }
+
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase, jedisPool);
         }
     }
 }
