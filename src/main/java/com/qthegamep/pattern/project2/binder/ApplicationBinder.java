@@ -4,6 +4,8 @@ import com.qthegamep.pattern.project2.metric.*;
 import com.qthegamep.pattern.project2.service.*;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.binder.jvm.*;
+import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
+import io.micrometer.core.instrument.binder.mongodb.MongoMetricsConnectionPoolListener;
 import io.micrometer.core.instrument.binder.system.*;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
@@ -18,6 +20,9 @@ public class ApplicationBinder extends AbstractBinder {
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
     private PrometheusMeterRegistry prometheusMeterRegistry;
+
+    private MongoMetricsCommandListener mongoMetricsCommandListener;
+    private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
     private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry) {
         this.converterService = converterService;
@@ -93,6 +98,8 @@ public class ApplicationBinder extends AbstractBinder {
             new ResponseStatusMetric().bindTo(newPrometheusMeterRegistry);
             new RequestCounterMetric().bindTo(newPrometheusMeterRegistry);
             new RequestTimeMetric().bindTo(newPrometheusMeterRegistry);
+            mongoMetricsCommandListener = new MongoMetricsCommandListener(newPrometheusMeterRegistry);
+            mongoMetricsConnectionPoolListener = new MongoMetricsConnectionPoolListener(newPrometheusMeterRegistry);
             bind(newPrometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
         } else {
             bind(prometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
