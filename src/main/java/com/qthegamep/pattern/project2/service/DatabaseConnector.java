@@ -25,9 +25,9 @@ public interface DatabaseConnector {
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType);
 
-    List<com.mongodb.MongoClient> getAllSyncMongoDBConnections();
+    List<com.mongodb.MongoClient> getSyncMongoDBConnections();
 
-    void closeSyncConnections();
+    void closeSyncMongoDBConnections();
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB();
 
@@ -45,17 +45,17 @@ public interface DatabaseConnector {
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType);
 
-    List<com.mongodb.async.client.MongoClient> getAllAsyncMongoDBConnections();
+    List<com.mongodb.async.client.MongoClient> getAsyncMongoDBConnections();
 
-    void closeAsyncConnections();
+    void closeAsyncMongoDBConnections();
 
     JedisPool connectToPoolRedis();
 
     JedisCluster connectToClusterRedis();
 
-    List<JedisPool> getAllRedisPools();
+    List<JedisPool> getRedisPools();
 
-    List<JedisCluster> getAllRedisClusters();
+    List<JedisCluster> getRedisClusters();
 
     void closeRedisPools();
 

@@ -92,12 +92,12 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
     }
 
     @Override
-    public List<com.mongodb.MongoClient> getAllSyncMongoDBConnections() {
+    public List<com.mongodb.MongoClient> getSyncMongoDBConnections() {
         return syncMongoClients;
     }
 
     @Override
-    public void closeSyncConnections() {
+    public void closeSyncMongoDBConnections() {
         LOG.debug("Sync MongoDB's to close: {}", syncMongoClients.size());
         syncMongoClients.forEach(Mongo::close);
         syncMongoClients.clear();
@@ -156,12 +156,12 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
     }
 
     @Override
-    public List<com.mongodb.async.client.MongoClient> getAllAsyncMongoDBConnections() {
+    public List<com.mongodb.async.client.MongoClient> getAsyncMongoDBConnections() {
         return asyncMongoClients;
     }
 
     @Override
-    public void closeAsyncConnections() {
+    public void closeAsyncMongoDBConnections() {
         LOG.debug("Async MongoDB's to close: {}", asyncMongoClients.size());
         asyncMongoClients.forEach(com.mongodb.async.client.MongoClient::close);
         asyncMongoClients.clear();
@@ -223,12 +223,12 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
     }
 
     @Override
-    public List<JedisPool> getAllRedisPools() {
+    public List<JedisPool> getRedisPools() {
         return redisPools;
     }
 
     @Override
-    public List<JedisCluster> getAllRedisClusters() {
+    public List<JedisCluster> getRedisClusters() {
         return redisClusters;
     }
 
@@ -255,8 +255,8 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
     @Override
     public void closeAll() {
         LOG.debug("Close all database connections");
-        closeSyncConnections();
-        closeAsyncConnections();
+        closeSyncMongoDBConnections();
+        closeAsyncMongoDBConnections();
         closeRedisPools();
         closeRedisClusters();
     }
