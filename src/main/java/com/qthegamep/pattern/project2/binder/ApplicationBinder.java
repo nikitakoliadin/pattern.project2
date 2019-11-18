@@ -26,17 +26,19 @@ public class ApplicationBinder extends AbstractBinder {
     private PrometheusMeterRegistry prometheusMeterRegistry;
     private DatabaseConnector databaseConnector;
     private com.mongodb.client.MongoDatabase syncMongoDatabase;
+    private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
         this.prometheusMeterRegistry = prometheusMeterRegistry;
         this.databaseConnector = databaseConnector;
         this.syncMongoDatabase = syncMongoDatabase;
+        this.asyncMongoDatabase = asyncMongoDatabase;
     }
 
     public ConverterService getConverterService() {
@@ -63,6 +65,10 @@ public class ApplicationBinder extends AbstractBinder {
         return syncMongoDatabase;
     }
 
+    public com.mongodb.async.client.MongoDatabase getAsyncMongoDatabase() {
+        return asyncMongoDatabase;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -75,6 +81,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindPrometheusMeterRegistry();
         bindDatabaseConnector();
         bindSyncMongoDatabase();
+        bindAsyncMongoDatabase();
     }
 
     private void bindConverterService() {
@@ -140,13 +147,30 @@ public class ApplicationBinder extends AbstractBinder {
             if (Boolean.parseBoolean(syncMongoDbEnabled)) {
                 String syncMongoDbType = System.getProperty("sync.mongodb.type");
                 LOG.info("Sync MongoDB type: {}", syncMongoDbType);
-                com.mongodb.client.MongoDatabase syncMongoDatabase = databaseConnector.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, syncMongoDbType);
-                bind(syncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
+                com.mongodb.client.MongoDatabase newSyncMongoDatabase = databaseConnector.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, syncMongoDbType);
+                bind(newSyncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
             } else {
                 LOG.warn("Sync MongoDB disabled");
             }
         } else {
             bind(syncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
+        }
+    }
+
+    private void bindAsyncMongoDatabase() {
+        if (asyncMongoDatabase == null) {
+            String asyncMongoDbEnabled = System.getProperty("async.mongodb.enabled");
+            LOG.debug("Async MongoDB enabled: {}", asyncMongoDbEnabled);
+            if (Boolean.parseBoolean(asyncMongoDbEnabled)) {
+                String asyncMongoDbType = System.getProperty("async.mongodb.type");
+                LOG.info("Async MongoDB type: {}", asyncMongoDbType);
+                com.mongodb.async.client.MongoDatabase newAsyncMongoDatabase = databaseConnector.connectToAsyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, asyncMongoDbType);
+                bind(newAsyncMongoDatabase).to(com.mongodb.async.client.MongoDatabase.class).to(Singleton.class);
+            } else {
+                LOG.warn("Async MongoDB disabled");
+            }
+        } else {
+            bind(asyncMongoDatabase).to(com.mongodb.async.client.MongoDatabase.class).in(Singleton.class);
         }
     }
 
@@ -158,6 +182,7 @@ public class ApplicationBinder extends AbstractBinder {
         private PrometheusMeterRegistry prometheusMeterRegistry;
         private DatabaseConnector databaseConnector;
         private com.mongodb.client.MongoDatabase syncMongoDatabase;
+        private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -189,8 +214,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setAsyncMongoDatabase(com.mongodb.async.client.MongoDatabase asyncMongoDatabase) {
+            this.asyncMongoDatabase = asyncMongoDatabase;
+            return this;
+        }
+
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase);
         }
     }
 }
