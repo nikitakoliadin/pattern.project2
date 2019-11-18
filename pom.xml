@@ -84,6 +84,7 @@
         <!-- DB -->
         <db.mongo-java-driver.version>3.5.0</db.mongo-java-driver.version>
         <db.mongodb-driver-async.version>3.5.0</db.mongodb-driver-async.version>
+        <db.jedis.version>2.9.0</db.jedis.version>
 
         <!-- Swagger -->
         <swagger.version>2.0.6</swagger.version>
@@ -331,6 +332,13 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-async</artifactId>
             <version>${db.mongodb-driver-async.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${db.jedis.version}</version>
         </dependency>
 
         <!-- Swagger -->
