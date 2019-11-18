@@ -2,6 +2,8 @@ package com.qthegamep.pattern.project2.service;
 
 import com.mongodb.event.CommandListener;
 import com.mongodb.event.ConnectionPoolListener;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 
@@ -46,4 +48,16 @@ public interface DatabaseConnector {
     List<com.mongodb.async.client.MongoClient> getAllAsyncMongoDBConnections();
 
     void closeAsyncConnections();
+
+    JedisPool connectToPoolRedis();
+
+    JedisCluster connectToClusterRedis();
+
+    List<JedisPool> getAllRedisPools();
+
+    List<JedisCluster> getAllRedisClusters();
+
+    void closeRedisPools();
+
+    void closeRedisClusters();
 }
