@@ -158,7 +158,7 @@ public class ApplicationBinder extends AbstractBinder {
                 com.mongodb.client.MongoDatabase newSyncMongoDatabase = databaseConnector.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, syncMongoDbType);
                 bind(newSyncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
             } else {
-                LOG.warn("Sync MongoDB disabled");
+                LOG.warn("Sync MongoDB disabled! Don't use or remove SyncMongoDatabase binding!");
             }
         } else {
             bind(syncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
@@ -175,7 +175,7 @@ public class ApplicationBinder extends AbstractBinder {
                 com.mongodb.async.client.MongoDatabase newAsyncMongoDatabase = databaseConnector.connectToAsyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, asyncMongoDbType);
                 bind(newAsyncMongoDatabase).to(com.mongodb.async.client.MongoDatabase.class).to(Singleton.class);
             } else {
-                LOG.warn("Async MongoDB disabled");
+                LOG.warn("Async MongoDB disabled! Don't use or remove AsyncMongoDatabase binding!");
             }
         } else {
             bind(asyncMongoDatabase).to(com.mongodb.async.client.MongoDatabase.class).in(Singleton.class);
@@ -190,7 +190,7 @@ public class ApplicationBinder extends AbstractBinder {
                 JedisPool newJedisPool = databaseConnector.connectToPoolRedis();
                 bind(newJedisPool).to(JedisPool.class).in(Singleton.class);
             } else {
-                LOG.warn("Redis pool disabled");
+                LOG.warn("Redis pool disabled! Don't use or remove JedisPool binding!");
             }
         } else {
             bind(jedisPool).to(JedisPool.class).in(Singleton.class);
@@ -218,7 +218,7 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
-        public ApplicationBinderBuilder errorResponseBuilderService(ErrorResponseBuilderService errorResponseBuilderService) {
+        public ApplicationBinderBuilder setErrorResponseBuilderService(ErrorResponseBuilderService errorResponseBuilderService) {
             this.errorResponseBuilderService = errorResponseBuilderService;
             return this;
         }
