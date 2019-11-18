@@ -11,17 +11,23 @@ import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.event.CommandListener;
 import com.mongodb.event.ConnectionPoolListener;
 import com.qthegamep.pattern.project2.exception.AsyncMongoDBConnectorRuntimeException;
+import com.qthegamep.pattern.project2.exception.CloseClusterRedisRuntimeException;
+import com.qthegamep.pattern.project2.exception.RedisConnectorRuntimeException;
 import com.qthegamep.pattern.project2.exception.SyncMongoDBConnectorRuntimeException;
 import com.qthegamep.pattern.project2.model.ErrorType;
 import com.qthegamep.pattern.project2.util.Constants;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DatabaseConnectorImpl implements DatabaseConnector {
 
@@ -29,6 +35,8 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
 
     private List<com.mongodb.MongoClient> syncMongoClients = new CopyOnWriteArrayList<>();
     private List<com.mongodb.async.client.MongoClient> asyncMongoClients = new CopyOnWriteArrayList<>();
+    private List<JedisPool> redisPools = new CopyOnWriteArrayList<>();
+    private List<JedisCluster> redisClusters = new CopyOnWriteArrayList<>();
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB() {
@@ -159,6 +167,91 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
         asyncMongoClients.clear();
     }
 
+    @Override
+    public JedisPool connectToPoolRedis() {
+        try {
+            String host = System.getProperty("redis.pool.host");
+            String port = System.getProperty("redis.pool.port");
+            String password = System.getProperty("redis.pool.password");
+            String maxTotal = System.getProperty("redis.pool.max.total");
+            String maxIdle = System.getProperty("redis.pool.max.idle");
+            String timeout = System.getProperty("redis.pool.timeout");
+            LOG.debug("Pool Redis properties -> Host: {} Port: {} Password: {} Max Total: {} Max Idle: {} Timeout: {}", host, port, password, maxTotal, maxIdle, timeout);
+            JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+            jedisPoolConfig.setMaxTotal(Integer.parseInt(maxTotal));
+            jedisPoolConfig.setMaxIdle(Integer.parseInt(maxIdle));
+            JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, Integer.parseInt(port), Integer.parseInt(timeout), password);
+            LOG.info("Pool Redis {}:{} was connected", host, port);
+            redisPools.add(jedisPool);
+            return jedisPool;
+        } catch (Exception e) {
+            throw new RedisConnectorRuntimeException(e, ErrorType.REDIS_POOL_CONNECTOR_ERROR);
+        }
+    }
+
+    @Override
+    public JedisCluster connectToClusterRedis() {
+        try {
+            List<String> hosts = getRedisListOfHosts();
+            List<String> ports = getRedisListOfPorts();
+            String password = System.getProperty("redis.cluster.password");
+            String testOnBorrow = System.getProperty("redis.cluster.test.on.borrow");
+            String testOnReturn = System.getProperty("redis.cluster.test.on.return");
+            String maxTotal = System.getProperty("redis.cluster.max.total");
+            String maxIdle = System.getProperty("redis.cluster.max.idle");
+            String minIdle = System.getProperty("redis.cluster.min.idle");
+            String connectionTimeout = System.getProperty("redis.cluster.connection.timeout");
+            String soTimeout = System.getProperty("redis.cluster.so.timeout");
+            String maxAttempts = System.getProperty("redis.cluster.max.attempts");
+            LOG.debug("Cluster Redis properties -> Host: {} Port: {} Password: {} Test On Borrow: {} Test On Return: {} Max Total: {} Max Idle: {} Min Idle: {} Connection Timeout: {} So Timeout: {} Max Attempts: {}", hosts, ports, password, testOnBorrow, testOnReturn, maxTotal, maxIdle, minIdle, connectionTimeout, soTimeout, maxAttempts);
+            Set<HostAndPort> clusterRedisNodes = buildClusterRedisNodes(hosts, ports);
+            GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
+            genericObjectPoolConfig.setTestOnBorrow(Boolean.parseBoolean(testOnBorrow));
+            genericObjectPoolConfig.setTestOnReturn(Boolean.parseBoolean(testOnReturn));
+            genericObjectPoolConfig.setMaxTotal(Integer.parseInt(maxTotal));
+            genericObjectPoolConfig.setMaxIdle(Integer.parseInt(maxIdle));
+            genericObjectPoolConfig.setMinIdle(Integer.parseInt(minIdle));
+            JedisCluster jedisCluster = new JedisCluster(clusterRedisNodes, Integer.parseInt(connectionTimeout), Integer.parseInt(soTimeout), Integer.parseInt(maxAttempts), password, genericObjectPoolConfig);
+            LOG.info("Cluster Redis were connected:");
+            IntStream.range(0, hosts.size())
+                    .forEach(i -> LOG.info("{}:{}", hosts.get(i), ports.get(i)));
+            redisClusters.add(jedisCluster);
+            return jedisCluster;
+        } catch (Exception e) {
+            throw new RedisConnectorRuntimeException(e, ErrorType.REDIS_CLUSTER_CONNECTOR_ERROR);
+        }
+    }
+
+    @Override
+    public List<JedisPool> getAllRedisPools() {
+        return redisPools;
+    }
+
+    @Override
+    public List<JedisCluster> getAllRedisClusters() {
+        return redisClusters;
+    }
+
+    @Override
+    public void closeRedisPools() {
+        LOG.debug("Redis pools to close: {}", redisPools.size());
+        redisPools.forEach(JedisPool::close);
+        redisPools.clear();
+    }
+
+    @Override
+    public void closeRedisClusters() {
+        try {
+            LOG.debug("Redis clusters to close: {}", redisClusters.size());
+            for (JedisCluster redisCluster : redisClusters) {
+                redisCluster.close();
+            }
+            redisClusters.clear();
+        } catch (Exception e) {
+            throw new CloseClusterRedisRuntimeException(e, ErrorType.CLOSE_CLUSTER_REDIS_ERROR);
+        }
+    }
+
     private com.mongodb.client.MongoDatabase connectToStandaloneSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
         String host = System.getProperty("sync.mongodb.standalone.host");
         String port = System.getProperty("sync.mongodb.standalone.port");
@@ -176,7 +269,7 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
     }
 
     private com.mongodb.client.MongoDatabase connectToClusterSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
-        List<String> hosts = getSyncListOfHosts();
+        List<String> hosts = getSyncMongoDBListOfHosts();
         String port = System.getProperty("sync.mongodb.cluster.port");
         String user = System.getProperty("sync.mongodb.cluster.user");
         String db = System.getProperty("sync.mongodb.cluster.db");
@@ -214,7 +307,7 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
     }
 
     private com.mongodb.async.client.MongoDatabase connectToClusterAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
-        List<String> hosts = getAsyncListOfHosts();
+        List<String> hosts = getAsyncMongoDBListOfHosts();
         String port = System.getProperty("async.mongodb.cluster.port");
         String user = System.getProperty("async.mongodb.cluster.user");
         String db = System.getProperty("async.mongodb.cluster.db");
@@ -262,19 +355,38 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
                 .build();
     }
 
-    private List<String> getSyncListOfHosts() {
-        return getListOfHosts("sync.mongodb.cluster.host");
+    private Set<HostAndPort> buildClusterRedisNodes(List<String> hosts, List<String> ports) {
+        Set<HostAndPort> redisClusterNodes = new HashSet<>();
+        for (int i = 0; i < hosts.size(); i++) {
+            String host = hosts.get(i);
+            int port = Integer.parseInt(ports.get(i));
+            HostAndPort hostAndPort = new HostAndPort(host, port);
+            redisClusterNodes.add(hostAndPort);
+        }
+        return redisClusterNodes;
     }
 
-    private List<String> getAsyncListOfHosts() {
-        return getListOfHosts("async.mongodb.cluster.host");
+    private List<String> getSyncMongoDBListOfHosts() {
+        return getListOf("sync.mongodb.cluster.host");
     }
 
-    private List<String> getListOfHosts(String hostProperty) {
+    private List<String> getAsyncMongoDBListOfHosts() {
+        return getListOf("async.mongodb.cluster.host");
+    }
+
+    private List<String> getRedisListOfHosts() {
+        return getListOf("redis.cluster.host");
+    }
+
+    private List<String> getRedisListOfPorts() {
+        return getListOf("redis.cluster.port");
+    }
+
+    private List<String> getListOf(String property) {
         List<String> hosts = new ArrayList<>();
         int i = 1;
         while (true) {
-            String host = System.getProperty(hostProperty + "." + i);
+            String host = System.getProperty(property + "." + i);
             if (host == null || host.isEmpty()) {
                 break;
             } else {
