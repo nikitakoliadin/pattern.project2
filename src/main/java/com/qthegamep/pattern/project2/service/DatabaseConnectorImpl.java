@@ -252,6 +252,15 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
         }
     }
 
+    @Override
+    public void closeAll() {
+        LOG.debug("Close all database connections");
+        closeSyncConnections();
+        closeAsyncConnections();
+        closeRedisPools();
+        closeRedisClusters();
+    }
+
     private com.mongodb.client.MongoDatabase connectToStandaloneSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
         String host = System.getProperty("sync.mongodb.standalone.host");
         String port = System.getProperty("sync.mongodb.standalone.port");

@@ -60,4 +60,6 @@ public interface DatabaseConnector {
     void closeRedisPools();
 
     void closeRedisClusters();
+
+    void closeAll();
 }
