@@ -22,7 +22,9 @@ public enum Constants {
     JSON_OBJECT_ID_FIELD_NAME("$oid"),
     STANDALONE_MONGO_DB_TYPE("standalone"),
     CLUSTER_MONGO_DB_TYPE("cluster"),
-    JSON_OBJECT_ID_KEY("_id");
+    JSON_OBJECT_ID_KEY("_id"),
+    POOL_REDIS_TYPE("pool"),
+    CLUSTER_REDIS_TYPE("cluster");
 
     private String value;
 
