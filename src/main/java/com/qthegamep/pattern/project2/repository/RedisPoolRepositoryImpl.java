@@ -9,6 +9,7 @@ import redis.clients.jedis.JedisPool;
 
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.Optional;
 
 public class RedisPoolRepositoryImpl implements RedisRepository {
 
@@ -72,6 +73,27 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
             jedis.expire(key, ttl);
         } catch (Exception e) {
             throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ALL_ERROR);
+        }
+    }
+
+    @Override
+    public Optional<String> read(String key) throws RedisRepositoryException {
+        return read(key, null);
+    }
+
+    @Override
+    public Optional<String> read(String key, String requestId) throws RedisRepositoryException {
+        LOG.debug("Key: {} RequestId: {}", key, requestId);
+        try (Jedis jedis = jedisPool.getResource()) {
+            String result = jedis.get(key);
+            LOG.debug("Result: {} RequestId: {}", result, requestId);
+            if (result == null || result.isEmpty()) {
+                return Optional.empty();
+            } else {
+                return Optional.of(result);
+            }
+        } catch (Exception e) {
+            throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ERROR);
         }
     }
 }

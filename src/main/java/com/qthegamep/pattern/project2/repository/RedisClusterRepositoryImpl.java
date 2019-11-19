@@ -8,6 +8,7 @@ import redis.clients.jedis.JedisCluster;
 
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.Optional;
 
 public class RedisClusterRepositoryImpl implements RedisRepository {
 
@@ -71,6 +72,27 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
             jedisCluster.expire(key, ttl);
         } catch (Exception e) {
             throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ALL_ERROR);
+        }
+    }
+
+    @Override
+    public Optional<String> read(String key) throws RedisRepositoryException {
+        return read(key, null);
+    }
+
+    @Override
+    public Optional<String> read(String key, String requestId) throws RedisRepositoryException {
+        LOG.debug("Key: {} RequestId: {}", key, requestId);
+        try {
+            String result = jedisCluster.get(key);
+            LOG.debug("Result: {} RequestId: {}", result, requestId);
+            if (result == null || result.isEmpty()) {
+                return Optional.empty();
+            } else {
+                return Optional.of(result);
+            }
+        } catch (Exception e) {
+            throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ERROR);
         }
     }
 }
