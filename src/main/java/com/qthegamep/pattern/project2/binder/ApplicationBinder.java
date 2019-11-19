@@ -1,11 +1,11 @@
 package com.qthegamep.pattern.project2.binder;
 
+import com.qthegamep.pattern.project2.exception.RedisBinderRuntimeException;
 import com.qthegamep.pattern.project2.metric.*;
-import com.qthegamep.pattern.project2.repository.AsyncMongoRepository;
-import com.qthegamep.pattern.project2.repository.AsyncMongoRepositoryImpl;
-import com.qthegamep.pattern.project2.repository.SyncMongoRepository;
-import com.qthegamep.pattern.project2.repository.SyncMongoRepositoryImpl;
+import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.repository.*;
 import com.qthegamep.pattern.project2.service.*;
+import com.qthegamep.pattern.project2.util.Constants;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.binder.jvm.*;
 import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
@@ -37,11 +37,12 @@ public class ApplicationBinder extends AbstractBinder {
     private JedisCluster jedisCluster;
     private SyncMongoRepository syncMongoRepository;
     private AsyncMongoRepository asyncMongoRepository;
+    private RedisRepository redisRepository;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository, AsyncMongoRepository asyncMongoRepository) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository, AsyncMongoRepository asyncMongoRepository, RedisRepository redisRepository) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -53,6 +54,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.jedisCluster = jedisCluster;
         this.syncMongoRepository = syncMongoRepository;
         this.asyncMongoRepository = asyncMongoRepository;
+        this.redisRepository = redisRepository;
     }
 
     public ConverterService getConverterService() {
@@ -99,6 +101,10 @@ public class ApplicationBinder extends AbstractBinder {
         return asyncMongoRepository;
     }
 
+    public RedisRepository getRedisRepository() {
+        return redisRepository;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -116,6 +122,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindJedisCluster();
         bindSyncMongoRepository();
         bindAsyncMongoRepository();
+        bindRedisRepository();
     }
 
     private void bindConverterService() {
@@ -254,6 +261,22 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindRedisRepository() {
+        if (redisRepository == null) {
+            String redisType = System.getProperty("redis.type");
+            LOG.debug("Redis type: {}", redisType);
+            if (Constants.POOL_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
+                bind(RedisPoolRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
+            } else if (Constants.CLUSTER_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
+                bind(RedisClusterRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
+            } else {
+                throw new RedisBinderRuntimeException(ErrorType.REDIS_NOT_EXISTING_TYPE_ERROR);
+            }
+        } else {
+            bind(redisRepository).to(RedisRepository.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
@@ -267,6 +290,7 @@ public class ApplicationBinder extends AbstractBinder {
         private JedisCluster jedisCluster;
         private SyncMongoRepository syncMongoRepository;
         private AsyncMongoRepository asyncMongoRepository;
+        private RedisRepository redisRepository;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -323,8 +347,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setRedisRepository(RedisRepository redisRepository) {
+            this.redisRepository = redisRepository;
+            return this;
+        }
+
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository, asyncMongoRepository);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository, asyncMongoRepository, redisRepository);
         }
     }
 }
