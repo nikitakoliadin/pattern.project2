@@ -95,4 +95,25 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
             throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ERROR);
         }
     }
+
+    @Override
+    public Optional<Map<String, String>> readAll(String key) throws RedisRepositoryException {
+        return readAll(key, null);
+    }
+
+    @Override
+    public Optional<Map<String, String>> readAll(String key, String requestId) throws RedisRepositoryException {
+        LOG.debug("Key: {} RequestId: {}", key, requestId);
+        try {
+            Map<String, String> result = jedisCluster.hgetAll(key);
+            LOG.debug("Result: {} RequestId: {}", result, requestId);
+            if (result == null || result.isEmpty()) {
+                return Optional.empty();
+            } else {
+                return Optional.of(result);
+            }
+        } catch (Exception e) {
+            throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ALL_ERROR);
+        }
+    }
 }
