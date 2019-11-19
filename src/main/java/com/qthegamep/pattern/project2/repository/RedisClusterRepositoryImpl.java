@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisCluster;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 public class RedisClusterRepositoryImpl implements RedisRepository {
 
@@ -44,6 +45,32 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
             jedisCluster.expire(key, ttl);
         } catch (Exception e) {
             throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ERROR);
+        }
+    }
+
+    @Override
+    public void saveAll(String key, Map<String, String> value) throws RedisRepositoryException {
+        saveAll(key, value, defaultTtl, null);
+    }
+
+    @Override
+    public void saveAll(String key, Map<String, String> value, String requestId) throws RedisRepositoryException {
+        saveAll(key, value, defaultTtl, requestId);
+    }
+
+    @Override
+    public void saveAll(String key, Map<String, String> value, Integer ttl) throws RedisRepositoryException {
+        saveAll(key, value, ttl, null);
+    }
+
+    @Override
+    public void saveAll(String key, Map<String, String> value, Integer ttl, String requestId) throws RedisRepositoryException {
+        LOG.debug("Key: {} Values: {} TTL: {} RequestId: {}", key, value, ttl, requestId);
+        try {
+            jedisCluster.hmset(key, value);
+            jedisCluster.expire(key, ttl);
+        } catch (Exception e) {
+            throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ALL_ERROR);
         }
     }
 }
