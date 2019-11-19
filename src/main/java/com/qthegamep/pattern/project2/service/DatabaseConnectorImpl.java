@@ -10,6 +10,7 @@ import com.mongodb.connection.ClusterSettings;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.event.CommandListener;
 import com.mongodb.event.ConnectionPoolListener;
+import com.qthegamep.pattern.project2.callback.MongoShutdownServerCallback;
 import com.qthegamep.pattern.project2.exception.AsyncMongoDBConnectorRuntimeException;
 import com.qthegamep.pattern.project2.exception.CloseClusterRedisRuntimeException;
 import com.qthegamep.pattern.project2.exception.RedisConnectorRuntimeException;
@@ -314,9 +315,11 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
                 .build();
         MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, mongoCredential, clusterSettings);
         com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
+        com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(db);
+        checkAsyncMongoDBConnection(database);
         LOG.info("Standalone async MongoDB {}:{} was connected", host, port);
         asyncMongoClients.add(mongoClient);
-        return mongoClient.getDatabase(db);
+        return database;
     }
 
     private com.mongodb.async.client.MongoDatabase connectToClusterAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
@@ -335,10 +338,12 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
                 .build();
         MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, mongoCredential, clusterSettings);
         com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
+        com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(db);
+        checkAsyncMongoDBConnection(database);
         LOG.info("Cluster async MongoDB were connected:");
         hosts.forEach(host -> LOG.info("{}:{}", host, port));
         asyncMongoClients.add(mongoClient);
-        return mongoClient.getDatabase(db);
+        return database;
     }
 
     private MongoClientOptions buildSyncMongoClientOptions(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
@@ -412,5 +417,12 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
 
     private void checkSyncMongoDBConnection(com.mongodb.client.MongoDatabase database) {
         database.listCollectionNames().iterator();
+    }
+
+    private void checkAsyncMongoDBConnection(com.mongodb.async.client.MongoDatabase database) {
+        database.listCollectionNames().forEach(
+                document -> {
+                },
+                new MongoShutdownServerCallback());
     }
 }
