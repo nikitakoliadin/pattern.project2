@@ -20,10 +20,7 @@ import com.qthegamep.pattern.project2.util.Constants;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -181,7 +178,13 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
             JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
             jedisPoolConfig.setMaxTotal(Integer.parseInt(maxTotal));
             jedisPoolConfig.setMaxIdle(Integer.parseInt(maxIdle));
-            JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, Integer.parseInt(port), Integer.parseInt(timeout), password);
+            JedisPool jedisPool;
+            if (password == null || password.isEmpty()) {
+                jedisPool = new JedisPool(jedisPoolConfig, host, Integer.parseInt(port), Integer.parseInt(timeout));
+            } else {
+                jedisPool = new JedisPool(jedisPoolConfig, host, Integer.parseInt(port), Integer.parseInt(timeout), password);
+            }
+            checkRedisPoolConnection(jedisPool);
             LOG.info("Pool Redis {}:{} was connected", host, port);
             redisPools.add(jedisPool);
             return jedisPool;
@@ -424,5 +427,11 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
                 document -> {
                 },
                 new MongoShutdownServerCallback());
+    }
+
+    private void checkRedisPoolConnection(JedisPool redisPool) {
+        try (Jedis jedis = redisPool.getResource()) {
+            jedis.isConnected();
+        }
     }
 }
