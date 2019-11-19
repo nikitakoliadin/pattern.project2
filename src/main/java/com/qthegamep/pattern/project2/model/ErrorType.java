@@ -19,7 +19,8 @@ public enum ErrorType {
     REDIS_NOT_EXISTING_TYPE_ERROR(513),
     REDIS_SAVE_ERROR(514),
     REDIS_SAVE_ALL_ERROR(515),
-    REDIS_READ_ERROR(516);
+    REDIS_READ_ERROR(516),
+    REDIS_READ_ALL_ERROR(517);
 
     private int errorCode;
 
