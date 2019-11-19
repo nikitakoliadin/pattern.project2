@@ -3,6 +3,7 @@ package com.qthegamep.pattern.project2.repository;
 import com.qthegamep.pattern.project2.exception.RedisRepositoryException;
 
 import java.util.Map;
+import java.util.Optional;
 
 public interface RedisRepository {
 
@@ -21,4 +22,8 @@ public interface RedisRepository {
     void saveAll(String key, Map<String, String> value, Integer ttl) throws RedisRepositoryException;
 
     void saveAll(String key, Map<String, String> value, Integer ttl, String requestId) throws RedisRepositoryException;
+
+    Optional<String> read(String key) throws RedisRepositoryException;
+
+    Optional<String> read(String key, String requestId) throws RedisRepositoryException;
 }
