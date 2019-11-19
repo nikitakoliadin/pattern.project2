@@ -20,7 +20,7 @@ public enum ErrorType {
     REDIS_SAVE_ERROR(514),
     REDIS_SAVE_ALL_ERROR(515),
     REDIS_READ_ERROR(516),
-    EDIS_READ_ALL_ERROR(517),
+    REDIS_READ_ALL_ERROR(517),
     ENCODE_TO_MD5_HASH_ERROR(518);
 
     private int errorCode;
