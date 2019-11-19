@@ -272,9 +272,11 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
         MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(user, db, password.toCharArray());
         MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener);
         com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(serverAddress, Collections.singletonList(mongoCredential), mongoClientOptions);
+        com.mongodb.client.MongoDatabase database = mongoClient.getDatabase(db);
+        checkSyncMongoDBConnection(database);
         LOG.info("Standalone sync MongoDB {}:{} was connected", host, port);
         syncMongoClients.add(mongoClient);
-        return mongoClient.getDatabase(db);
+        return database;
     }
 
     private com.mongodb.client.MongoDatabase connectToClusterSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
@@ -290,10 +292,12 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
         MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(user, db, password.toCharArray());
         MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener);
         com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(serverAddresses, Collections.singletonList(mongoCredential), mongoClientOptions);
+        com.mongodb.client.MongoDatabase database = mongoClient.getDatabase(db);
+        checkSyncMongoDBConnection(database);
         LOG.info("Cluster sync MongoDB were connected:");
         hosts.forEach(host -> LOG.info("{}:{}", host, port));
         syncMongoClients.add(mongoClient);
-        return mongoClient.getDatabase(db);
+        return database;
     }
 
     private com.mongodb.async.client.MongoDatabase connectToStandaloneAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
@@ -404,5 +408,9 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
             }
         }
         return hosts;
+    }
+
+    private void checkSyncMongoDBConnection(com.mongodb.client.MongoDatabase database) {
+        database.listCollectionNames().iterator();
     }
 }
