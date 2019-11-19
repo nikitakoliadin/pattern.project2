@@ -99,6 +99,7 @@
 
         <!-- Others -->
         <jmx-prometheus-javaagent.version>0.11.0</jmx-prometheus-javaagent.version>
+        <commons-codec.version>1.9</commons-codec.version>
     </properties>
 
     <build>
@@ -393,6 +394,13 @@
             <groupId>io.prometheus.jmx</groupId>
             <artifactId>jmx_prometheus_javaagent</artifactId>
             <version>${jmx-prometheus-javaagent.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
         </dependency>
     </dependencies>
 </project>
