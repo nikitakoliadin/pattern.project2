@@ -40,7 +40,7 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
 
     @Override
     public void save(String key, String value, Integer ttl, String requestId) throws RedisRepositoryException {
-        LOG.debug("Key: {} Value: {} TTL: {} RequestId: {}", key, value, ttl, requestId);
+        LOG.debug("Save -> Key: {} Value: {} TTL: {} RequestId: {}", key, value, ttl, requestId);
         try {
             jedisCluster.set(key, value);
             jedisCluster.expire(key, ttl);
@@ -66,7 +66,7 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
 
     @Override
     public void saveAll(String key, Map<String, String> value, Integer ttl, String requestId) throws RedisRepositoryException {
-        LOG.debug("Key: {} Values: {} TTL: {} RequestId: {}", key, value, ttl, requestId);
+        LOG.debug("Save all -> Key: {} Values: {} TTL: {} RequestId: {}", key, value, ttl, requestId);
         try {
             jedisCluster.hmset(key, value);
             jedisCluster.expire(key, ttl);
@@ -82,10 +82,10 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
 
     @Override
     public Optional<String> read(String key, String requestId) throws RedisRepositoryException {
-        LOG.debug("Key: {} RequestId: {}", key, requestId);
+        LOG.debug("Read -> Key: {} RequestId: {}", key, requestId);
         try {
             String result = jedisCluster.get(key);
-            LOG.debug("Result: {} RequestId: {}", result, requestId);
+            LOG.debug("Read result: {} RequestId: {}", result, requestId);
             if (result == null || result.isEmpty()) {
                 return Optional.empty();
             } else {
@@ -103,10 +103,10 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
 
     @Override
     public Optional<Map<String, String>> readAll(String key, String requestId) throws RedisRepositoryException {
-        LOG.debug("Key: {} RequestId: {}", key, requestId);
+        LOG.debug("Read all -> Key: {} RequestId: {}", key, requestId);
         try {
             Map<String, String> result = jedisCluster.hgetAll(key);
-            LOG.debug("Result: {} RequestId: {}", result, requestId);
+            LOG.debug("Read all result: {} RequestId: {}", result, requestId);
             if (result == null || result.isEmpty()) {
                 return Optional.empty();
             } else {
