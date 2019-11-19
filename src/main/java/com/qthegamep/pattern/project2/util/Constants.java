@@ -21,7 +21,8 @@ public enum Constants {
     HTTP("http://"),
     JSON_OBJECT_ID_FIELD_NAME("$oid"),
     STANDALONE_MONGO_DB_TYPE("standalone"),
-    CLUSTER_MONGO_DB_TYPE("cluster");
+    CLUSTER_MONGO_DB_TYPE("cluster"),
+    JSON_OBJECT_ID_KEY("_id");
 
     private String value;
 
