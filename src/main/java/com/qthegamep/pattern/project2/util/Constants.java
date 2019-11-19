@@ -24,7 +24,8 @@ public enum Constants {
     CLUSTER_MONGO_DB_TYPE("cluster"),
     JSON_OBJECT_ID_KEY("_id"),
     POOL_REDIS_TYPE("pool"),
-    CLUSTER_REDIS_TYPE("cluster");
+    CLUSTER_REDIS_TYPE("cluster"),
+    MD5_HASH("MD5");
 
     private String value;
 
