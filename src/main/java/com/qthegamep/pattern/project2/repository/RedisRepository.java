@@ -26,4 +26,8 @@ public interface RedisRepository {
     Optional<String> read(String key) throws RedisRepositoryException;
 
     Optional<String> read(String key, String requestId) throws RedisRepositoryException;
+
+    Optional<Map<String, String>> readAll(String key) throws RedisRepositoryException;
+
+    Optional<Map<String, String>> readAll(String key, String requestId) throws RedisRepositoryException;
 }
