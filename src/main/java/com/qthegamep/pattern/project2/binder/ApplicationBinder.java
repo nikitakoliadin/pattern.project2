@@ -1,6 +1,8 @@
 package com.qthegamep.pattern.project2.binder;
 
 import com.qthegamep.pattern.project2.metric.*;
+import com.qthegamep.pattern.project2.repository.SyncMongoRepository;
+import com.qthegamep.pattern.project2.repository.SyncMongoRepositoryImpl;
 import com.qthegamep.pattern.project2.service.*;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.binder.jvm.*;
@@ -31,11 +33,12 @@ public class ApplicationBinder extends AbstractBinder {
     private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
     private JedisPool jedisPool;
     private JedisCluster jedisCluster;
+    private SyncMongoRepository syncMongoRepository;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -45,6 +48,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.asyncMongoDatabase = asyncMongoDatabase;
         this.jedisPool = jedisPool;
         this.jedisCluster = jedisCluster;
+        this.syncMongoRepository = syncMongoRepository;
     }
 
     public ConverterService getConverterService() {
@@ -83,6 +87,10 @@ public class ApplicationBinder extends AbstractBinder {
         return jedisCluster;
     }
 
+    public SyncMongoRepository getSyncMongoRepository() {
+        return syncMongoRepository;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -98,6 +106,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindAsyncMongoDatabase();
         bindJedisPool();
         bindJedisCluster();
+        bindSyncMongoRepository();
     }
 
     private void bindConverterService() {
@@ -220,6 +229,14 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindSyncMongoRepository() {
+        if (syncMongoRepository == null) {
+            bind(SyncMongoRepositoryImpl.class).to(SyncMongoRepository.class).in(Singleton.class);
+        } else {
+            bind(syncMongoRepository).to(SyncMongoRepository.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
@@ -231,6 +248,7 @@ public class ApplicationBinder extends AbstractBinder {
         private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
         private JedisPool jedisPool;
         private JedisCluster jedisCluster;
+        private SyncMongoRepository syncMongoRepository;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -277,8 +295,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setSyncMongoRepository(SyncMongoRepository syncMongoRepository) {
+            this.syncMongoRepository = syncMongoRepository;
+            return this;
+        }
+
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository);
         }
     }
 }
