@@ -215,7 +215,12 @@ public class DatabaseConnectorImpl implements DatabaseConnector {
             genericObjectPoolConfig.setMaxTotal(Integer.parseInt(maxTotal));
             genericObjectPoolConfig.setMaxIdle(Integer.parseInt(maxIdle));
             genericObjectPoolConfig.setMinIdle(Integer.parseInt(minIdle));
-            JedisCluster jedisCluster = new JedisCluster(clusterRedisNodes, Integer.parseInt(connectionTimeout), Integer.parseInt(soTimeout), Integer.parseInt(maxAttempts), password, genericObjectPoolConfig);
+            JedisCluster jedisCluster;
+            if (password == null || password.isEmpty()) {
+                jedisCluster = new JedisCluster(clusterRedisNodes, Integer.parseInt(connectionTimeout), Integer.parseInt(soTimeout), Integer.parseInt(maxAttempts), genericObjectPoolConfig);
+            } else {
+                jedisCluster = new JedisCluster(clusterRedisNodes, Integer.parseInt(connectionTimeout), Integer.parseInt(soTimeout), Integer.parseInt(maxAttempts), password, genericObjectPoolConfig);
+            }
             LOG.info("Cluster Redis were connected:");
             IntStream.range(0, hosts.size())
                     .forEach(i -> LOG.info("{}:{}", hosts.get(i), ports.get(i)));
