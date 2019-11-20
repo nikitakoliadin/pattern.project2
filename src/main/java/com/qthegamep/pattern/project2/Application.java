@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2;
 
 import com.qthegamep.pattern.project2.binder.ApplicationBinder;
 import com.qthegamep.pattern.project2.config.ApplicationConfig;
+import com.qthegamep.pattern.project2.config.AspectRegistrar;
 import com.qthegamep.pattern.project2.config.GrizzlyServersShutdownHook;
 import com.qthegamep.pattern.project2.config.IOStrategyFactory;
 import com.qthegamep.pattern.project2.probe.GrizzlyThreadPoolProbe;
@@ -59,6 +60,7 @@ public class Application {
         ResourceConfig resourceConfig = new ResourceConfig()
                 .packages(Application.class.getPackage().getName())
                 .register(ApplicationBinder.builder().build());
+        new AspectRegistrar().register(resourceConfig);
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig, false);
         configServer(httpServer);
         return httpServer;
