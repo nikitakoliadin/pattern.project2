@@ -1,7 +1,6 @@
 package com.qthegamep.pattern.project2.aspect;
 
 import com.qthegamep.pattern.project2.annotation.Cacheable;
-import com.qthegamep.pattern.project2.binder.ApplicationBinder;
 import com.qthegamep.pattern.project2.exception.CryptoServiceException;
 import com.qthegamep.pattern.project2.repository.RedisRepository;
 import com.qthegamep.pattern.project2.service.ConverterService;
@@ -12,11 +11,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.glassfish.jersey.internal.inject.InjectionManager;
-import org.glassfish.jersey.internal.inject.Injections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
@@ -26,19 +24,12 @@ public class CacheAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(CacheAspect.class);
 
+    @Inject
     private CryptoService cryptoService;
+    @Inject
     private ConverterService converterService;
+    @Inject
     private RedisRepository redisRepository;
-
-    public CacheAspect() {
-        // TODO: FIX TO CORRECT INJECT
-        ApplicationBinder applicationBinder = ApplicationBinder.builder().build();
-        InjectionManager injectionManager = Injections.createInjectionManager();
-        injectionManager.register(applicationBinder);
-        cryptoService = injectionManager.getInstance(CryptoService.class);
-        converterService = injectionManager.getInstance(ConverterService.class);
-        redisRepository = injectionManager.getInstance(RedisRepository.class);
-    }
 
     @Pointcut("@annotation(cacheable)")
     void cacheableAnnotation(Cacheable cacheable) {
@@ -81,7 +72,7 @@ public class CacheAspect {
 
     private Class<?> getReturnType(ProceedingJoinPoint thisJoinPoint) {
         MethodSignature methodSignature = (MethodSignature) thisJoinPoint.getSignature();
-        final Method method = methodSignature.getMethod();
+        Method method = methodSignature.getMethod();
         return method.getReturnType();
     }
 }
