@@ -17,11 +17,18 @@ Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Ni
 
 ## Urls
 
+### Monitoring Urls
+
 * /metrics
 * /test
+
+### Documentation Urls
+
 * /pattern/project2/docs/
 * /pattern/project2/swagger/openapi.json
 * /pattern/project2/swagger/openapi.yaml
+
+### Service Urls
 
 ## Contact Information
 * **Author:** Koliadin Nikita
