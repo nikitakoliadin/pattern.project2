@@ -12,16 +12,26 @@ public aspect LogDurationTraceAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogDurationTraceAspect.class);
 
+    private final boolean enableLogDurationTraceAspect = Boolean.parseBoolean(System.getProperty("aop.enable.log.duration.trace.aspect"));
+
     pointcut all(): execution(* *(..));
 
+    public LogDurationTraceAspect() {
+        LOG.warn("Enable log duration trace aspect: {}", enableLogDurationTraceAspect);
+    }
+
     Object around(): all() {
-        Signature signature = thisJoinPoint.getSignature();
-        Object[] args = thisJoinPoint.getArgs();
-        LocalDateTime startDateTime = LocalDateTime.now();
-        Object result = proceed();
-        LocalDateTime endDateTime = LocalDateTime.now();
-        long duration = MILLIS.between(startDateTime, endDateTime);
-        LOG.trace("{} : {} : {} : {} ms", signature, args, result, duration);
-        return result;
+        if (enableLogDurationTraceAspect) {
+            Signature signature = thisJoinPoint.getSignature();
+            Object[] args = thisJoinPoint.getArgs();
+            LocalDateTime startDateTime = LocalDateTime.now();
+            Object result = proceed();
+            LocalDateTime endDateTime = LocalDateTime.now();
+            long duration = MILLIS.between(startDateTime, endDateTime);
+            LOG.trace("{} : {} : {} : {} ms", signature, args, result, duration);
+            return result;
+        } else {
+            return proceed();
+        }
     }
 }
