@@ -163,30 +163,6 @@
                 </executions>
             </plugin>
 
-            <!-- AspectJ plugin -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>${aspectj-plugin.version}</version>
-                <configuration>
-                    <complianceLevel>${aspectj-plugin.complianceLevel}</complianceLevel>
-                    <source>${aspectj-plugin.source}</source>
-                    <target>${aspectj-plugin.target}</target>
-                    <showWeaveInfo>${aspectj-plugin.showWeaveInfo}</showWeaveInfo>
-                    <verbose>${aspectj-plugin.verbose}</verbose>
-                    <Xlint>${aspectj-plugin.xlint}</Xlint>
-                    <encoding>${aspectj-plugin.encoding}</encoding>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- JaCoCo plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -403,4 +379,41 @@
             <version>${commons-codec.version}</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <!-- AOP profile -->
+        <profile>
+            <id>AOP</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- AspectJ plugin -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>aspectj-maven-plugin</artifactId>
+                        <version>${aspectj-plugin.version}</version>
+                        <configuration>
+                            <complianceLevel>${aspectj-plugin.complianceLevel}</complianceLevel>
+                            <source>${aspectj-plugin.source}</source>
+                            <target>${aspectj-plugin.target}</target>
+                            <showWeaveInfo>${aspectj-plugin.showWeaveInfo}</showWeaveInfo>
+                            <verbose>${aspectj-plugin.verbose}</verbose>
+                            <Xlint>${aspectj-plugin.xlint}</Xlint>
+                            <encoding>${aspectj-plugin.encoding}</encoding>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                    <goal>test-compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
