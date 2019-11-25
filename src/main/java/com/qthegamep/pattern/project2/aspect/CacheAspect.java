@@ -24,12 +24,18 @@ public class CacheAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(CacheAspect.class);
 
+    private final boolean enableCacheAspect = Boolean.parseBoolean(System.getProperty("aop.enable.cache.aspect"));
+
     @Inject
     private CryptoService cryptoService;
     @Inject
     private ConverterService converterService;
     @Inject
     private RedisRepository redisRepository;
+
+    public CacheAspect() {
+        LOG.warn("Enable cache aspect: {}", enableCacheAspect);
+    }
 
     @Pointcut("@annotation(cacheable)")
     void cacheableAnnotation(Cacheable cacheable) {
@@ -39,21 +45,25 @@ public class CacheAspect {
             argNames = "thisJoinPoint,cacheable")
     public Object cache(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) {
         try {
-            LOG.debug("Cache method {} with arguments {} by {} hash algorithm", thisJoinPoint.getSignature(), thisJoinPoint.getArgs(), cacheable.hashAlgorithm());
-            String key = getKey(thisJoinPoint, cacheable);
-            Optional<String> resultFromCache = redisRepository.read(key);
-            LOG.debug("Has result: {} by key: {}", resultFromCache.isPresent(), key);
-            if (resultFromCache.isPresent()) {
-                String result = resultFromCache.get();
-                LOG.debug("Result from cache: {} by key: {}", result, key);
-                Class<?> returnType = getReturnType(thisJoinPoint);
-                return converterService.fromJson(result, returnType);
+            if (enableCacheAspect) {
+                LOG.debug("Cache method {} with arguments {} by {} hash algorithm", thisJoinPoint.getSignature(), thisJoinPoint.getArgs(), cacheable.hashAlgorithm());
+                String key = getKey(thisJoinPoint, cacheable);
+                Optional<String> resultFromCache = redisRepository.read(key);
+                LOG.debug("Has result: {} by key: {}", resultFromCache.isPresent(), key);
+                if (resultFromCache.isPresent()) {
+                    String result = resultFromCache.get();
+                    LOG.debug("Result from cache: {} by key: {}", result, key);
+                    Class<?> returnType = getReturnType(thisJoinPoint);
+                    return converterService.fromJson(result, returnType);
+                } else {
+                    Object result = thisJoinPoint.proceed();
+                    LOG.debug("Result from proceed: {}", result);
+                    String jsonResult = converterService.toJson(result);
+                    redisRepository.save(key, jsonResult);
+                    return result;
+                }
             } else {
-                Object result = thisJoinPoint.proceed();
-                LOG.debug("Result from proceed: {}", result);
-                String jsonResult = converterService.toJson(result);
-                redisRepository.save(key, jsonResult);
-                return result;
+                return thisJoinPoint.proceed();
             }
         } catch (Throwable e) {
             LOG.error("ERROR", e);
