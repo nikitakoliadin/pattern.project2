@@ -12,16 +12,26 @@ public aspect LogRepositoryDurationAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogRepositoryDurationAspect.class);
 
+    private final boolean enableLogRepositoryDurationAspect = Boolean.parseBoolean(System.getProperty("aop.enable.log.repository.duration.aspect"));
+
     pointcut repository(): execution(* *..repository..*(..));
 
+    public LogRepositoryDurationAspect() {
+        LOG.warn("Enable log repository duration aspect: {}", enableLogRepositoryDurationAspect);
+    }
+
     Object around(): repository() {
-        Signature signature = thisJoinPoint.getSignature();
-        Object[] args = thisJoinPoint.getArgs();
-        LocalDateTime startDateTime = LocalDateTime.now();
-        Object result = proceed();
-        LocalDateTime endDateTime = LocalDateTime.now();
-        long duration = MILLIS.between(startDateTime, endDateTime);
-        LOG.debug("Repository method {} with arguments {} executed {} ms", signature, args, duration);
-        return result;
+        if (enableLogRepositoryDurationAspect) {
+            Signature signature = thisJoinPoint.getSignature();
+            Object[] args = thisJoinPoint.getArgs();
+            LocalDateTime startDateTime = LocalDateTime.now();
+            Object result = proceed();
+            LocalDateTime endDateTime = LocalDateTime.now();
+            long duration = MILLIS.between(startDateTime, endDateTime);
+            LOG.debug("Repository method {} with arguments {} executed {} ms", signature, args, duration);
+            return result;
+        } else {
+            return proceed();
+        }
     }
 }
