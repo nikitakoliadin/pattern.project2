@@ -39,12 +39,12 @@ public class ApplicationBinder extends AbstractBinder {
     private AsyncMongoRepository asyncMongoRepository;
     private RedisRepository redisRepository;
     private CryptoService cryptoService;
-    private KeyBuilder keyBuilder;
+    private KeyBuilderService keyBuilderService;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnectorService databaseConnectorService, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository, AsyncMongoRepository asyncMongoRepository, RedisRepository redisRepository, CryptoService cryptoService, KeyBuilder keyBuilder) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnectorService databaseConnectorService, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository, AsyncMongoRepository asyncMongoRepository, RedisRepository redisRepository, CryptoService cryptoService, KeyBuilderService keyBuilderService) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -58,7 +58,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.asyncMongoRepository = asyncMongoRepository;
         this.redisRepository = redisRepository;
         this.cryptoService = cryptoService;
-        this.keyBuilder = keyBuilder;
+        this.keyBuilderService = keyBuilderService;
     }
 
     public ConverterService getConverterService() {
@@ -113,8 +113,8 @@ public class ApplicationBinder extends AbstractBinder {
         return cryptoService;
     }
 
-    public KeyBuilder getKeyBuilder() {
-        return keyBuilder;
+    public KeyBuilderService getKeyBuilderService() {
+        return keyBuilderService;
     }
 
     public static ApplicationBinderBuilder builder() {
@@ -300,10 +300,10 @@ public class ApplicationBinder extends AbstractBinder {
     }
 
     private void bindKeyBuilder() {
-        if (keyBuilder == null) {
-            bind(KeyBuilderImpl.class).to(KeyBuilder.class).in(Singleton.class);
+        if (keyBuilderService == null) {
+            bind(KeyBuilderServiceImpl.class).to(KeyBuilderService.class).in(Singleton.class);
         } else {
-            bind(keyBuilder).to(KeyBuilder.class).in(Singleton.class);
+            bind(keyBuilderService).to(KeyBuilderService.class).in(Singleton.class);
         }
     }
 
@@ -322,7 +322,7 @@ public class ApplicationBinder extends AbstractBinder {
         private AsyncMongoRepository asyncMongoRepository;
         private RedisRepository redisRepository;
         private CryptoService cryptoService;
-        private KeyBuilder keyBuilder;
+        private KeyBuilderService keyBuilderService;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -389,13 +389,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
-        public ApplicationBinderBuilder setKeyBuilder(KeyBuilder keyBuilder) {
-            this.keyBuilder = keyBuilder;
+        public ApplicationBinderBuilder setKeyBuilderService(KeyBuilderService keyBuilderService) {
+            this.keyBuilderService = keyBuilderService;
             return this;
         }
 
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnectorService, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository, asyncMongoRepository, redisRepository, cryptoService, keyBuilder);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnectorService, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository, asyncMongoRepository, redisRepository, cryptoService, keyBuilderService);
         }
     }
 }

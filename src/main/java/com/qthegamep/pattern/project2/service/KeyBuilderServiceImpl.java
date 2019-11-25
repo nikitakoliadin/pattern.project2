@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
-public class KeyBuilderImpl implements KeyBuilder {
+public class KeyBuilderServiceImpl implements KeyBuilderService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(KeyBuilderImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KeyBuilderServiceImpl.class);
 
     @Override
     public String buildCacheKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) {

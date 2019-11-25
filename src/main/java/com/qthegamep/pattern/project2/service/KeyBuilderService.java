@@ -4,7 +4,7 @@ import com.qthegamep.pattern.project2.annotation.Cacheable;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 @FunctionalInterface
-public interface KeyBuilder {
+public interface KeyBuilderService {
 
     String buildCacheKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable);
 }
