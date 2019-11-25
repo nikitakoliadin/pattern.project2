@@ -7,7 +7,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 
-public interface DatabaseConnector {
+public interface DatabaseConnectorService {
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB();
 

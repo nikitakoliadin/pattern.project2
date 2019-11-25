@@ -27,9 +27,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class DatabaseConnectorImpl implements DatabaseConnector {
+public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DatabaseConnectorImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseConnectorServiceImpl.class);
 
     private List<com.mongodb.MongoClient> syncMongoClients = new CopyOnWriteArrayList<>();
     private List<com.mongodb.async.client.MongoClient> asyncMongoClients = new CopyOnWriteArrayList<>();

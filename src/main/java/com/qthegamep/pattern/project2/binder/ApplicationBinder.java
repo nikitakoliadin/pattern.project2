@@ -30,7 +30,7 @@ public class ApplicationBinder extends AbstractBinder {
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
     private PrometheusMeterRegistry prometheusMeterRegistry;
-    private DatabaseConnector databaseConnector;
+    private DatabaseConnectorService databaseConnectorService;
     private com.mongodb.client.MongoDatabase syncMongoDatabase;
     private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
     private JedisPool jedisPool;
@@ -44,12 +44,12 @@ public class ApplicationBinder extends AbstractBinder {
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnector databaseConnector, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository, AsyncMongoRepository asyncMongoRepository, RedisRepository redisRepository, CryptoService cryptoService, KeyBuilder keyBuilder) {
+    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnectorService databaseConnectorService, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository, AsyncMongoRepository asyncMongoRepository, RedisRepository redisRepository, CryptoService cryptoService, KeyBuilder keyBuilder) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
         this.prometheusMeterRegistry = prometheusMeterRegistry;
-        this.databaseConnector = databaseConnector;
+        this.databaseConnectorService = databaseConnectorService;
         this.syncMongoDatabase = syncMongoDatabase;
         this.asyncMongoDatabase = asyncMongoDatabase;
         this.jedisPool = jedisPool;
@@ -77,8 +77,8 @@ public class ApplicationBinder extends AbstractBinder {
         return prometheusMeterRegistry;
     }
 
-    public DatabaseConnector getDatabaseConnector() {
-        return databaseConnector;
+    public DatabaseConnectorService getDatabaseConnectorService() {
+        return databaseConnectorService;
     }
 
     public com.mongodb.client.MongoDatabase getSyncMongoDatabase() {
@@ -187,11 +187,11 @@ public class ApplicationBinder extends AbstractBinder {
     }
 
     private void bindDatabaseConnector() {
-        if (databaseConnector == null) {
-            databaseConnector = new DatabaseConnectorImpl();
-            bind(databaseConnector).to(DatabaseConnector.class).in(Singleton.class);
+        if (databaseConnectorService == null) {
+            databaseConnectorService = new DatabaseConnectorServiceImpl();
+            bind(databaseConnectorService).to(DatabaseConnectorService.class).in(Singleton.class);
         } else {
-            bind(databaseConnector).to(DatabaseConnector.class).in(Singleton.class);
+            bind(databaseConnectorService).to(DatabaseConnectorService.class).in(Singleton.class);
         }
     }
 
@@ -202,7 +202,7 @@ public class ApplicationBinder extends AbstractBinder {
             if (Boolean.parseBoolean(syncMongoDbEnabled)) {
                 String syncMongoDbType = System.getProperty("sync.mongodb.type");
                 LOG.info("Sync MongoDB type: {}", syncMongoDbType);
-                com.mongodb.client.MongoDatabase newSyncMongoDatabase = databaseConnector.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, syncMongoDbType);
+                com.mongodb.client.MongoDatabase newSyncMongoDatabase = databaseConnectorService.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, syncMongoDbType);
                 bind(newSyncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
             } else {
                 LOG.warn("Sync MongoDB disabled! Don't use or remove SyncMongoDatabase binding!");
@@ -219,7 +219,7 @@ public class ApplicationBinder extends AbstractBinder {
             if (Boolean.parseBoolean(asyncMongoDbEnabled)) {
                 String asyncMongoDbType = System.getProperty("async.mongodb.type");
                 LOG.info("Async MongoDB type: {}", asyncMongoDbType);
-                com.mongodb.async.client.MongoDatabase newAsyncMongoDatabase = databaseConnector.connectToAsyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, asyncMongoDbType);
+                com.mongodb.async.client.MongoDatabase newAsyncMongoDatabase = databaseConnectorService.connectToAsyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, asyncMongoDbType);
                 bind(newAsyncMongoDatabase).to(com.mongodb.async.client.MongoDatabase.class).to(Singleton.class);
             } else {
                 LOG.warn("Async MongoDB disabled! Don't use or remove AsyncMongoDatabase binding!");
@@ -234,7 +234,7 @@ public class ApplicationBinder extends AbstractBinder {
             String redisPoolEnabled = System.getProperty("redis.pool.enabled");
             LOG.debug("Redis pool enabled: {}", redisPoolEnabled);
             if (Boolean.parseBoolean(redisPoolEnabled)) {
-                JedisPool newJedisPool = databaseConnector.connectToPoolRedis();
+                JedisPool newJedisPool = databaseConnectorService.connectToPoolRedis();
                 bind(newJedisPool).to(JedisPool.class).in(Singleton.class);
             } else {
                 LOG.warn("Redis pool disabled! Don't use or remove JedisPool binding!");
@@ -249,7 +249,7 @@ public class ApplicationBinder extends AbstractBinder {
             String redisClusterEnabled = System.getProperty("redis.cluster.enabled");
             LOG.debug("Redis cluster enabled: {}", redisClusterEnabled);
             if (Boolean.parseBoolean(redisClusterEnabled)) {
-                JedisCluster newJedisCluster = databaseConnector.connectToClusterRedis();
+                JedisCluster newJedisCluster = databaseConnectorService.connectToClusterRedis();
                 bind(newJedisCluster).to(JedisCluster.class).in(Singleton.class);
             } else {
                 LOG.warn("Redis cluster disabled! Don't use or remove JedisCluster binding!");
@@ -313,7 +313,7 @@ public class ApplicationBinder extends AbstractBinder {
         private GenerationService generationService;
         private ErrorResponseBuilderService errorResponseBuilderService;
         private PrometheusMeterRegistry prometheusMeterRegistry;
-        private DatabaseConnector databaseConnector;
+        private DatabaseConnectorService databaseConnectorService;
         private com.mongodb.client.MongoDatabase syncMongoDatabase;
         private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
         private JedisPool jedisPool;
@@ -344,8 +344,8 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
-        public ApplicationBinderBuilder setDatabaseConnector(DatabaseConnector databaseConnector) {
-            this.databaseConnector = databaseConnector;
+        public ApplicationBinderBuilder setDatabaseConnectorService(DatabaseConnectorService databaseConnectorService) {
+            this.databaseConnectorService = databaseConnectorService;
             return this;
         }
 
@@ -395,7 +395,7 @@ public class ApplicationBinder extends AbstractBinder {
         }
 
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnector, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository, asyncMongoRepository, redisRepository, cryptoService, keyBuilder);
+            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnectorService, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository, asyncMongoRepository, redisRepository, cryptoService, keyBuilder);
         }
     }
 }
