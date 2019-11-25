@@ -5,8 +5,8 @@ import com.qthegamep.pattern.project2.exception.CryptoServiceException;
 import com.qthegamep.pattern.project2.repository.RedisRepository;
 import com.qthegamep.pattern.project2.service.ConverterService;
 import com.qthegamep.pattern.project2.service.CryptoService;
+import com.qthegamep.pattern.project2.service.KeyBuilder;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Aspect
@@ -32,6 +31,8 @@ public class CacheAspect {
     private ConverterService converterService;
     @Inject
     private RedisRepository redisRepository;
+    @Inject
+    private KeyBuilder keyBuilder;
 
     public CacheAspect() {
         LOG.warn("Enable cache aspect: {}", enableCacheAspect);
@@ -72,12 +73,10 @@ public class CacheAspect {
     }
 
     private String getKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) throws CryptoServiceException {
-        Signature signature = thisJoinPoint.getSignature();
-        Object[] args = thisJoinPoint.getArgs();
-        String dataForKey = signature.toString() + Arrays.toString(args);
-        String key = cryptoService.encodeTo(dataForKey, cacheable.hashAlgorithm());
-        LOG.debug("Key: {}", key);
-        return key;
+        String key = keyBuilder.buildCacheKey(thisJoinPoint, cacheable);
+        String encodedKey = cryptoService.encodeTo(key, cacheable.hashAlgorithm());
+        LOG.debug("Encoded key: {}", encodedKey);
+        return encodedKey;
     }
 
     private Class<?> getReturnType(ProceedingJoinPoint thisJoinPoint) {
