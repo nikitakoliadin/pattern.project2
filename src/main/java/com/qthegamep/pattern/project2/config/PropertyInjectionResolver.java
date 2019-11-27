@@ -26,8 +26,13 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
         Map<String, Object> properties = application.getProperties();
         String key = annotation.value();
         Object value = properties.get(key);
-        LOG.debug("Property injection: Required Type: {} Key: {} Value: {}", requiredType, key, value);
-        return value;
+        String defaultValue = annotation.defaultValue();
+        LOG.debug("Property injection: Required Type: {} Key: {} Value: {} Default Value: {}", requiredType, key, value, defaultValue);
+        if (value == null && !defaultValue.isEmpty()) {
+            return defaultValue;
+        } else {
+            return value;
+        }
     }
 
     @Override
