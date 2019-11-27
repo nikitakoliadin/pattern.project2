@@ -13,4 +13,6 @@ import java.lang.annotation.Target;
 public @interface Property {
 
     @Nonbinding String value() default "";
+
+    @Nonbinding String defaultValue() default "";
 }
