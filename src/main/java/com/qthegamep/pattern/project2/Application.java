@@ -26,18 +26,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Map;
 
 public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) throws ApplicationConfigInitializationException, InterruptedException {
-        initConfigs();
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        applicationConfig.init();
+        Map<String, Object> applicationProperties = applicationConfig.getApplicationProperties();
         String host = System.getProperty("application.host", "0.0.0.0");
         String port = System.getProperty("application.port", "8080");
         String applicationContext = System.getProperty("application.context", "");
         String applicationUrl = Constants.HTTP.getValue() + host + ":" + port + applicationContext;
-        HttpServer applicationHttpServer = startServer(applicationUrl);
+        HttpServer applicationHttpServer = startServer(applicationUrl, applicationProperties);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         String swaggerPath = addSwaggerUIMapping(applicationHttpServer, applicationContext + swaggerUrl);
         String monitoringPort = System.getProperty("application.monitoring.port", "8081");
@@ -51,14 +54,10 @@ public class Application {
         Thread.currentThread().join();
     }
 
-    private static void initConfigs() throws ApplicationConfigInitializationException {
-        ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.init();
-    }
-
-    private static HttpServer startServer(String applicationUrl) {
+    private static HttpServer startServer(String applicationUrl, Map<String, Object> applicationProperties) {
         URI applicationUri = URI.create(applicationUrl);
         ResourceConfig resourceConfig = new ResourceConfig()
+                .addProperties(applicationProperties)
                 .packages(Application.class.getPackage().getName())
                 .register(ConfigurationBinder.builder().build())
                 .register(ApplicationBinder.builder().build());
