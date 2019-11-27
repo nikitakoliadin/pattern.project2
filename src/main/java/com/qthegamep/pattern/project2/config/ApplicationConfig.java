@@ -14,12 +14,16 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class ApplicationConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationConfig.class);
+
+    private Properties applicationProperties;
 
     public void init() throws ApplicationConfigInitializationException {
         try {
@@ -36,6 +40,14 @@ public class ApplicationConfig {
             LOG.error("ERROR", e);
             throw new ApplicationConfigInitializationException(e);
         }
+    }
+
+    public Map<String, Object> getApplicationProperties() {
+        return applicationProperties.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        e -> String.valueOf(e.getKey()),
+                        Map.Entry::getValue));
     }
 
     private void loadServerIp() throws SocketException {
@@ -75,18 +87,18 @@ public class ApplicationConfig {
     }
 
     private void loadDefaultProperties() throws Exception {
-        Properties properties = new Properties();
+        applicationProperties = new Properties();
         try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(Constants.DEFAULT_CONFIG_PROPERTIES_PATH.getValue())) {
-            properties.load(inputStream);
-            loadProperties(properties);
+            applicationProperties.load(inputStream);
+            loadProperties(applicationProperties);
         }
     }
 
     private void loadCustomProperties(String path) throws Exception {
-        Properties properties = new Properties();
+        applicationProperties = new Properties();
         try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8)) {
-            properties.load(inputStreamReader);
-            loadProperties(properties);
+            applicationProperties.load(inputStreamReader);
+            loadProperties(applicationProperties);
         }
     }
 
