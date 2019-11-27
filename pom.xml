@@ -100,6 +100,7 @@
         <!-- Others -->
         <jmx-prometheus-javaagent.version>0.11.0</jmx-prometheus-javaagent.version>
         <commons-codec.version>1.9</commons-codec.version>
+        <cdi-api.version>2.0.SP1</cdi-api.version>
     </properties>
 
     <build>
@@ -377,6 +378,14 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>${commons-codec.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>${cdi-api.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
