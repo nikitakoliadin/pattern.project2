@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Qualifier
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = {ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
+@Target(value = {ElementType.FIELD})
 public @interface Property {
 
     @Nonbinding String value() default "";
