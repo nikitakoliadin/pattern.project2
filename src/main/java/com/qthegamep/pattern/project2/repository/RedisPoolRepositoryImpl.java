@@ -15,7 +15,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisPoolRepositoryImpl.class);
 
-    private final int defaultTtl = 1200;
+    private final int defaultTtl = Integer.parseInt(System.getProperty("redis.pool.default.ttl"));
 
     private JedisPool jedisPool;
 

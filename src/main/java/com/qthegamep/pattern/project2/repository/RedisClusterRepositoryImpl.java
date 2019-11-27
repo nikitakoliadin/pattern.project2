@@ -14,7 +14,7 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisClusterRepositoryImpl.class);
 
-    private final int defaultTtl = 1200;
+    private final int defaultTtl = Integer.parseInt(System.getProperty("redis.cluster.default.ttl"));
 
     private JedisCluster jedisCluster;
 
