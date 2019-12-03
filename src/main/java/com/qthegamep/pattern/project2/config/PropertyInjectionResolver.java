@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
+import com.google.common.base.Defaults;
 import com.qthegamep.pattern.project2.annotation.Property;
 import org.apache.commons.lang3.ClassUtils;
 import org.glassfish.hk2.api.Injectee;
@@ -29,10 +30,12 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
         Object value = properties.get(key);
         String defaultValue = annotation.defaultValue();
         LOG.debug("Property injection: Required Type: {} Key: {} Value: {} Default Value: {}", requiredType, key, value, defaultValue);
-        if (value == null && !defaultValue.isEmpty()) {
+        if (value != null) {
+            return parse(value, requiredType);
+        } else if (!defaultValue.isEmpty()) {
             return parse(defaultValue, requiredType);
         } else {
-            return parse(value, requiredType);
+            return emptyFor(requiredType);
         }
     }
 
@@ -57,6 +60,17 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
         } else {
             LOG.debug("Parse to object value");
             return parseToObject(value, requiredClass);
+        }
+    }
+
+    private Object emptyFor(Type requiredType) {
+        Class<?> requiredClass = (Class<?>) requiredType;
+        if (isPrimitive(requiredClass)) {
+            LOG.debug("Empty value for primitive");
+            return Defaults.defaultValue(requiredClass);
+        } else {
+            LOG.debug("Empty value for object");
+            return null;
         }
     }
 
