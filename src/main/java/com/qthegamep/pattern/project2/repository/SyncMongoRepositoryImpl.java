@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2.repository;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.entity.Error;
 import com.qthegamep.pattern.project2.exception.SyncMongoRepositoryException;
 import com.qthegamep.pattern.project2.model.ErrorType;
@@ -18,7 +19,8 @@ public class SyncMongoRepositoryImpl implements SyncMongoRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(SyncMongoRepositoryImpl.class);
 
-    private final String errorCollectionName = System.getProperty("mongodb.error.collection.name");
+    @Property(value = "mongodb.error.collection.name")
+    private String errorCollectionName;
 
     private MongoDatabase mongoDatabase;
     private ConverterService converterService;

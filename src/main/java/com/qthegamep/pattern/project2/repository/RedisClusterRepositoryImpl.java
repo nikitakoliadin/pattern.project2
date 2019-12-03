@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.repository;
 
+import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.exception.RedisRepositoryException;
 import com.qthegamep.pattern.project2.model.ErrorType;
 import org.slf4j.Logger;
@@ -14,7 +15,8 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisClusterRepositoryImpl.class);
 
-    private final int defaultTtl = Integer.parseInt(System.getProperty("redis.cluster.default.ttl"));
+    @Property(value = "redis.cluster.default.ttl")
+    private Integer defaultTtl;
 
     private JedisCluster jedisCluster;
 
