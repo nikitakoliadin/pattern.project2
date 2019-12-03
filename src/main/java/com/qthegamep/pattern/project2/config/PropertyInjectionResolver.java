@@ -66,10 +66,10 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
     private Object emptyFor(Type requiredType) {
         Class<?> requiredClass = (Class<?>) requiredType;
         if (isPrimitive(requiredClass)) {
-            LOG.debug("Empty value for primitive");
+            LOG.debug("Empty primitive value");
             return Defaults.defaultValue(requiredClass);
         } else {
-            LOG.debug("Empty value for object");
+            LOG.debug("Empty object value");
             return null;
         }
     }
@@ -104,7 +104,7 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
         } else if (requiredClass == Void.class || requiredClass == Void.TYPE) {
             return Void.TYPE;
         } else {
-            LOG.warn("Something was wrong with parse value: {} to primitive class: {}", value, requiredClass);
+            LOG.warn("Something was wrong when parse value: {} to primitive class: {}", value, requiredClass);
             return null;
         }
     }
@@ -113,7 +113,7 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
         if (requiredClass == String.class) {
             return value;
         } else {
-            LOG.warn("Something was wrong with parse value: {} to primitive class: {}", value, requiredClass);
+            LOG.warn("Something was wrong when parse value: {} to object class: {}", value, requiredClass);
             return null;
         }
     }
