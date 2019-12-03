@@ -1,6 +1,7 @@
 package com.qthegamep.pattern.project2.config;
 
 import com.qthegamep.pattern.project2.annotation.Property;
+import org.apache.commons.lang3.ClassUtils;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.ServiceHandle;
@@ -29,9 +30,9 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
         String defaultValue = annotation.defaultValue();
         LOG.debug("Property injection: Required Type: {} Key: {} Value: {} Default Value: {}", requiredType, key, value, defaultValue);
         if (value == null && !defaultValue.isEmpty()) {
-            return defaultValue;
+            return parse(defaultValue, requiredType);
         } else {
-            return value;
+            return parse(value, requiredType);
         }
     }
 
@@ -43,5 +44,54 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
     @Override
     public boolean isMethodParameterIndicator() {
         return false;
+    }
+
+    private Object parse(Object value, Type requiredType) {
+        Class<?> requiredClass = (Class<?>) requiredType;
+        if (isPrimitive(requiredClass)) {
+            LOG.debug("Parse to primitive value");
+            return parseToPrimitive(value.toString(), requiredClass);
+        } else if (isPrimitiveWrapper(requiredClass)) {
+            LOG.debug("Parse to primitive wrapper value");
+            return parseToPrimitive(value.toString(), requiredClass);
+        } else {
+            LOG.debug("Don't parse value");
+            return value;
+        }
+    }
+
+    private boolean isPrimitive(Class<?> clazz) {
+        return clazz.isPrimitive();
+    }
+
+    private boolean isPrimitiveWrapper(Class<?> clazz) {
+        return ClassUtils.isPrimitiveWrapper(clazz);
+    }
+
+    private Object parseToPrimitive(String value, Class<?> requiredClass) {
+        if (requiredClass == Boolean.class || requiredClass == Boolean.TYPE) {
+            return Boolean.parseBoolean(value);
+        } else if (requiredClass == Character.class || requiredClass == Character.TYPE) {
+            return value.isEmpty()
+                    ? '\u0000'
+                    : value.charAt(0);
+        } else if (requiredClass == Byte.class || requiredClass == Byte.TYPE) {
+            return Byte.parseByte(value);
+        } else if (requiredClass == Short.class || requiredClass == Short.TYPE) {
+            return Short.parseShort(value);
+        } else if (requiredClass == Integer.class || requiredClass == Integer.TYPE) {
+            return Integer.parseInt(value);
+        } else if (requiredClass == Long.class || requiredClass == Long.TYPE) {
+            return Long.parseLong(value);
+        } else if (requiredClass == Float.class || requiredClass == Float.TYPE) {
+            return Float.parseFloat(value);
+        } else if (requiredClass == Double.class || requiredClass == Double.TYPE) {
+            return Double.parseDouble(value);
+        } else if (requiredClass == Void.class || requiredClass == Void.TYPE) {
+            return Void.TYPE;
+        } else {
+            LOG.warn("Something was wrong with parse value: {} to primitive class: {}", value, requiredClass);
+            return null;
+        }
     }
 }
