@@ -55,8 +55,8 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
             LOG.debug("Parse to primitive wrapper value");
             return parseToPrimitive(value.toString(), requiredClass);
         } else {
-            LOG.debug("Don't parse value");
-            return value;
+            LOG.debug("Parse to object value");
+            return parseToObject(value, requiredClass);
         }
     }
 
@@ -89,6 +89,15 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
             return Double.parseDouble(value);
         } else if (requiredClass == Void.class || requiredClass == Void.TYPE) {
             return Void.TYPE;
+        } else {
+            LOG.warn("Something was wrong with parse value: {} to primitive class: {}", value, requiredClass);
+            return null;
+        }
+    }
+
+    private Object parseToObject(Object value, Class<?> requiredClass) {
+        if (requiredClass == String.class) {
+            return value;
         } else {
             LOG.warn("Something was wrong with parse value: {} to primitive class: {}", value, requiredClass);
             return null;
