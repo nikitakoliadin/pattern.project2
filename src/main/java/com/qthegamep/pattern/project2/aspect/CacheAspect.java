@@ -53,7 +53,7 @@ public class CacheAspect {
                 LOG.debug("Has result: {} by key: {}", resultFromCache.isPresent(), key);
                 if (resultFromCache.isPresent()) {
                     String result = resultFromCache.get();
-                    LOG.debug("Result from cache: {} by key: {}", result, key);
+                    LOG.info("Result from cache: {} by key: {}", result, key);
                     Class<?> returnType = getReturnType(thisJoinPoint);
                     return converterService.fromJson(result, returnType);
                 } else {
