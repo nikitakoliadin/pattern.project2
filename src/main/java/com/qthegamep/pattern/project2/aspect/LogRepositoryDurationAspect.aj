@@ -28,7 +28,7 @@ public aspect LogRepositoryDurationAspect {
             Object result = proceed();
             LocalDateTime endDateTime = LocalDateTime.now();
             long duration = MILLIS.between(startDateTime, endDateTime);
-            LOG.debug("Repository method {} with arguments {} executed {} ms", signature, args, duration);
+            LOG.info("Repository method {} with arguments {} executed {} ms", signature, args, duration);
             return result;
         } else {
             return proceed();
