@@ -12,7 +12,7 @@ public aspect LogDurationTraceAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogDurationTraceAspect.class);
 
-    private final boolean enableLogDurationTraceAspect = Boolean.parseBoolean(System.getProperty("aop.enable.log.duration.trace.aspect"));
+    private final boolean enableLogDurationTraceAspect = LOG.isTraceEnabled();
 
     pointcut all(): execution(* *(..));
 
