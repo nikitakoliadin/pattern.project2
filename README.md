@@ -6,14 +6,13 @@
 
 ### Params
 
-* log.level - One of [TRACE | DEBUG | INFO | WARN | ERROR]. If parameter is empty then level sets in DEBUG by default
 * config.properties - Path to your project configs. If parameter is empty then path sets to default configs
 
 ### Start
 
-Run jar: `java -D"log.level"=[your_level] -D"config.properties"=[your_path] -jar .\pattern.project2-1.0.30.jar`
+Run jar: `java -D"config.properties"=[your_path] -jar .\pattern.project2-1.0.30.jar`
 
-Example: `java -D"log.level"="TRACE" -D"config.properties"="C:\Users\Koliadin Nikita\IdeaProjects\pattern.project2\src\main\resources\config.properties" -jar .\pattern.project2-1.0.30.jar`
+Example: `java -D"config.properties"="C:\Users\Koliadin Nikita\IdeaProjects\pattern.project2\src\main\resources\config.properties" -jar .\pattern.project2-1.0.30.jar`
 
 ## Urls
 
