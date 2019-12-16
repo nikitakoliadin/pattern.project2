@@ -2,10 +2,7 @@ package com.qthegamep.pattern.project2;
 
 import com.qthegamep.pattern.project2.binder.ApplicationBinder;
 import com.qthegamep.pattern.project2.binder.ConfigurationBinder;
-import com.qthegamep.pattern.project2.config.ApplicationConfig;
-import com.qthegamep.pattern.project2.config.AspectRegistrar;
-import com.qthegamep.pattern.project2.config.GrizzlyServersShutdownHook;
-import com.qthegamep.pattern.project2.config.IOStrategyFactory;
+import com.qthegamep.pattern.project2.config.*;
 import com.qthegamep.pattern.project2.probe.GrizzlyThreadPoolProbe;
 import com.qthegamep.pattern.project2.probe.TaskQueueSizeProbe;
 import com.qthegamep.pattern.project2.exception.ApplicationConfigInitializationException;
@@ -36,6 +33,8 @@ public class Application {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.init();
         Map<String, Object> applicationProperties = applicationConfig.getApplicationProperties();
+        LogConfig logConfig = new LogConfig();
+        logConfig.configureLogLevels();
         String host = System.getProperty("application.host", "0.0.0.0");
         String port = System.getProperty("application.port", "8080");
         String applicationContext = System.getProperty("application.context", "");
