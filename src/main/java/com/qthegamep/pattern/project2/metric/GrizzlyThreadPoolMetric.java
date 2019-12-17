@@ -15,15 +15,15 @@ public class GrizzlyThreadPoolMetric implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        Gauge.builder(CORE_POOL_SIZE, () -> Integer.parseInt(System.getProperty("server.core.pool.size")))
+        Gauge.builder(CORE_POOL_SIZE, () -> Integer.parseInt(System.getProperty("application.server.core.pool.size")))
                 .description("The core pool size of the Grizzly server")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .register(meterRegistry);
-        Gauge.builder(MAX_POOL_SIZE, () -> Integer.parseInt(System.getProperty("server.max.pool.size")))
+        Gauge.builder(MAX_POOL_SIZE, () -> Integer.parseInt(System.getProperty("application.server.max.pool.size")))
                 .description("The max pool size of the Grizzly server")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .register(meterRegistry);
-        Gauge.builder(SELECTOR_RUNNERS, () -> Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("server.selector.runners.multiplier")))
+        Gauge.builder(SELECTOR_RUNNERS, () -> Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("application.server.selector.runners.multiplier")))
                 .description("The selector runners of the Grizzly server")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .register(meterRegistry);
@@ -31,7 +31,7 @@ public class GrizzlyThreadPoolMetric implements MeterBinder {
                 .description("The current number of available threads in Grizzly thread pool")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .register(meterRegistry);
-        Gauge.builder(WORKED_THREADS, () -> Integer.parseInt(System.getProperty("server.core.pool.size")) - Metrics.AVAILABLE_THREADS_METRIC.get())
+        Gauge.builder(WORKED_THREADS, () -> Integer.parseInt(System.getProperty("application.server.core.pool.size")) - Metrics.AVAILABLE_THREADS_METRIC.get())
                 .description("The current number of worked threads in Grizzly thread pool")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .register(meterRegistry);
