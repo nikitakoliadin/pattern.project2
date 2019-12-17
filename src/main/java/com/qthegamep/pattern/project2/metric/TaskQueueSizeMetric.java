@@ -16,7 +16,7 @@ public class TaskQueueSizeMetric implements MeterBinder {
                 .description("The current number of tasks in queue")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .register(meterRegistry);
-        Gauge.builder(TASK_QUEUE_LIMIT, () -> Integer.parseInt(System.getProperty("server.queue.limit")))
+        Gauge.builder(TASK_QUEUE_LIMIT, () -> Integer.parseInt(System.getProperty("application.server.queue.limit")))
                 .description("The limit size of the task queue. If limit value is negative then queue has infinity limit")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .register(meterRegistry);
