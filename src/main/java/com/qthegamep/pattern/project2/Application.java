@@ -73,11 +73,11 @@ public class Application {
             TCPNIOTransport grizzlyTransport = httpServer.getListener(Constants.GRIZZLY.getValue()).getTransport();
             ThreadPoolConfig threadPoolConfig = ThreadPoolConfig.defaultConfig()
                     .setPoolName(Constants.APPLICATION_GRIZZLY_POOL_NAME.getValue())
-                    .setCorePoolSize(Integer.parseInt(System.getProperty("server.core.pool.size")))
-                    .setMaxPoolSize(Integer.parseInt(System.getProperty("server.max.pool.size")))
-                    .setQueueLimit(Integer.parseInt(System.getProperty("server.queue.limit")));
+                    .setCorePoolSize(Integer.parseInt(System.getProperty("application.server.core.pool.size")))
+                    .setMaxPoolSize(Integer.parseInt(System.getProperty("application.server.max.pool.size")))
+                    .setQueueLimit(Integer.parseInt(System.getProperty("application.server.queue.limit")));
             grizzlyTransport.configureBlocking(false);
-            grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("server.selector.runners.multiplier")));
+            grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("application.server.selector.runners.multiplier")));
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setIOStrategy(new IOStrategyFactory().createIOStrategy(IoStrategyType.DYNAMIC_IO_STRATEGY));
@@ -126,11 +126,11 @@ public class Application {
         try {
             TCPNIOTransport grizzlyTransport = httpServer.getListener(Constants.GRIZZLY.getValue()).getTransport();
             ThreadPoolConfig threadPoolConfig = ThreadPoolConfig.defaultConfig()
-                    .setPoolName(Constants.PROMETHEUS_GRIZZLY_POOL_NAME.getValue())
-                    .setCorePoolSize(Integer.parseInt(System.getProperty("server.core.pool.size")))
-                    .setMaxPoolSize(Integer.parseInt(System.getProperty("server.max.pool.size")))
-                    .setQueueLimit(Integer.parseInt(System.getProperty("server.queue.limit")));
-            grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("server.selector.runners.multiplier")));
+                    .setPoolName(Constants.METRICS_GRIZZLY_POOL_NAME.getValue())
+                    .setCorePoolSize(Integer.parseInt(System.getProperty("metrics.server.core.pool.size")))
+                    .setMaxPoolSize(Integer.parseInt(System.getProperty("metrics.server.max.pool.size")))
+                    .setQueueLimit(Integer.parseInt(System.getProperty("metrics.server.queue.limit")));
+            grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("metrics.server.selector.runners.multiplier")));
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setIOStrategy(new IOStrategyFactory().createIOStrategy(IoStrategyType.DYNAMIC_IO_STRATEGY));
