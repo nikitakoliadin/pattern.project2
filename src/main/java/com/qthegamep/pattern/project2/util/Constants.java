@@ -17,7 +17,7 @@ public enum Constants {
     ERROR_MESSAGES_LOCALIZATION("localization.error_messages"),
     GRIZZLY("grizzly"),
     APPLICATION_GRIZZLY_POOL_NAME("application-grizzly-worker-thread-"),
-    PROMETHEUS_GRIZZLY_POOL_NAME("prometheus-grizzly-worker-thread-"),
+    METRICS_GRIZZLY_POOL_NAME("metrics-grizzly-worker-thread-"),
     HTTP("http://"),
     JSON_OBJECT_ID_FIELD_NAME("$oid"),
     STANDALONE_MONGO_DB_TYPE("standalone"),
