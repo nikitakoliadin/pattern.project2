@@ -9,6 +9,8 @@ import javax.annotation.Priority;
 import javax.ws.rs.container.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Provider
@@ -24,6 +26,7 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
         registerResponseStatusMetric(responseContext, requestId);
         registerRequestCounterMetric(requestContext, requestId);
         registerRequestTimeMetric(requestContext, responseContext, requestId);
+        registerMaxRequestTimeMetric(requestContext, responseContext, requestId);
     }
 
     private void registerResponseStatusMetric(ContainerResponseContext responseContext, String requestId) {
@@ -43,10 +46,18 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
     }
 
     private void registerRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
+        registerTimeMetric(Metrics.REQUEST_TIME_METRIC, requestContext, responseContext, requestId);
+    }
+
+    private void registerMaxRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
+        registerTimeMetric(Metrics.MAX_REQUEST_TIME_METRIC, requestContext, responseContext, requestId);
+    }
+
+    private void registerTimeMetric(Map<String, List<AtomicLong>> metric, ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
         String path = "/" + requestContext.getUriInfo().getPath();
-        if (Metrics.REQUEST_TIME_METRIC.containsKey(path)) {
+        if (metric.containsKey(path)) {
             AtomicLong duration = new AtomicLong(Long.parseLong(responseContext.getHeaderString(Constants.DURATION_HEADER.getValue())));
-            Metrics.REQUEST_TIME_METRIC.get(path).add(duration);
+            metric.get(path).add(duration);
             LOG.debug("Path: [{}] Duration: {} RequestId: {}", path, duration, requestId);
         } else {
             LOG.debug("Path: [{}] not exists. RequestId: {}", path, requestId);
