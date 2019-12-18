@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RequestTimeMetric implements MeterBinder {
 
     private static final String REQUEST_TIME = "request.time";
+    private static final String MAX_REQUEST_TIME = "max.request.time";
     private static final String PATH_TAG = "path";
 
     @Override
@@ -26,6 +27,19 @@ public class RequestTimeMetric implements MeterBinder {
                     return Math.round(result);
                 })
                 .description("The request time")
+                .baseUnit(Constants.GRIZZLY.getValue())
+                .tags(Tags.of(PATH_TAG, key))
+                .register(meterRegistry));
+        Metrics.MAX_REQUEST_TIME_METRIC.forEach((key, value) -> Gauge.builder(MAX_REQUEST_TIME,
+                () -> {
+                    long result = Arrays.stream(value.toArray())
+                            .mapToLong(num -> ((AtomicLong) num).get())
+                            .max()
+                            .orElse(0);
+                    value.clear();
+                    return result;
+                })
+                .description("The max request time")
                 .baseUnit(Constants.GRIZZLY.getValue())
                 .tags(Tags.of(PATH_TAG, key))
                 .register(meterRegistry));
