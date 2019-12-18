@@ -60,6 +60,20 @@ public class Metrics {
                     (a, b) -> b,
                     ConcurrentHashMap::new));
 
+    public static final Map<String, List<AtomicLong>> MAX_REQUEST_TIME_METRIC = Arrays.stream(Paths.class.getFields())
+            .map(field -> {
+                try {
+                    return String.valueOf(field.get(null));
+                } catch (IllegalAccessException e) {
+                    return null;
+                }
+            })
+            .collect(Collectors.toMap(
+                    value -> value,
+                    value -> new CopyOnWriteArrayList<>(),
+                    (a, b) -> b,
+                    ConcurrentHashMap::new));
+
     private Metrics() {
     }
 }
