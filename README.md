@@ -10,9 +10,9 @@
 
 ### Start
 
-Run jar: `java -D"config.properties"=[your_path] -jar .\pattern.project2-1.0.35.jar`
+Run jar: `java -D"config.properties"=[your_path] -jar .\pattern.project2-1.0.36.jar`
 
-Example: `java -D"config.properties"="C:\Users\Koliadin Nikita\IdeaProjects\pattern.project2\src\main\resources\config.properties" -jar .\pattern.project2-1.0.35.jar`
+Example: `java -D"config.properties"="C:\Users\Koliadin Nikita\IdeaProjects\pattern.project2\src\main\resources\config.properties" -jar .\pattern.project2-1.0.36.jar`
 
 ## Urls
 
