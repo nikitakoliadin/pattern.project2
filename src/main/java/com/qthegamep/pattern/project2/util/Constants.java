@@ -26,7 +26,8 @@ public enum Constants {
     POOL_REDIS_TYPE("pool"),
     CLUSTER_REDIS_TYPE("cluster"),
     SERVER_IP_PROPERTY("serverIp"),
-    DOCKER_IMAGE_NAME_PROPERTY("docker.image.name");
+    DOCKER_IMAGE_NAME_PROPERTY("docker.image.name"),
+    LOGGER_REPLACE_PATTERN("\\{}");
 
     private String value;
 
