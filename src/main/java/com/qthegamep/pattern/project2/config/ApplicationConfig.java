@@ -5,18 +5,15 @@ import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ApplicationConfig {
@@ -36,6 +33,7 @@ public class ApplicationConfig {
                 LOG.info("Load custom config properties! config.properties: {}", configPath);
                 loadCustomProperties(configPath);
             }
+            loadDockerImageName();
         } catch (Exception e) {
             LOG.error("ERROR", e);
             throw new ApplicationConfigInitializationException(e);
@@ -55,7 +53,7 @@ public class ApplicationConfig {
         if (serverIpOptional.isPresent()) {
             String serverIp = serverIpOptional.get();
             LOG.info("Server IP: {}", serverIp);
-            System.setProperty("serverIp", serverIp);
+            System.setProperty(Constants.SERVER_IP_PROPERTY.getValue(), serverIp);
         } else {
             LOG.warn("Server IP is not defined!");
         }
@@ -111,5 +109,22 @@ public class ApplicationConfig {
                     LOG.info("SYSTEM PROPERTY: {}={}", key, value);
                     System.setProperty(key, value);
                 });
+    }
+
+    private void loadDockerImageName() throws IOException {
+        String dockerImageNameFilePath = System.getProperty("docker.image.name.file.path");
+        File dockerImageNameFile = new File(dockerImageNameFilePath);
+        if (dockerImageNameFile.exists() && !dockerImageNameFile.isDirectory()) {
+            List<String> lines = Files.readAllLines(Paths.get(dockerImageNameFilePath), StandardCharsets.UTF_8);
+            if (lines.isEmpty()) {
+                LOG.warn("Docker image name file: {} is empty!", dockerImageNameFilePath);
+            } else {
+                String dockerImageName = lines.get(0);
+                LOG.info("Docker image name: {}", dockerImageName);
+                System.setProperty(Constants.DOCKER_IMAGE_NAME_PROPERTY.getValue(), dockerImageName);
+            }
+        } else {
+            LOG.warn("Docker image name file: {} not exists!", dockerImageNameFilePath);
+        }
     }
 }
