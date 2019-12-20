@@ -17,6 +17,8 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
 
     @Property(value = "redis.cluster.default.ttl")
     private Integer defaultTtl;
+    @Property(value = "redis.cluster.fall.when.error")
+    private Boolean fallWhenError;
 
     private JedisCluster jedisCluster;
 
@@ -47,7 +49,11 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
             jedisCluster.set(key, value);
             jedisCluster.expire(key, ttl);
         } catch (Exception e) {
-            throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ERROR);
+            if (fallWhenError) {
+                throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ERROR);
+            } else {
+                LOG.error("Error when save to Redis. Key: {} Value: {} TTL: {} RequestId: {}", key, value, ttl, requestId, e);
+            }
         }
     }
 
@@ -73,7 +79,11 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
             jedisCluster.hmset(key, value);
             jedisCluster.expire(key, ttl);
         } catch (Exception e) {
-            throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ALL_ERROR);
+            if (fallWhenError) {
+                throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ALL_ERROR);
+            } else {
+                LOG.error("Error when save all to Redis. Key: {} Values: {}, TTL: {} RequestId: {}", key, value, ttl, requestId, e);
+            }
         }
     }
 
@@ -94,7 +104,12 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
                 return Optional.of(result);
             }
         } catch (Exception e) {
-            throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ERROR);
+            if (fallWhenError) {
+                throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ERROR);
+            } else {
+                LOG.error("Error when read from Redis. Key: {} RequestId: {}", key, requestId, e);
+                return Optional.empty();
+            }
         }
     }
 
@@ -115,7 +130,12 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
                 return Optional.of(result);
             }
         } catch (Exception e) {
-            throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ALL_ERROR);
+            if (fallWhenError) {
+                throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ALL_ERROR);
+            } else {
+                LOG.error("Error when read all from Redis. Key: {} RequestId: {}", key, requestId, e);
+                return Optional.empty();
+            }
         }
     }
 }
