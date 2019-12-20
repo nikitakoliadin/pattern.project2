@@ -74,6 +74,8 @@ public class Metrics {
                     (a, b) -> b,
                     ConcurrentHashMap::new));
 
+    public static final AtomicLong REDIS_ERROR_COUNTER_METRIC = new AtomicLong();
+
     private Metrics() {
     }
 }
