@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2.repository;
 
 import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.exception.RedisRepositoryException;
+import com.qthegamep.pattern.project2.metric.Metrics;
 import com.qthegamep.pattern.project2.model.ErrorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
             jedis.set(key, value);
             jedis.expire(key, ttl);
         } catch (Exception e) {
+            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
                 throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ERROR);
             } else {
@@ -80,6 +82,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
             jedis.hmset(key, value);
             jedis.expire(key, ttl);
         } catch (Exception e) {
+            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
                 throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ALL_ERROR);
             } else {
@@ -105,6 +108,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
                 return Optional.of(result);
             }
         } catch (Exception e) {
+            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
                 throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ERROR);
             } else {
@@ -131,6 +135,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
                 return Optional.of(result);
             }
         } catch (Exception e) {
+            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
                 throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ALL_ERROR);
             } else {
