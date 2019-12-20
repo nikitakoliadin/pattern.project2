@@ -27,7 +27,8 @@ public enum Constants {
     CLUSTER_REDIS_TYPE("cluster"),
     SERVER_IP_PROPERTY("serverIp"),
     DOCKER_IMAGE_NAME_PROPERTY("docker.image.name"),
-    LOGGER_REPLACE_PATTERN("\\{}");
+    LOGGER_REPLACE_PATTERN("\\{}"),
+    REDIS("redis");
 
     private String value;
 
