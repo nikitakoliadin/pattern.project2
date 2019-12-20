@@ -178,6 +178,7 @@ public class ApplicationBinder extends AbstractBinder {
             new ResponseStatusMetric().bindTo(newPrometheusMeterRegistry);
             new RequestCounterMetric().bindTo(newPrometheusMeterRegistry);
             new RequestTimeMetric().bindTo(newPrometheusMeterRegistry);
+            new RedisErrorCounterMetric().bindTo(newPrometheusMeterRegistry);
             mongoMetricsCommandListener = new MongoMetricsCommandListener(newPrometheusMeterRegistry);
             mongoMetricsConnectionPoolListener = new MongoMetricsConnectionPoolListener(newPrometheusMeterRegistry);
             bind(newPrometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
