@@ -44,7 +44,20 @@ public class ApplicationBinder extends AbstractBinder {
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService, GenerationService generationService, ErrorResponseBuilderService errorResponseBuilderService, PrometheusMeterRegistry prometheusMeterRegistry, DatabaseConnectorService databaseConnectorService, com.mongodb.client.MongoDatabase syncMongoDatabase, com.mongodb.async.client.MongoDatabase asyncMongoDatabase, JedisPool jedisPool, JedisCluster jedisCluster, SyncMongoRepository syncMongoRepository, AsyncMongoRepository asyncMongoRepository, RedisRepository redisRepository, CryptoService cryptoService, KeyBuilderService keyBuilderService) {
+    private ApplicationBinder(ConverterService converterService,
+                              GenerationService generationService,
+                              ErrorResponseBuilderService errorResponseBuilderService,
+                              PrometheusMeterRegistry prometheusMeterRegistry,
+                              DatabaseConnectorService databaseConnectorService,
+                              com.mongodb.client.MongoDatabase syncMongoDatabase,
+                              com.mongodb.async.client.MongoDatabase asyncMongoDatabase,
+                              JedisPool jedisPool,
+                              JedisCluster jedisCluster,
+                              SyncMongoRepository syncMongoRepository,
+                              AsyncMongoRepository asyncMongoRepository,
+                              RedisRepository redisRepository,
+                              CryptoService cryptoService,
+                              KeyBuilderService keyBuilderService) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -396,7 +409,21 @@ public class ApplicationBinder extends AbstractBinder {
         }
 
         public ApplicationBinder build() {
-            return new ApplicationBinder(converterService, generationService, errorResponseBuilderService, prometheusMeterRegistry, databaseConnectorService, syncMongoDatabase, asyncMongoDatabase, jedisPool, jedisCluster, syncMongoRepository, asyncMongoRepository, redisRepository, cryptoService, keyBuilderService);
+            return new ApplicationBinder(
+                    converterService,
+                    generationService,
+                    errorResponseBuilderService,
+                    prometheusMeterRegistry,
+                    databaseConnectorService,
+                    syncMongoDatabase,
+                    asyncMongoDatabase,
+                    jedisPool,
+                    jedisCluster,
+                    syncMongoRepository,
+                    asyncMongoRepository,
+                    redisRepository,
+                    cryptoService,
+                    keyBuilderService);
         }
     }
 }
