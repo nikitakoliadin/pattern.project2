@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
-import com.qthegamep.pattern.project2.model.IoStrategyType;
+import com.qthegamep.pattern.project2.model.IoStrategy;
 import org.glassfish.grizzly.IOStrategy;
 import org.glassfish.grizzly.strategies.LeaderFollowerNIOStrategy;
 import org.glassfish.grizzly.strategies.SameThreadIOStrategy;
@@ -13,9 +13,9 @@ public class IOStrategyFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(IOStrategyFactory.class);
 
-    public IOStrategy createIOStrategy(IoStrategyType ioStrategyType) {
-        LOG.info("IO strategy: {}", ioStrategyType);
-        switch (ioStrategyType) {
+    public IOStrategy createIOStrategy(IoStrategy ioStrategy) {
+        LOG.info("IO strategy: {}", ioStrategy);
+        switch (ioStrategy) {
             case WORKER_IO_STRATEGY:
                 return WorkerThreadIOStrategy.getInstance();
             case SAME_IO_STRATEGY:

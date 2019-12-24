@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.model;
 
-public enum IoStrategyType {
+public enum IoStrategy {
 
     SAME_IO_STRATEGY,
     WORKER_IO_STRATEGY,
