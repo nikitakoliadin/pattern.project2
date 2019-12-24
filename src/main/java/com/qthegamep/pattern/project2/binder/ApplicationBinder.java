@@ -42,6 +42,7 @@ public class ApplicationBinder extends AbstractBinder {
     private CryptoService cryptoService;
     private KeyBuilderService keyBuilderService;
     private GeneralExceptionMapper generalExceptionMapper;
+    private ValidationService validationService;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
@@ -60,7 +61,8 @@ public class ApplicationBinder extends AbstractBinder {
                               RedisRepository redisRepository,
                               CryptoService cryptoService,
                               KeyBuilderService keyBuilderService,
-                              GeneralExceptionMapper generalExceptionMapper) {
+                              GeneralExceptionMapper generalExceptionMapper,
+                              ValidationService validationService) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -76,6 +78,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.cryptoService = cryptoService;
         this.keyBuilderService = keyBuilderService;
         this.generalExceptionMapper = generalExceptionMapper;
+        this.validationService = validationService;
     }
 
     public ConverterService getConverterService() {
@@ -138,6 +141,10 @@ public class ApplicationBinder extends AbstractBinder {
         return generalExceptionMapper;
     }
 
+    public ValidationService getValidationService() {
+        return validationService;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -159,6 +166,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindCryptoService();
         bindKeyBuilder();
         bindGeneralExceptionMapper();
+        bindValidationService();
     }
 
     private void bindConverterService() {
@@ -338,6 +346,14 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindValidationService() {
+        if (validationService == null) {
+            bind(ValidationServiceImpl.class).to(ValidationService.class).in(Singleton.class);
+        } else {
+            bind(validationService).to(ValidationService.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
@@ -355,6 +371,7 @@ public class ApplicationBinder extends AbstractBinder {
         private CryptoService cryptoService;
         private KeyBuilderService keyBuilderService;
         private GeneralExceptionMapper generalExceptionMapper;
+        private ValidationService validationService;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -431,6 +448,11 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setValidationService(ValidationService validationService) {
+            this.validationService = validationService;
+            return this;
+        }
+
         public ApplicationBinder build() {
             return new ApplicationBinder(
                     converterService,
@@ -447,7 +469,8 @@ public class ApplicationBinder extends AbstractBinder {
                     redisRepository,
                     cryptoService,
                     keyBuilderService,
-                    generalExceptionMapper);
+                    generalExceptionMapper,
+                    validationService);
         }
     }
 }
