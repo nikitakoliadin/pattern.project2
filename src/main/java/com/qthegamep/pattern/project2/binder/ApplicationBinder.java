@@ -1,6 +1,7 @@
 package com.qthegamep.pattern.project2.binder;
 
 import com.qthegamep.pattern.project2.exception.RedisBinderRuntimeException;
+import com.qthegamep.pattern.project2.mapper.GeneralExceptionMapper;
 import com.qthegamep.pattern.project2.metric.*;
 import com.qthegamep.pattern.project2.model.ErrorType;
 import com.qthegamep.pattern.project2.repository.*;
@@ -40,6 +41,7 @@ public class ApplicationBinder extends AbstractBinder {
     private RedisRepository redisRepository;
     private CryptoService cryptoService;
     private KeyBuilderService keyBuilderService;
+    private GeneralExceptionMapper generalExceptionMapper;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
@@ -57,7 +59,8 @@ public class ApplicationBinder extends AbstractBinder {
                               AsyncMongoRepository asyncMongoRepository,
                               RedisRepository redisRepository,
                               CryptoService cryptoService,
-                              KeyBuilderService keyBuilderService) {
+                              KeyBuilderService keyBuilderService,
+                              GeneralExceptionMapper generalExceptionMapper) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -72,6 +75,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.redisRepository = redisRepository;
         this.cryptoService = cryptoService;
         this.keyBuilderService = keyBuilderService;
+        this.generalExceptionMapper = generalExceptionMapper;
     }
 
     public ConverterService getConverterService() {
@@ -130,6 +134,10 @@ public class ApplicationBinder extends AbstractBinder {
         return keyBuilderService;
     }
 
+    public GeneralExceptionMapper getGeneralExceptionMapper() {
+        return generalExceptionMapper;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -150,6 +158,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindRedisRepository();
         bindCryptoService();
         bindKeyBuilder();
+        bindGeneralExceptionMapper();
     }
 
     private void bindConverterService() {
@@ -321,6 +330,14 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindGeneralExceptionMapper() {
+        if (generalExceptionMapper == null) {
+            bindAsContract(GeneralExceptionMapper.class).in(Singleton.class);
+        } else {
+            bind(generalExceptionMapper).to(GeneralExceptionMapper.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
@@ -337,6 +354,7 @@ public class ApplicationBinder extends AbstractBinder {
         private RedisRepository redisRepository;
         private CryptoService cryptoService;
         private KeyBuilderService keyBuilderService;
+        private GeneralExceptionMapper generalExceptionMapper;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -408,6 +426,11 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setGeneralExceptionMapper(GeneralExceptionMapper generalExceptionMapper) {
+            this.generalExceptionMapper = generalExceptionMapper;
+            return this;
+        }
+
         public ApplicationBinder build() {
             return new ApplicationBinder(
                     converterService,
@@ -423,7 +446,8 @@ public class ApplicationBinder extends AbstractBinder {
                     asyncMongoRepository,
                     redisRepository,
                     cryptoService,
-                    keyBuilderService);
+                    keyBuilderService,
+                    generalExceptionMapper);
         }
     }
 }
