@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -50,6 +51,8 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
     private ErrorType getErrorType(Exception exception) {
         if (exception instanceof ServiceException) {
             return ((ServiceException) exception).getErrorType();
+        } else if (exception instanceof ValidationException) {
+            return ErrorType.INVALID_REQUEST_ERROR;
         } else if (exception instanceof NotFoundException) {
             return ErrorType.PAGE_NOT_FOUND_ERROR;
         } else {
