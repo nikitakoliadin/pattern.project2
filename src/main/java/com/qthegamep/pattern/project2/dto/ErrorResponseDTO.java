@@ -3,20 +3,24 @@ package com.qthegamep.pattern.project2.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Schema(name = "Error",
         description = "This is error response object")
 public class ErrorResponseDTO {
 
+    @NotNull
     @Schema(description = "Error code",
             required = true,
             example = "500")
     @JsonProperty(
             value = "errorCode",
             required = true)
-    private int errorCode;
+    private Integer errorCode;
 
+    @NotEmpty
     @Schema(description = "Error message",
             required = true,
             example = "INTERNAL_ERROR")
@@ -25,11 +29,11 @@ public class ErrorResponseDTO {
             required = true)
     private String errorMessage;
 
-    public int getErrorCode() {
+    public Integer getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(int errorCode) {
+    public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
 
@@ -46,7 +50,7 @@ public class ErrorResponseDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ErrorResponseDTO that = (ErrorResponseDTO) o;
-        return errorCode == that.errorCode &&
+        return Objects.equals(errorCode, that.errorCode) &&
                 Objects.equals(errorMessage, that.errorMessage);
     }
 

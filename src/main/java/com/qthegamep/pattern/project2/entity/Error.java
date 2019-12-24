@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class Error {
@@ -14,16 +16,19 @@ public class Error {
             required = true)
     private ObjectId objectId;
 
+    @NotEmpty
     @JsonProperty(
             value = "requestId",
             required = true)
     private String requestId;
 
+    @NotNull
     @JsonProperty(
             value = "errorCode",
             required = true)
-    private int errorCode;
+    private Integer errorCode;
 
+    @NotEmpty
     @JsonProperty(
             value = "errorMessage",
             required = true)
@@ -45,11 +50,11 @@ public class Error {
         this.requestId = requestId;
     }
 
-    public int getErrorCode() {
+    public Integer getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(int errorCode) {
+    public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
 
@@ -66,9 +71,9 @@ public class Error {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Error error = (Error) o;
-        return errorCode == error.errorCode &&
-                Objects.equals(objectId, error.objectId) &&
+        return Objects.equals(objectId, error.objectId) &&
                 Objects.equals(requestId, error.requestId) &&
+                Objects.equals(errorCode, error.errorCode) &&
                 Objects.equals(errorMessage, error.errorMessage);
     }
 
