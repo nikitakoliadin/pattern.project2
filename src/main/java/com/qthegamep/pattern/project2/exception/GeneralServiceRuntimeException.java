@@ -15,6 +15,11 @@ abstract class GeneralServiceRuntimeException extends RuntimeException implement
         this.errorType = errorType;
     }
 
+    public GeneralServiceRuntimeException(String message, ErrorType errorType) {
+        super(message);
+        this.errorType = errorType;
+    }
+
     @Override
     public ErrorType getErrorType() {
         return errorType;
