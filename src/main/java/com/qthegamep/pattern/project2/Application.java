@@ -19,6 +19,7 @@ import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 import org.glassfish.grizzly.threadpool.ThreadPoolProbe;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +58,7 @@ public class Application {
         URI applicationUri = URI.create(applicationUrl);
         ResourceConfig resourceConfig = new ResourceConfig()
                 .addProperties(applicationProperties)
+                .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                 .packages(Application.class.getPackage().getName())
                 .register(ConfigurationBinder.builder().build())
                 .register(ApplicationBinder.builder().build());
