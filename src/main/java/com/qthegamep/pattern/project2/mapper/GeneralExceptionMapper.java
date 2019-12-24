@@ -52,7 +52,7 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
         if (exception instanceof ServiceException) {
             return ((ServiceException) exception).getErrorType();
         } else if (exception instanceof ValidationException) {
-            return ErrorType.INVALID_REQUEST_ERROR;
+            return ErrorType.INVALID_REQUEST_RESPONSE_ERROR;
         } else if (exception instanceof NotFoundException) {
             return ErrorType.PAGE_NOT_FOUND_ERROR;
         } else {
