@@ -13,7 +13,7 @@ import com.mongodb.event.ConnectionPoolListener;
 import com.qthegamep.pattern.project2.callback.MongoShutdownServerCallback;
 import com.qthegamep.pattern.project2.exception.runtime.AsyncMongoDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.CloseRedisClustersDatabaseConnectorServiceRuntimeException;
-import com.qthegamep.pattern.project2.exception.runtime.RedisConnectorRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.RedisDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.SyncMongoDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Constants;
@@ -189,7 +189,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             redisPools.add(jedisPool);
             return jedisPool;
         } catch (Exception e) {
-            throw new RedisConnectorRuntimeException(e, Error.REDIS_POOL_CONNECTOR_ERROR);
+            throw new RedisDatabaseConnectorServiceRuntimeException(e, Error.REDIS_POOL_CONNECTOR_ERROR);
         }
     }
 
@@ -227,7 +227,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             redisClusters.add(jedisCluster);
             return jedisCluster;
         } catch (Exception e) {
-            throw new RedisConnectorRuntimeException(e, Error.REDIS_CLUSTER_CONNECTOR_ERROR);
+            throw new RedisDatabaseConnectorServiceRuntimeException(e, Error.REDIS_CLUSTER_CONNECTOR_ERROR);
         }
     }
 
