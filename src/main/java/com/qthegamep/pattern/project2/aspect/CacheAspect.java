@@ -2,7 +2,7 @@ package com.qthegamep.pattern.project2.aspect;
 
 import com.qthegamep.pattern.project2.annotation.Cacheable;
 import com.qthegamep.pattern.project2.exception.compile.CryptoServiceException;
-import com.qthegamep.pattern.project2.repository.RedisRepository;
+import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
 import com.qthegamep.pattern.project2.service.ConverterService;
 import com.qthegamep.pattern.project2.service.CryptoService;
 import com.qthegamep.pattern.project2.service.KeyBuilderService;

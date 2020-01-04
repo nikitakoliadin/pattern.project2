@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.repository;
+package com.qthegamep.pattern.project2.repository.redis;
 
 import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.exception.compile.RedisRepositoryException;

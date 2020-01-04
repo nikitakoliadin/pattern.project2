@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.repository;
+package com.qthegamep.pattern.project2.repository.mongo;
 
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
