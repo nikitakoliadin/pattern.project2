@@ -12,7 +12,7 @@ import com.mongodb.event.CommandListener;
 import com.mongodb.event.ConnectionPoolListener;
 import com.qthegamep.pattern.project2.callback.MongoShutdownServerCallback;
 import com.qthegamep.pattern.project2.exception.runtime.AsyncMongoDatabaseConnectorServiceRuntimeException;
-import com.qthegamep.pattern.project2.exception.runtime.CloseClusterRedisRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.CloseRedisClustersDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.RedisConnectorRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.SyncMongoDBConnectorRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
@@ -257,7 +257,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             }
             redisClusters.clear();
         } catch (Exception e) {
-            throw new CloseClusterRedisRuntimeException(e, Error.CLOSE_CLUSTER_REDIS_ERROR);
+            throw new CloseRedisClustersDatabaseConnectorServiceRuntimeException(e, Error.CLOSE_CLUSTER_REDIS_ERROR);
         }
     }
 
