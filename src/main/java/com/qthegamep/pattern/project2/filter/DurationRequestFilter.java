@@ -18,10 +18,10 @@ public class DurationRequestFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) {
-        String requestId = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
+        String requestId = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER);
         MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
         String startTime = String.valueOf(System.currentTimeMillis());
         LOG.debug("StartTime: {} RequestId: {}", startTime, requestId);
-        headers.add(Constants.START_TIME_HEADER.getValue(), startTime);
+        headers.add(Constants.START_TIME_HEADER, startTime);
     }
 }

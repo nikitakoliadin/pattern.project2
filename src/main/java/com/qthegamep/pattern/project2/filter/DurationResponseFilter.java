@@ -18,11 +18,11 @@ public class DurationResponseFilter implements ContainerResponseFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) {
-        String requestId = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
-        String startTime = containerRequestContext.getHeaderString(Constants.START_TIME_HEADER.getValue());
+        String requestId = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER);
+        String startTime = containerRequestContext.getHeaderString(Constants.START_TIME_HEADER);
         long duration = System.currentTimeMillis() - Long.parseLong(startTime);
         LOG.debug("Duration: {} RequestId: {}", duration, requestId);
         MultivaluedMap<String, Object> headers = containerResponseContext.getHeaders();
-        headers.add(Constants.DURATION_HEADER.getValue(), duration);
+        headers.add(Constants.DURATION_HEADER, duration);
     }
 }

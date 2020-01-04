@@ -316,9 +316,9 @@ public class ApplicationBinder extends AbstractBinder {
         if (redisRepository == null) {
             String redisType = System.getProperty("redis.type");
             LOG.debug("Redis type: {}", redisType);
-            if (Constants.POOL_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
+            if (Constants.POOL_REDIS_TYPE.equalsIgnoreCase(redisType)) {
                 bind(PoolRedisRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
-            } else if (Constants.CLUSTER_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
+            } else if (Constants.CLUSTER_REDIS_TYPE.equalsIgnoreCase(redisType)) {
                 bind(ClusterRedisRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else {
                 throw new RedisRepositoryApplicationBinderRuntimeException(Error.REDIS_NOT_EXISTING_TYPE_ERROR);

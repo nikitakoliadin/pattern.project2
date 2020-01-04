@@ -15,7 +15,7 @@ public class RequestCounterMetric implements MeterBinder {
     public void bindTo(MeterRegistry meterRegistry) {
         Metrics.REQUEST_COUNTER_METRIC.forEach((key, value) -> Gauge.builder(REQUEST_COUNTER, value::get)
                 .description("The request counter")
-                .baseUnit(Constants.GRIZZLY.getValue())
+                .baseUnit(Constants.GRIZZLY)
                 .tags(Tags.of(PATH_TAG, key))
                 .register(meterRegistry));
     }

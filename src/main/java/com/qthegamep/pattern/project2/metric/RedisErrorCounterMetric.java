@@ -13,7 +13,7 @@ public class RedisErrorCounterMetric implements MeterBinder {
     public void bindTo(MeterRegistry meterRegistry) {
         Gauge.builder(REDIS_ERROR_COUNTER, Metrics.REDIS_ERROR_COUNTER_METRIC::get)
                 .description("The current number of Redis errors")
-                .baseUnit(Constants.REDIS.getValue())
+                .baseUnit(Constants.REDIS)
                 .register(meterRegistry);
     }
 }

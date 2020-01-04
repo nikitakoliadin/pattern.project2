@@ -38,7 +38,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB() {
-        return connectToSyncMongoDB(null, null, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToSyncMongoDB(null, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener) {
-        return connectToSyncMongoDB(commandListener, null, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToSyncMongoDB(commandListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(ConnectionPoolListener connectionPoolListener) {
-        return connectToSyncMongoDB(null, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToSyncMongoDB(null, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
@@ -68,16 +68,16 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
-        return connectToSyncMongoDB(commandListener, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToSyncMongoDB(commandListener, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType) {
         LOG.debug("Sync MongoDB type: {}", connectionType);
         try {
-            if (Constants.STANDALONE_MONGO_DB_TYPE.getValue().equalsIgnoreCase(connectionType)) {
+            if (Constants.STANDALONE_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
                 return connectToStandaloneSyncMongoDB(commandListener, connectionPoolListener);
-            } else if (Constants.CLUSTER_MONGO_DB_TYPE.getValue().equalsIgnoreCase(connectionType)) {
+            } else if (Constants.CLUSTER_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
                 return connectToClusterSyncMongoDB(commandListener, connectionPoolListener);
             } else {
                 throw new SyncMongoDatabaseConnectorServiceRuntimeException(Error.MONGO_DB_NOT_EXISTING_TYPE_ERROR);
@@ -103,7 +103,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB() {
-        return connectToAsyncMongoDB(null, null, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToAsyncMongoDB(null, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener) {
-        return connectToAsyncMongoDB(commandListener, null, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToAsyncMongoDB(commandListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(ConnectionPoolListener connectionPoolListener) {
-        return connectToAsyncMongoDB(null, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToAsyncMongoDB(null, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
@@ -133,15 +133,15 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
-        return connectToAsyncMongoDB(commandListener, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE.getValue());
+        return connectToAsyncMongoDB(commandListener, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType) {
         try {
-            if (Constants.STANDALONE_MONGO_DB_TYPE.getValue().equalsIgnoreCase(connectionType)) {
+            if (Constants.STANDALONE_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
                 return connectToStandaloneAsyncMongoDB(commandListener, connectionPoolListener);
-            } else if (Constants.CLUSTER_MONGO_DB_TYPE.getValue().equalsIgnoreCase(connectionType)) {
+            } else if (Constants.CLUSTER_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
                 return connectToClusterAsyncMongoDB(commandListener, connectionPoolListener);
             } else {
                 throw new AsyncMongoDatabaseConnectorServiceRuntimeException(Error.MONGO_DB_NOT_EXISTING_TYPE_ERROR);

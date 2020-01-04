@@ -14,11 +14,11 @@ public class TaskQueueSizeMetric implements MeterBinder {
     public void bindTo(MeterRegistry meterRegistry) {
         Gauge.builder(TASK_QUEUE_SIZE, Metrics.TASK_QUEUE_SIZE_METRIC::get)
                 .description("The current number of tasks in queue")
-                .baseUnit(Constants.GRIZZLY.getValue())
+                .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
         Gauge.builder(TASK_QUEUE_LIMIT, () -> Integer.parseInt(System.getProperty("application.server.queue.limit")))
                 .description("The limit size of the task queue. If limit value is negative then queue has infinity limit")
-                .baseUnit(Constants.GRIZZLY.getValue())
+                .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
     }
 }

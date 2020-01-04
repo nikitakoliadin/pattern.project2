@@ -22,7 +22,7 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        String requestId = requestContext.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
+        String requestId = requestContext.getHeaderString(Constants.REQUEST_ID_HEADER);
         registerResponseStatusMetric(responseContext, requestId);
         registerRequestCounterMetric(requestContext, requestId);
         registerRequestTimeMetric(requestContext, responseContext, requestId);
@@ -56,7 +56,7 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
     private void registerTimeMetric(Map<String, List<AtomicLong>> metric, ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
         String path = "/" + requestContext.getUriInfo().getPath();
         if (metric.containsKey(path)) {
-            AtomicLong duration = new AtomicLong(Long.parseLong(responseContext.getHeaderString(Constants.DURATION_HEADER.getValue())));
+            AtomicLong duration = new AtomicLong(Long.parseLong(responseContext.getHeaderString(Constants.DURATION_HEADER)));
             metric.get(path).add(duration);
             LOG.debug("Path: [{}] Duration: {} RequestId: {}", path, duration, requestId);
         } else {

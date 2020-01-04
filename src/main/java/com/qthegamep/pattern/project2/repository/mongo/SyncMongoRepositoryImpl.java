@@ -38,7 +38,7 @@ public class SyncMongoRepositoryImpl implements SyncMongoRepository {
             LOG.debug("Sync save error: {} RequestId: {}", errorJson, error.getRequestId());
             Document query = Document.parse(errorJson);
             errorCollection.insertOne(query);
-            ObjectId objectId = query.getObjectId(Constants.JSON_OBJECT_ID_KEY.getValue());
+            ObjectId objectId = query.getObjectId(Constants.JSON_OBJECT_ID_KEY);
             LOG.debug("ObjectId: {} RequestId: {}", objectId, error.getRequestId());
             error.setObjectId(objectId);
             return error;

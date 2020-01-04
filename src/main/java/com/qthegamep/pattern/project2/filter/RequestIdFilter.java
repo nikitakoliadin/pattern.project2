@@ -27,14 +27,14 @@ public class RequestIdFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) {
-        String requestIdHeader = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
+        String requestIdHeader = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER);
         if (requestIdHeader == null || requestIdHeader.isEmpty()) {
-            String requestId = containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue()) == null
+            String requestId = containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER) == null
                     ? generationService.generateUniqueId(10L)
-                    : containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER.getValue());
+                    : containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER);
             LOG.debug("RequestId: {}", requestId);
             MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
-            headers.add(Constants.REQUEST_ID_HEADER.getValue(), requestId);
+            headers.add(Constants.REQUEST_ID_HEADER, requestId);
         } else {
             LOG.debug("RequestId header: {}", requestIdHeader);
         }

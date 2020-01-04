@@ -27,7 +27,7 @@ public class RequestTimeMetric implements MeterBinder {
                     return Math.round(result);
                 })
                 .description("The request time")
-                .baseUnit(Constants.GRIZZLY.getValue())
+                .baseUnit(Constants.GRIZZLY)
                 .tags(Tags.of(PATH_TAG, key))
                 .register(meterRegistry));
         Metrics.MAX_REQUEST_TIME_METRIC.forEach((key, value) -> Gauge.builder(MAX_REQUEST_TIME,
@@ -40,7 +40,7 @@ public class RequestTimeMetric implements MeterBinder {
                     return result;
                 })
                 .description("The max request time")
-                .baseUnit(Constants.GRIZZLY.getValue())
+                .baseUnit(Constants.GRIZZLY)
                 .tags(Tags.of(PATH_TAG, key))
                 .register(meterRegistry));
     }

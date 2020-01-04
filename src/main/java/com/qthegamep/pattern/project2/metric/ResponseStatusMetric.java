@@ -15,7 +15,7 @@ public class ResponseStatusMetric implements MeterBinder {
     public void bindTo(MeterRegistry meterRegistry) {
         Metrics.RESPONSE_STATUS_METRIC.forEach((key, value) -> Gauge.builder(RESPONSE_STATUS, value::get)
                 .description("The response status")
-                .baseUnit(Constants.GRIZZLY.getValue())
+                .baseUnit(Constants.GRIZZLY)
                 .tags(Tags.of(RESPONSE_CODE_TAG, key))
                 .register(meterRegistry));
     }

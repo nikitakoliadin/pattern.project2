@@ -26,7 +26,7 @@ public class LogConfig {
         String rootLogLevel = System.getProperty("root.logger.level");
         logger.setLevel(Level.toLevel(rootLogLevel));
         boolean rootLoggerFileEnabled = Boolean.parseBoolean(System.getProperty("root.logger.file.enable"));
-        String dockerImageName = System.getProperty(Constants.DOCKER_IMAGE_NAME_PROPERTY.getValue());
+        String dockerImageName = System.getProperty(Constants.DOCKER_IMAGE_NAME_PROPERTY);
         if (rootLoggerFileEnabled && dockerImageName != null && !dockerImageName.isEmpty()) {
             LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
             logger.addAppender(buildRollingFileAppender(loggerContext, dockerImageName));
@@ -44,7 +44,7 @@ public class LogConfig {
         RollingFileAppender<ILoggingEvent> rollingFileAppender = new RollingFileAppender<>();
         rollingFileAppender.setContext(loggerContext);
         rollingFileAppender.setName(rootLoggerFileName);
-        rollingFileAppender.setFile(rootLoggerFilePath.replaceAll(Constants.LOGGER_REPLACE_PATTERN.getValue(), dockerImageName));
+        rollingFileAppender.setFile(rootLoggerFilePath.replaceAll(Constants.LOGGER_REPLACE_PATTERN, dockerImageName));
         rollingFileAppender.setAppend(Boolean.parseBoolean(rootLoggerFileAppender));
         rollingFileAppender.setRollingPolicy(buildTimeBasedRollingPolicy(loggerContext, rollingFileAppender, dockerImageName));
         rollingFileAppender.setEncoder(buildPatternLayoutEncoder(loggerContext, rollingFileAppender));
@@ -59,7 +59,7 @@ public class LogConfig {
         TimeBasedRollingPolicy<ILoggingEvent> timeBasedRollingPolicy = new TimeBasedRollingPolicy<>();
         timeBasedRollingPolicy.setContext(loggerContext);
         timeBasedRollingPolicy.setParent(rollingFileAppender);
-        timeBasedRollingPolicy.setFileNamePattern(rootLoggerFileNamePattern.replaceAll(Constants.LOGGER_REPLACE_PATTERN.getValue(), dockerImageName));
+        timeBasedRollingPolicy.setFileNamePattern(rootLoggerFileNamePattern.replaceAll(Constants.LOGGER_REPLACE_PATTERN, dockerImageName));
         timeBasedRollingPolicy.setTimeBasedFileNamingAndTriggeringPolicy(buildSizeAndTimeBasedFNATP(loggerContext, timeBasedRollingPolicy));
         timeBasedRollingPolicy.setMaxHistory(Integer.parseInt(rootLoggerFileMaxHistory));
         timeBasedRollingPolicy.setTotalSizeCap(FileSize.valueOf(rootLoggerFileTotalSizeCap));

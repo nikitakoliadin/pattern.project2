@@ -53,7 +53,7 @@ public class ApplicationConfig {
         if (serverIpOptional.isPresent()) {
             String serverIp = serverIpOptional.get();
             LOG.info("Server IP: {}", serverIp);
-            System.setProperty(Constants.SERVER_IP_PROPERTY.getValue(), serverIp);
+            System.setProperty(Constants.SERVER_IP_PROPERTY, serverIp);
         } else {
             LOG.warn("Server IP is not defined!");
         }
@@ -86,7 +86,7 @@ public class ApplicationConfig {
 
     private void loadDefaultProperties() throws Exception {
         applicationProperties = new Properties();
-        try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(Constants.DEFAULT_CONFIG_PROPERTIES_PATH.getValue())) {
+        try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(Constants.DEFAULT_CONFIG_PROPERTIES_PATH)) {
             applicationProperties.load(inputStream);
             loadProperties(applicationProperties);
         }
@@ -121,7 +121,7 @@ public class ApplicationConfig {
             } else {
                 String dockerImageName = lines.get(0);
                 LOG.info("Docker image name: {}", dockerImageName);
-                System.setProperty(Constants.DOCKER_IMAGE_NAME_PROPERTY.getValue(), dockerImageName);
+                System.setProperty(Constants.DOCKER_IMAGE_NAME_PROPERTY, dockerImageName);
             }
         } else {
             LOG.warn("Docker image name file: {} not exists!", dockerImageNameFilePath);

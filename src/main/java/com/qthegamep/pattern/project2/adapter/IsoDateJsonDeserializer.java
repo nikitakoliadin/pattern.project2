@@ -17,10 +17,10 @@ class IsoDateJsonDeserializer extends JsonDeserializer<Date> {
     @Override
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.MONGO_UTC_DATE_FORMAT.getValue());
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone(Constants.GMT_TIMEZONE.getValue()));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.MONGO_UTC_DATE_FORMAT);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone(Constants.GMT_TIMEZONE));
             JsonNode jsonNode = jsonParser.readValueAsTree();
-            String isoDate = jsonNode.get(Constants.JSON_DATE_FIELD_NAME.getValue()).asText();
+            String isoDate = jsonNode.get(Constants.JSON_DATE_FIELD_NAME).asText();
             return simpleDateFormat.parse(isoDate);
         } catch (ParseException e) {
             return null;

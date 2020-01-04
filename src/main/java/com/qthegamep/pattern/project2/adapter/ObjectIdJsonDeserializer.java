@@ -13,7 +13,7 @@ class ObjectIdJsonDeserializer extends JsonDeserializer<ObjectId> {
     public ObjectId deserialize(JsonParser jsonParser, DeserializationContext context) {
         try {
             JsonNode jsonNode = jsonParser.readValueAsTree();
-            String id = jsonNode.get(Constants.JSON_OBJECT_ID_FIELD_NAME.getValue()).asText();
+            String id = jsonNode.get(Constants.JSON_OBJECT_ID_FIELD_NAME).asText();
             return new ObjectId(id);
         } catch (Exception e) {
             return null;

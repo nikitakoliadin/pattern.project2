@@ -15,7 +15,7 @@ public class ErrorTypesMetric implements MeterBinder {
     public void bindTo(MeterRegistry meterRegistry) {
         Metrics.ERROR_TYPES_METRIC.forEach((key, value) -> Gauge.builder(ERROR_TYPES, value::get)
                 .description("The error response types")
-                .baseUnit(Constants.GRIZZLY.getValue())
+                .baseUnit(Constants.GRIZZLY)
                 .tags(Tags.of(ERROR_CODE_TAG, key))
                 .register(meterRegistry));
     }

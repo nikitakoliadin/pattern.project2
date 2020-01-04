@@ -28,16 +28,16 @@ public class ResponseLogFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) {
         String path = containerRequestContext.getUriInfo().getRequestUri().toString();
-        String requestId = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
+        String requestId = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER);
         String clientIp = getClientIp();
-        String duration = containerResponseContext.getHeaderString(Constants.DURATION_HEADER.getValue());
+        String duration = containerResponseContext.getHeaderString(Constants.DURATION_HEADER);
         LOG.info("Request processed. Path: {} RequestId: {} Client IP: {} Duration: {}", path, requestId, clientIp, duration);
     }
 
     private String getClientIp() {
         Request request = requestProvider.get();
-        return request.getHeader(Constants.X_FORWARDED_FOR_HEADER.getValue()) == null
+        return request.getHeader(Constants.X_FORWARDED_FOR_HEADER) == null
                 ? request.getRemoteAddr()
-                : request.getHeader(Constants.X_FORWARDED_FOR_HEADER.getValue());
+                : request.getHeader(Constants.X_FORWARDED_FOR_HEADER);
     }
 }

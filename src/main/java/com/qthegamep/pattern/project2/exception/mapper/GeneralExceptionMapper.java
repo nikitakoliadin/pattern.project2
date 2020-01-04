@@ -40,7 +40,7 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
     public Response toResponse(Exception exception) {
         Error error = getError(exception);
         List<Locale> requestLocales = httpHeaders.getAcceptableLanguages();
-        String requestId = httpHeaders.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
+        String requestId = httpHeaders.getHeaderString(Constants.REQUEST_ID_HEADER);
         LOG.error("Error. RequestId: {}", requestId, exception);
         ErrorResponse errorResponse = errorResponseBuilderService.buildResponse(error, requestLocales, requestId);
         errorResponse.setErrorMessage(errorResponse.getErrorMessage() + " Request ID: " + requestId);
