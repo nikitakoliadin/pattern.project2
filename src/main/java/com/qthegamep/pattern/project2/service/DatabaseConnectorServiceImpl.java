@@ -14,7 +14,7 @@ import com.qthegamep.pattern.project2.callback.MongoShutdownServerCallback;
 import com.qthegamep.pattern.project2.exception.runtime.AsyncMongoDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.CloseRedisClustersDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.RedisConnectorRuntimeException;
-import com.qthegamep.pattern.project2.exception.runtime.SyncMongoDBConnectorRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.SyncMongoDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
@@ -80,12 +80,12 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             } else if (Constants.CLUSTER_MONGO_DB_TYPE.getValue().equalsIgnoreCase(connectionType)) {
                 return connectToClusterSyncMongoDB(commandListener, connectionPoolListener);
             } else {
-                throw new SyncMongoDBConnectorRuntimeException(Error.MONGO_DB_NOT_EXISTING_TYPE_ERROR);
+                throw new SyncMongoDatabaseConnectorServiceRuntimeException(Error.MONGO_DB_NOT_EXISTING_TYPE_ERROR);
             }
-        } catch (SyncMongoDBConnectorRuntimeException e) {
-            throw new SyncMongoDBConnectorRuntimeException(e, e.getError());
+        } catch (SyncMongoDatabaseConnectorServiceRuntimeException e) {
+            throw new SyncMongoDatabaseConnectorServiceRuntimeException(e, e.getError());
         } catch (Exception e) {
-            throw new SyncMongoDBConnectorRuntimeException(e, Error.SYNC_MONGO_DB_CONNECTOR_ERROR);
+            throw new SyncMongoDatabaseConnectorServiceRuntimeException(e, Error.SYNC_MONGO_DB_CONNECTOR_ERROR);
         }
     }
 
