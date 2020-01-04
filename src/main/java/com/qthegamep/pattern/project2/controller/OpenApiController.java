@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.controller;
 
 import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
-import com.qthegamep.pattern.project2.exception.compile.OpenApiException;
+import com.qthegamep.pattern.project2.exception.compile.OpenApiControllerException;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -50,5 +50,5 @@ public interface OpenApiController {
     @Produces({MediaType.APPLICATION_JSON, "application/yaml"})
     Response getOpenApi(@Context HttpHeaders headers,
                         @Context UriInfo uriInfo,
-                        @PathParam("type") String type) throws OpenApiException;
+                        @PathParam("type") String type) throws OpenApiControllerException;
 }

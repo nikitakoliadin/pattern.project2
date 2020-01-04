@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.controller;
 
-import com.qthegamep.pattern.project2.exception.compile.OpenApiException;
+import com.qthegamep.pattern.project2.exception.compile.OpenApiControllerException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Paths;
 import io.swagger.v3.jaxrs2.integration.resources.BaseOpenApiResource;
@@ -44,7 +44,7 @@ public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenAp
     @Produces({MediaType.APPLICATION_JSON, "application/yaml"})
     public Response getOpenApi(@Context HttpHeaders headers,
                                @Context UriInfo uriInfo,
-                               @PathParam("type") String type) throws OpenApiException {
+                               @PathParam("type") String type) throws OpenApiControllerException {
         try {
             URI baseUri = uriInfo.getBaseUri();
             String applicationUrl = baseUri.getPath();
@@ -53,7 +53,7 @@ public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenAp
             openApiConfiguration.getOpenAPI().addServersItem(httpServer);
             return super.getOpenApi(headers, servletConfig, application, uriInfo, type);
         } catch (Exception e) {
-            throw new OpenApiException(e, Error.OPEN_API_ERROR);
+            throw new OpenApiControllerException(e, Error.OPEN_API_ERROR);
         }
     }
 }
