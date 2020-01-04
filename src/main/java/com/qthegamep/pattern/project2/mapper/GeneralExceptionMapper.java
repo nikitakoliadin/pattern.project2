@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.mapper;
 
-import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
+import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.exception.ServiceException;
 import com.qthegamep.pattern.project2.metric.Metrics;
 import com.qthegamep.pattern.project2.model.container.Error;
@@ -42,10 +42,10 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
         List<Locale> requestLocales = httpHeaders.getAcceptableLanguages();
         String requestId = httpHeaders.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
         LOG.error("Error. RequestId: {}", requestId, exception);
-        ErrorResponseDTO errorResponseDTO = errorResponseBuilderService.buildResponse(error, requestLocales, requestId);
-        errorResponseDTO.setErrorMessage(errorResponseDTO.getErrorMessage() + " Request ID: " + requestId);
+        ErrorResponse errorResponse = errorResponseBuilderService.buildResponse(error, requestLocales, requestId);
+        errorResponse.setErrorMessage(errorResponse.getErrorMessage() + " Request ID: " + requestId);
         registerMetrics(error, requestId);
-        return buildResponse(errorResponseDTO);
+        return buildResponse(errorResponse);
     }
 
     private Error getError(Exception exception) {
@@ -66,16 +66,16 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
         LOG.debug("Error code: {} Error count: {} RequestId: {}", errorCode, errorCount, requestId);
     }
 
-    private Response buildResponse(ErrorResponseDTO errorResponseDTO) {
+    private Response buildResponse(ErrorResponse errorResponse) {
         String contentType = getContentType(httpHeaders);
-        if (errorResponseDTO.getErrorCode() == Error.PAGE_NOT_FOUND_ERROR.getErrorCode()) {
+        if (errorResponse.getErrorCode() == Error.PAGE_NOT_FOUND_ERROR.getErrorCode()) {
             return Response.status(Response.Status.NOT_FOUND)
                     .header(HttpHeaders.CONTENT_TYPE, contentType)
                     .build();
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .header(HttpHeaders.CONTENT_TYPE, contentType)
-                    .entity(errorResponseDTO)
+                    .entity(errorResponse)
                     .build();
         }
     }

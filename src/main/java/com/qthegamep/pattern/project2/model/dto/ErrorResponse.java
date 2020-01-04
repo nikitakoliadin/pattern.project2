@@ -8,8 +8,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Schema(name = "Error",
-        description = "This is error response object")
-public class ErrorResponseDTO {
+        description = "This is error response DTO object")
+public class ErrorResponse {
 
     @NotNull
     @Schema(description = "Error code",
@@ -49,7 +49,7 @@ public class ErrorResponseDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ErrorResponseDTO that = (ErrorResponseDTO) o;
+        ErrorResponse that = (ErrorResponse) o;
         return Objects.equals(errorCode, that.errorCode) &&
                 Objects.equals(errorMessage, that.errorMessage);
     }
@@ -61,7 +61,7 @@ public class ErrorResponseDTO {
 
     @Override
     public String toString() {
-        return "ErrorResponseDTO{" +
+        return "ErrorResponse{" +
                 "errorCode=" + errorCode +
                 ", errorMessage='" + errorMessage + '\'' +
                 '}';

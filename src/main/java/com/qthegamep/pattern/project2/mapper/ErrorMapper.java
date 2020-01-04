@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.mapper;
 
-import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
+import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.model.entity.Error;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,7 +16,7 @@ public interface ErrorMapper {
             @Mapping(source = "errorCode", target = "errorCode"),
             @Mapping(source = "errorMessage", target = "errorMessage")
     })
-    ErrorResponseDTO errorToErrorResponseDTO(Error error);
+    ErrorResponse errorToErrorResponse(Error error);
 
     @Mappings({
             @Mapping(source = "errorCode", target = "errorCode"),
@@ -24,5 +24,5 @@ public interface ErrorMapper {
             @Mapping(target = "objectId", ignore = true),
             @Mapping(target = "requestId", ignore = true)
     })
-    Error errorResponseDTOToError(ErrorResponseDTO errorResponseDTO);
+    Error errorResponseToError(ErrorResponse errorResponse);
 }

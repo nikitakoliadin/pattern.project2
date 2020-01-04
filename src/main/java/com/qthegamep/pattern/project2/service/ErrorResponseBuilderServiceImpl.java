@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.service;
 
-import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
+import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
@@ -21,11 +21,11 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
     }
 
     @Override
-    public ErrorResponseDTO buildResponse(Error error, List<Locale> requestLocales, String requestId) {
-        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO();
+    public ErrorResponse buildResponse(Error error, List<Locale> requestLocales, String requestId) {
+        ErrorResponse errorResponse = new ErrorResponse();
         int errorCode = error.getErrorCode();
         LOG.debug("Response code: {} RequestId: {}", errorCode, requestId);
-        errorResponseDTO.setErrorCode(errorCode);
+        errorResponse.setErrorCode(errorCode);
         LOG.debug("Available locales: {} RequestId: {}", availableLocales, requestId);
         LOG.debug("Request locales: {} RequestId: {}", requestLocales, requestId);
         Locale locale = getLocale(requestLocales);
@@ -34,12 +34,12 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
             ResourceBundle resourceBundle = ResourceBundle.getBundle(Constants.ERROR_MESSAGES_LOCALIZATION.getValue(), locale);
             String errorMessage = resourceBundle.getString(error.name());
             LOG.debug("Message: {} RequestId: {}", errorMessage, requestId);
-            errorResponseDTO.setErrorMessage(errorMessage);
+            errorResponse.setErrorMessage(errorMessage);
         } catch (Exception e) {
             LOG.error("Localization error. RequestId: {}", requestId, e);
-            errorResponseDTO.setErrorMessage(error.name());
+            errorResponse.setErrorMessage(error.name());
         }
-        return errorResponseDTO;
+        return errorResponse;
     }
 
     private Locale getLocale(List<Locale> requestLocales) {

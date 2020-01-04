@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.controller;
 
-import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
+import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.exception.OpenApiException;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +44,7 @@ public interface OpenApiController {
     @ApiResponse(
             responseCode = "others",
             description = "Error",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @GET
     @Path("/openapi.{type:json|yaml}")
     @Produces({MediaType.APPLICATION_JSON, "application/yaml"})
