@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.exception;
+package com.qthegamep.pattern.project2.exception.runtime;
 
 import com.qthegamep.pattern.project2.model.container.Error;
 

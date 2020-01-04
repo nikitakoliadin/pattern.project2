@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.service;
 
-import com.qthegamep.pattern.project2.exception.CryptoServiceException;
+import com.qthegamep.pattern.project2.exception.compile.CryptoServiceException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.model.container.HashAlgorithm;
 import org.apache.commons.codec.binary.Hex;

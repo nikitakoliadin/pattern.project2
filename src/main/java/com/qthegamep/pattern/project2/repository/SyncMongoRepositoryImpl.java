@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.repository;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.qthegamep.pattern.project2.annotation.Property;
-import com.qthegamep.pattern.project2.exception.SyncMongoRepositoryException;
+import com.qthegamep.pattern.project2.exception.compile.SyncMongoRepositoryException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.service.ConverterService;
 import com.qthegamep.pattern.project2.util.Constants;

@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.repository;
 
 import com.qthegamep.pattern.project2.annotation.Property;
-import com.qthegamep.pattern.project2.exception.RedisRepositoryException;
+import com.qthegamep.pattern.project2.exception.compile.RedisRepositoryException;
 import com.qthegamep.pattern.project2.metric.Metrics;
 import com.qthegamep.pattern.project2.model.container.Error;
 import org.slf4j.Logger;

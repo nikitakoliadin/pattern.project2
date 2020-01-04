@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.exception;
+package com.qthegamep.pattern.project2.exception.initialization;
 
 public class ApplicationConfigInitializationException extends GeneralServiceInitializationException {
 

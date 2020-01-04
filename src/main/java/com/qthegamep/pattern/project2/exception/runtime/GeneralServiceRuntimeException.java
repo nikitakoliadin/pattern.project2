@@ -1,5 +1,6 @@
-package com.qthegamep.pattern.project2.exception;
+package com.qthegamep.pattern.project2.exception.runtime;
 
+import com.qthegamep.pattern.project2.exception.ServiceException;
 import com.qthegamep.pattern.project2.model.container.Error;
 
 abstract class GeneralServiceRuntimeException extends RuntimeException implements ServiceException {

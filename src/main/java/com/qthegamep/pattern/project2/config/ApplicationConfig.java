@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
-import com.qthegamep.pattern.project2.exception.ApplicationConfigInitializationException;
+import com.qthegamep.pattern.project2.exception.initialization.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

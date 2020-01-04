@@ -4,7 +4,7 @@ import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
 import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.callback.MongoAsyncInsertCallback;
-import com.qthegamep.pattern.project2.exception.AsyncMongoRepositoryException;
+import com.qthegamep.pattern.project2.exception.compile.AsyncMongoRepositoryException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.service.ConverterService;
 import org.bson.Document;

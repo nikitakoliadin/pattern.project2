@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.repository;
 
-import com.qthegamep.pattern.project2.exception.RedisRepositoryException;
+import com.qthegamep.pattern.project2.exception.compile.RedisRepositoryException;
 
 import java.util.Map;
 import java.util.Optional;

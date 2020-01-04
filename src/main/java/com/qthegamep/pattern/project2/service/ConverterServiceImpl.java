@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.qthegamep.pattern.project2.adapter.IsoDateModuleAdapter;
 import com.qthegamep.pattern.project2.adapter.ObjectIdModuleAdapter;
-import com.qthegamep.pattern.project2.exception.JsonConverterRuntimeException;
-import com.qthegamep.pattern.project2.exception.XmlConverterRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.JsonConverterRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.XmlConverterRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
 
 import java.io.BufferedReader;

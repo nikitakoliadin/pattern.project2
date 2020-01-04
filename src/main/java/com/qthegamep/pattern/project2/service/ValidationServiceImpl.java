@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.service;
 
-import com.qthegamep.pattern.project2.exception.ValidationServiceRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.ValidationServiceRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

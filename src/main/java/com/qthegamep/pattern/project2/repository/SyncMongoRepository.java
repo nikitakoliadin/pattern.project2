@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.repository;
 
 import com.qthegamep.pattern.project2.model.entity.Error;
-import com.qthegamep.pattern.project2.exception.SyncMongoRepositoryException;
+import com.qthegamep.pattern.project2.exception.compile.SyncMongoRepositoryException;
 
 public interface SyncMongoRepository {
 

@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.controller;
 
 import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
-import com.qthegamep.pattern.project2.exception.OpenApiException;
+import com.qthegamep.pattern.project2.exception.compile.OpenApiException;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;

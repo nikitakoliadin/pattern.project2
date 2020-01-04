@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.controller;
 
-import com.qthegamep.pattern.project2.exception.OpenApiException;
+import com.qthegamep.pattern.project2.exception.compile.OpenApiException;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Paths;
 import io.swagger.v3.jaxrs2.integration.resources.BaseOpenApiResource;
