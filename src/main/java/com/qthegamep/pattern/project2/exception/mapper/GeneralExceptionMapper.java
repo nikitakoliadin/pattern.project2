@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.mapper;
+package com.qthegamep.pattern.project2.exception.mapper;
 
 import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.exception.ServiceException;

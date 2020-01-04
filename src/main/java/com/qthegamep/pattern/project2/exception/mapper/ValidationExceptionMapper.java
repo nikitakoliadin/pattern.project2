@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.mapper;
+package com.qthegamep.pattern.project2.exception.mapper;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;

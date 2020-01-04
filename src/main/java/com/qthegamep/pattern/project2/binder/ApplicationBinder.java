@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.binder;
 
 import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicationBinderRuntimeException;
-import com.qthegamep.pattern.project2.mapper.GeneralExceptionMapper;
+import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper;
 import com.qthegamep.pattern.project2.metric.*;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.repository.*;
