@@ -15,7 +15,7 @@ import com.qthegamep.pattern.project2.exception.AsyncMongoDBConnectorRuntimeExce
 import com.qthegamep.pattern.project2.exception.CloseClusterRedisRuntimeException;
 import com.qthegamep.pattern.project2.exception.RedisConnectorRuntimeException;
 import com.qthegamep.pattern.project2.exception.SyncMongoDBConnectorRuntimeException;
-import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;

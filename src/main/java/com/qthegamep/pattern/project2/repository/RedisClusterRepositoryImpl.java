@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.repository;
 import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.exception.RedisRepositoryException;
 import com.qthegamep.pattern.project2.metric.Metrics;
-import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisCluster;

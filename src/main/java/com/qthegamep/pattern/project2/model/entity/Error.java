@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.entity;
+package com.qthegamep.pattern.project2.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

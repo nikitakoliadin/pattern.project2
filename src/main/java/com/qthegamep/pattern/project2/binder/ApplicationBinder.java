@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.binder;
 import com.qthegamep.pattern.project2.exception.RedisBinderRuntimeException;
 import com.qthegamep.pattern.project2.mapper.GeneralExceptionMapper;
 import com.qthegamep.pattern.project2.metric.*;
-import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
 import com.qthegamep.pattern.project2.repository.*;
 import com.qthegamep.pattern.project2.service.*;
 import com.qthegamep.pattern.project2.util.Constants;

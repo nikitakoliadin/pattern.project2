@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.model;
+package com.qthegamep.pattern.project2.model.container;
 
 public enum IoStrategy {
 

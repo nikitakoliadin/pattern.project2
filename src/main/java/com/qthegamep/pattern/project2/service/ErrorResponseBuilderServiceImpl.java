@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.service;
 
-import com.qthegamep.pattern.project2.dto.ErrorResponseDTO;
-import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.exception;
 
-import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
 
 abstract class GeneralServiceException extends Exception implements ServiceException {
 

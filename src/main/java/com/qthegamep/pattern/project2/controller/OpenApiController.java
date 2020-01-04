@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.controller;
 
-import com.qthegamep.pattern.project2.dto.ErrorResponseDTO;
+import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
 import com.qthegamep.pattern.project2.exception.OpenApiException;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;

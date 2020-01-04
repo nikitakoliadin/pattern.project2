@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
-import com.qthegamep.pattern.project2.model.IoStrategy;
+import com.qthegamep.pattern.project2.model.container.IoStrategy;
 import org.glassfish.grizzly.IOStrategy;
 import org.glassfish.grizzly.strategies.LeaderFollowerNIOStrategy;
 import org.glassfish.grizzly.strategies.SameThreadIOStrategy;

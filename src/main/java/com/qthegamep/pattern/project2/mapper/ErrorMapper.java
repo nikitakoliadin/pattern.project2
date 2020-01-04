@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.mapper;
 
-import com.qthegamep.pattern.project2.dto.ErrorResponseDTO;
-import com.qthegamep.pattern.project2.entity.Error;
+import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
+import com.qthegamep.pattern.project2.model.entity.Error;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

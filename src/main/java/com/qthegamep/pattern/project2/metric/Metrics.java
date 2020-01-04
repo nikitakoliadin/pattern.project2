@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.metric;
 
-import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
 import com.qthegamep.pattern.project2.util.Paths;
 
 import javax.ws.rs.core.Response;

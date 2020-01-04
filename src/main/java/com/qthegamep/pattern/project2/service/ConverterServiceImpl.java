@@ -9,7 +9,7 @@ import com.qthegamep.pattern.project2.adapter.IsoDateModuleAdapter;
 import com.qthegamep.pattern.project2.adapter.ObjectIdModuleAdapter;
 import com.qthegamep.pattern.project2.exception.JsonConverterRuntimeException;
 import com.qthegamep.pattern.project2.exception.XmlConverterRuntimeException;
-import com.qthegamep.pattern.project2.model.ErrorType;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
 
 import java.io.BufferedReader;
 import java.io.IOException;

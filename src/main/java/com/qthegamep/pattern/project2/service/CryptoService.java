@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.service;
 
 import com.qthegamep.pattern.project2.exception.CryptoServiceException;
-import com.qthegamep.pattern.project2.model.HashAlgorithm;
+import com.qthegamep.pattern.project2.model.container.HashAlgorithm;
 
 public interface CryptoService {
 

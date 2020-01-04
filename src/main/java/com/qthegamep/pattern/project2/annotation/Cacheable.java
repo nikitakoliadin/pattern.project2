@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.annotation;
 
-import com.qthegamep.pattern.project2.model.HashAlgorithm;
-import com.qthegamep.pattern.project2.model.KeyAlgorithm;
+import com.qthegamep.pattern.project2.model.container.HashAlgorithm;
+import com.qthegamep.pattern.project2.model.container.KeyAlgorithm;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

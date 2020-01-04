@@ -1,8 +1,8 @@
 package com.qthegamep.pattern.project2.service;
 
 import com.qthegamep.pattern.project2.exception.CryptoServiceException;
-import com.qthegamep.pattern.project2.model.ErrorType;
-import com.qthegamep.pattern.project2.model.HashAlgorithm;
+import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.HashAlgorithm;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
