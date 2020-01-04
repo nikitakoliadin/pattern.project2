@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.exception.compile.SyncMongoRepositoryException;
-import com.qthegamep.pattern.project2.model.container.Error;
+import com.qthegamep.pattern.project2.model.entity.Error;
 import com.qthegamep.pattern.project2.service.ConverterService;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.bson.Document;
@@ -31,7 +31,7 @@ public class SyncMongoRepositoryImpl implements SyncMongoRepository {
     }
 
     @Override
-    public com.qthegamep.pattern.project2.model.entity.Error saveError(com.qthegamep.pattern.project2.model.entity.Error error) throws SyncMongoRepositoryException {
+    public Error saveError(Error error) throws SyncMongoRepositoryException {
         try {
             MongoCollection<Document> errorCollection = mongoDatabase.getCollection(errorCollectionName);
             String errorJson = converterService.toJson(error);
@@ -43,7 +43,7 @@ public class SyncMongoRepositoryImpl implements SyncMongoRepository {
             error.setObjectId(objectId);
             return error;
         } catch (Exception e) {
-            throw new SyncMongoRepositoryException(e, Error.MONGO_SYNC_SAVE_ERROR_ERROR);
+            throw new SyncMongoRepositoryException(e, com.qthegamep.pattern.project2.model.container.Error.MONGO_SYNC_SAVE_ERROR_ERROR);
         }
     }
 }
