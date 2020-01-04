@@ -9,7 +9,7 @@ import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepositoryImpl;
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepository;
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepositoryImpl;
 import com.qthegamep.pattern.project2.repository.redis.ClusterRedisRepositoryImpl;
-import com.qthegamep.pattern.project2.repository.redis.RedisPoolRepositoryImpl;
+import com.qthegamep.pattern.project2.repository.redis.PoolRedisRepositoryImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
 import com.qthegamep.pattern.project2.service.*;
 import com.qthegamep.pattern.project2.util.Constants;
@@ -317,7 +317,7 @@ public class ApplicationBinder extends AbstractBinder {
             String redisType = System.getProperty("redis.type");
             LOG.debug("Redis type: {}", redisType);
             if (Constants.POOL_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
-                bind(RedisPoolRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
+                bind(PoolRedisRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else if (Constants.CLUSTER_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
                 bind(ClusterRedisRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else {

@@ -13,9 +13,9 @@ import javax.inject.Inject;
 import java.util.Map;
 import java.util.Optional;
 
-public class RedisPoolRepositoryImpl implements RedisRepository {
+public class PoolRedisRepositoryImpl implements RedisRepository {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RedisPoolRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PoolRedisRepositoryImpl.class);
 
     @Property(value = "redis.pool.default.ttl")
     private Integer defaultTtl;
@@ -25,7 +25,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
     private JedisPool jedisPool;
 
     @Inject
-    public RedisPoolRepositoryImpl(JedisPool jedisPool) {
+    public PoolRedisRepositoryImpl(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
 
