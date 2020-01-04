@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.mapper;
 import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
 import com.qthegamep.pattern.project2.exception.ServiceException;
 import com.qthegamep.pattern.project2.metric.Metrics;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.service.ErrorResponseBuilderService;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
@@ -38,37 +38,37 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(Exception exception) {
-        ErrorType errorType = getErrorType(exception);
+        Error error = getError(exception);
         List<Locale> requestLocales = httpHeaders.getAcceptableLanguages();
         String requestId = httpHeaders.getHeaderString(Constants.REQUEST_ID_HEADER.getValue());
         LOG.error("Error. RequestId: {}", requestId, exception);
-        ErrorResponseDTO errorResponseDTO = errorResponseBuilderService.buildResponse(errorType, requestLocales, requestId);
+        ErrorResponseDTO errorResponseDTO = errorResponseBuilderService.buildResponse(error, requestLocales, requestId);
         errorResponseDTO.setErrorMessage(errorResponseDTO.getErrorMessage() + " Request ID: " + requestId);
-        registerMetrics(errorType, requestId);
+        registerMetrics(error, requestId);
         return buildResponse(errorResponseDTO);
     }
 
-    private ErrorType getErrorType(Exception exception) {
+    private Error getError(Exception exception) {
         if (exception instanceof ServiceException) {
-            return ((ServiceException) exception).getErrorType();
+            return ((ServiceException) exception).getError();
         } else if (exception instanceof ValidationException) {
-            return ErrorType.INVALID_REQUEST_RESPONSE_ERROR;
+            return Error.INVALID_REQUEST_RESPONSE_ERROR;
         } else if (exception instanceof NotFoundException) {
-            return ErrorType.PAGE_NOT_FOUND_ERROR;
+            return Error.PAGE_NOT_FOUND_ERROR;
         } else {
-            return ErrorType.INTERNAL_ERROR;
+            return Error.INTERNAL_ERROR;
         }
     }
 
-    private void registerMetrics(ErrorType errorType, String requestId) {
-        String errorCode = String.valueOf(errorType.getErrorCode());
+    private void registerMetrics(Error error, String requestId) {
+        String errorCode = String.valueOf(error.getErrorCode());
         long errorCount = Metrics.ERROR_TYPES_METRIC.get(errorCode).incrementAndGet();
         LOG.debug("Error code: {} Error count: {} RequestId: {}", errorCode, errorCount, requestId);
     }
 
     private Response buildResponse(ErrorResponseDTO errorResponseDTO) {
         String contentType = getContentType(httpHeaders);
-        if (errorResponseDTO.getErrorCode() == ErrorType.PAGE_NOT_FOUND_ERROR.getErrorCode()) {
+        if (errorResponseDTO.getErrorCode() == Error.PAGE_NOT_FOUND_ERROR.getErrorCode()) {
             return Response.status(Response.Status.NOT_FOUND)
                     .header(HttpHeaders.CONTENT_TYPE, contentType)
                     .build();

@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.service;
 
 import com.qthegamep.pattern.project2.exception.ValidationServiceRuntimeException;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class ValidationServiceImpl implements ValidationService {
                     .collect(Collectors.joining("; "));
             LOG.debug("Validate error: {}", error);
             if (!error.isEmpty()) {
-                throw new ValidationServiceRuntimeException(error, ErrorType.VALIDATION_ERROR);
+                throw new ValidationServiceRuntimeException(error, Error.VALIDATION_ERROR);
             }
         }
     }

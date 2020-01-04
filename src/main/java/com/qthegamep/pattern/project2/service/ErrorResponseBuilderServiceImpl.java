@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.service;
 
 import com.qthegamep.pattern.project2.model.dto.ErrorResponseDTO;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +21,9 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
     }
 
     @Override
-    public ErrorResponseDTO buildResponse(ErrorType errorType, List<Locale> requestLocales, String requestId) {
+    public ErrorResponseDTO buildResponse(Error error, List<Locale> requestLocales, String requestId) {
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO();
-        int errorCode = errorType.getErrorCode();
+        int errorCode = error.getErrorCode();
         LOG.debug("Response code: {} RequestId: {}", errorCode, requestId);
         errorResponseDTO.setErrorCode(errorCode);
         LOG.debug("Available locales: {} RequestId: {}", availableLocales, requestId);
@@ -32,12 +32,12 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
         LOG.debug("Locale: {} RequestId: {}", locale, requestId);
         try {
             ResourceBundle resourceBundle = ResourceBundle.getBundle(Constants.ERROR_MESSAGES_LOCALIZATION.getValue(), locale);
-            String errorMessage = resourceBundle.getString(errorType.name());
+            String errorMessage = resourceBundle.getString(error.name());
             LOG.debug("Message: {} RequestId: {}", errorMessage, requestId);
             errorResponseDTO.setErrorMessage(errorMessage);
         } catch (Exception e) {
             LOG.error("Localization error. RequestId: {}", requestId, e);
-            errorResponseDTO.setErrorMessage(errorType.name());
+            errorResponseDTO.setErrorMessage(error.name());
         }
         return errorResponseDTO;
     }

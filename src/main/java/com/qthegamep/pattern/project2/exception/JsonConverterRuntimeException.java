@@ -1,10 +1,10 @@
 package com.qthegamep.pattern.project2.exception;
 
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 
 public class JsonConverterRuntimeException extends GeneralServiceRuntimeException {
 
-    public JsonConverterRuntimeException(Throwable cause, ErrorType errorType) {
-        super(cause, errorType);
+    public JsonConverterRuntimeException(Throwable cause, Error error) {
+        super(cause, error);
     }
 }

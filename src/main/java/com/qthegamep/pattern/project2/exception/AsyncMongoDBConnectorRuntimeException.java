@@ -1,14 +1,14 @@
 package com.qthegamep.pattern.project2.exception;
 
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 
 public class AsyncMongoDBConnectorRuntimeException extends GeneralServiceRuntimeException {
 
-    public AsyncMongoDBConnectorRuntimeException(ErrorType errorType) {
-        super(errorType);
+    public AsyncMongoDBConnectorRuntimeException(Error error) {
+        super(error);
     }
 
-    public AsyncMongoDBConnectorRuntimeException(Throwable cause, ErrorType errorType) {
-        super(cause, errorType);
+    public AsyncMongoDBConnectorRuntimeException(Throwable cause, Error error) {
+        super(cause, error);
     }
 }

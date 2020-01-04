@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.controller;
 
 import com.qthegamep.pattern.project2.exception.OpenApiException;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Paths;
 import io.swagger.v3.jaxrs2.integration.resources.BaseOpenApiResource;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
@@ -53,7 +53,7 @@ public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenAp
             openApiConfiguration.getOpenAPI().addServersItem(httpServer);
             return super.getOpenApi(headers, servletConfig, application, uriInfo, type);
         } catch (Exception e) {
-            throw new OpenApiException(e, ErrorType.OPEN_API_ERROR);
+            throw new OpenApiException(e, Error.OPEN_API_ERROR);
         }
     }
 }

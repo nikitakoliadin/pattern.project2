@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.metric;
 
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Paths;
 
 import javax.ws.rs.core.Response;
@@ -18,7 +18,7 @@ public class Metrics {
 
     public static final AtomicLong AVAILABLE_THREADS_METRIC = new AtomicLong(Integer.parseInt(System.getProperty("application.server.core.pool.size")));
 
-    public static final Map<String, AtomicLong> ERROR_TYPES_METRIC = Arrays.stream(ErrorType.values())
+    public static final Map<String, AtomicLong> ERROR_TYPES_METRIC = Arrays.stream(Error.values())
             .collect(Collectors.toMap(
                     value -> String.valueOf(value.getErrorCode()),
                     value -> new AtomicLong(),

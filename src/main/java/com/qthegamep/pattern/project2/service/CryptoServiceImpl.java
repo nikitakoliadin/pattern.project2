@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.service;
 
 import com.qthegamep.pattern.project2.exception.CryptoServiceException;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.model.container.HashAlgorithm;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class CryptoServiceImpl implements CryptoService {
         if (HashAlgorithm.MD5.equals(hashAlgorithm)) {
             return encode(data, hashAlgorithm.getAlgorithm());
         } else {
-            throw new CryptoServiceException(ErrorType.ENCODE_HASH_ALGORITHM_NOT_EXISTS_ERROR);
+            throw new CryptoServiceException(Error.ENCODE_HASH_ALGORITHM_NOT_EXISTS_ERROR);
         }
     }
 
@@ -34,7 +34,7 @@ public class CryptoServiceImpl implements CryptoService {
             md5MessageDigest.update(data.getBytes(), 0, data.length());
             return Hex.encodeHexString(md5MessageDigest.digest());
         } catch (Exception e) {
-            throw new CryptoServiceException(e, ErrorType.ENCODE_HASH_ERROR);
+            throw new CryptoServiceException(e, Error.ENCODE_HASH_ERROR);
         }
     }
 }

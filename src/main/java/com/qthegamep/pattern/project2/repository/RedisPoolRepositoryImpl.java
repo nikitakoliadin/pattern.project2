@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.repository;
 import com.qthegamep.pattern.project2.annotation.Property;
 import com.qthegamep.pattern.project2.exception.RedisRepositoryException;
 import com.qthegamep.pattern.project2.metric.Metrics;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -53,7 +53,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
-                throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ERROR);
+                throw new RedisRepositoryException(e, Error.REDIS_SAVE_ERROR);
             } else {
                 LOG.error("Error when save to Redis. Key: {} Value: {} TTL: {} RequestId: {}", key, value, ttl, requestId, e);
             }
@@ -84,7 +84,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
-                throw new RedisRepositoryException(e, ErrorType.REDIS_SAVE_ALL_ERROR);
+                throw new RedisRepositoryException(e, Error.REDIS_SAVE_ALL_ERROR);
             } else {
                 LOG.error("Error when save all to Redis. Key: {} Values: {}, TTL: {} RequestId: {}", key, value, ttl, requestId, e);
             }
@@ -110,7 +110,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
-                throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ERROR);
+                throw new RedisRepositoryException(e, Error.REDIS_READ_ERROR);
             } else {
                 LOG.error("Error when read from Redis. Key: {} RequestId: {}", key, requestId, e);
                 return Optional.empty();
@@ -137,7 +137,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
             if (fallWhenError) {
-                throw new RedisRepositoryException(e, ErrorType.REDIS_READ_ALL_ERROR);
+                throw new RedisRepositoryException(e, Error.REDIS_READ_ALL_ERROR);
             } else {
                 LOG.error("Error when read all from Redis. Key: {} RequestId: {}", key, requestId, e);
                 return Optional.empty();

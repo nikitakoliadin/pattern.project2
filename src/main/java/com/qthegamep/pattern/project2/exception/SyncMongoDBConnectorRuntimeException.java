@@ -1,14 +1,14 @@
 package com.qthegamep.pattern.project2.exception;
 
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 
 public class SyncMongoDBConnectorRuntimeException extends GeneralServiceRuntimeException {
 
-    public SyncMongoDBConnectorRuntimeException(ErrorType errorType) {
-        super(errorType);
+    public SyncMongoDBConnectorRuntimeException(Error error) {
+        super(error);
     }
 
-    public SyncMongoDBConnectorRuntimeException(Throwable cause, ErrorType errorType) {
-        super(cause, errorType);
+    public SyncMongoDBConnectorRuntimeException(Throwable cause, Error error) {
+        super(cause, error);
     }
 }

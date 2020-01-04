@@ -1,10 +1,10 @@
 package com.qthegamep.pattern.project2.exception;
 
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 
 public class RedisBinderRuntimeException extends GeneralServiceRuntimeException {
 
-    public RedisBinderRuntimeException(ErrorType errorType) {
-        super(errorType);
+    public RedisBinderRuntimeException(Error error) {
+        super(error);
     }
 }

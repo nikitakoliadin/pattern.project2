@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.model.container;
 
-public enum ErrorType {
+public enum Error {
 
     PAGE_NOT_FOUND_ERROR(404),
     INTERNAL_ERROR(500),
@@ -28,7 +28,7 @@ public enum ErrorType {
 
     private int errorCode;
 
-    ErrorType(int errorCode) {
+    Error(int errorCode) {
         this.errorCode = errorCode;
     }
 

@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.binder;
 import com.qthegamep.pattern.project2.exception.RedisBinderRuntimeException;
 import com.qthegamep.pattern.project2.mapper.GeneralExceptionMapper;
 import com.qthegamep.pattern.project2.metric.*;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.repository.*;
 import com.qthegamep.pattern.project2.service.*;
 import com.qthegamep.pattern.project2.util.Constants;
@@ -315,7 +315,7 @@ public class ApplicationBinder extends AbstractBinder {
             } else if (Constants.CLUSTER_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
                 bind(RedisClusterRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else {
-                throw new RedisBinderRuntimeException(ErrorType.REDIS_NOT_EXISTING_TYPE_ERROR);
+                throw new RedisBinderRuntimeException(Error.REDIS_NOT_EXISTING_TYPE_ERROR);
             }
         } else {
             bind(redisRepository).to(RedisRepository.class).in(Singleton.class);

@@ -9,7 +9,7 @@ import com.qthegamep.pattern.project2.adapter.IsoDateModuleAdapter;
 import com.qthegamep.pattern.project2.adapter.ObjectIdModuleAdapter;
 import com.qthegamep.pattern.project2.exception.JsonConverterRuntimeException;
 import com.qthegamep.pattern.project2.exception.XmlConverterRuntimeException;
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class ConverterServiceImpl implements ConverterService {
         try {
             return json.readValue(entity, modelClass);
         } catch (IOException e) {
-            throw new JsonConverterRuntimeException(e, ErrorType.JSON_CONVERTER_ERROR);
+            throw new JsonConverterRuntimeException(e, Error.JSON_CONVERTER_ERROR);
         }
     }
 
@@ -41,7 +41,7 @@ public class ConverterServiceImpl implements ConverterService {
         try {
             return json.writeValueAsString(model);
         } catch (JsonProcessingException e) {
-            throw new JsonConverterRuntimeException(e, ErrorType.JSON_CONVERTER_ERROR);
+            throw new JsonConverterRuntimeException(e, Error.JSON_CONVERTER_ERROR);
         }
     }
 
@@ -50,7 +50,7 @@ public class ConverterServiceImpl implements ConverterService {
         try {
             return xml.readValue(entity, modelClass);
         } catch (IOException e) {
-            throw new XmlConverterRuntimeException(e, ErrorType.XML_CONVERTER_ERROR);
+            throw new XmlConverterRuntimeException(e, Error.XML_CONVERTER_ERROR);
         }
     }
 
@@ -59,7 +59,7 @@ public class ConverterServiceImpl implements ConverterService {
         try {
             return xml.writeValueAsString(model);
         } catch (JsonProcessingException e) {
-            throw new XmlConverterRuntimeException(e, ErrorType.XML_CONVERTER_ERROR);
+            throw new XmlConverterRuntimeException(e, Error.XML_CONVERTER_ERROR);
         }
     }
 

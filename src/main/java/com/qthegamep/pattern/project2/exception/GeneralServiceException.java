@@ -1,22 +1,22 @@
 package com.qthegamep.pattern.project2.exception;
 
-import com.qthegamep.pattern.project2.model.container.ErrorType;
+import com.qthegamep.pattern.project2.model.container.Error;
 
 abstract class GeneralServiceException extends Exception implements ServiceException {
 
-    private final ErrorType errorType;
+    private final Error error;
 
-    GeneralServiceException(ErrorType errorType) {
-        this.errorType = errorType;
+    GeneralServiceException(Error error) {
+        this.error = error;
     }
 
-    GeneralServiceException(Throwable cause, ErrorType errorType) {
+    GeneralServiceException(Throwable cause, Error error) {
         super(cause);
-        this.errorType = errorType;
+        this.error = error;
     }
 
     @Override
-    public ErrorType getErrorType() {
-        return errorType;
+    public Error getError() {
+        return error;
     }
 }
