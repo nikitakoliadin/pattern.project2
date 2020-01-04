@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.repository.mongo;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
 import com.qthegamep.pattern.project2.annotation.Property;
-import com.qthegamep.pattern.project2.callback.MongoAsyncInsertCallback;
+import com.qthegamep.pattern.project2.repository.mongo.callback.AsyncInsertCallback;
 import com.qthegamep.pattern.project2.exception.compile.AsyncMongoRepositoryException;
 import com.qthegamep.pattern.project2.model.entity.Error;
 import com.qthegamep.pattern.project2.service.ConverterService;
@@ -36,7 +36,7 @@ public class AsyncMongoRepositoryImpl implements AsyncMongoRepository {
             String errorJson = converterService.toJson(error);
             LOG.debug("Async save error: {} RequestId: {}", errorJson, error.getRequestId());
             Document query = Document.parse(errorJson);
-            errorCollection.insertOne(query, new MongoAsyncInsertCallback(error.getRequestId()));
+            errorCollection.insertOne(query, new AsyncInsertCallback(error.getRequestId()));
         } catch (Exception e) {
             throw new AsyncMongoRepositoryException(e, com.qthegamep.pattern.project2.model.container.Error.MONGO_ASYNC_SAVE_ERROR_ERROR);
         }

@@ -1,16 +1,16 @@
-package com.qthegamep.pattern.project2.callback;
+package com.qthegamep.pattern.project2.repository.mongo.callback;
 
 import com.mongodb.async.SingleResultCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MongoAsyncInsertCallback implements SingleResultCallback<Void> {
+public class AsyncInsertCallback implements SingleResultCallback<Void> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MongoAsyncInsertCallback.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AsyncInsertCallback.class);
 
     private String requestId;
 
-    public MongoAsyncInsertCallback(String requestId) {
+    public AsyncInsertCallback(String requestId) {
         this.requestId = requestId;
     }
 
