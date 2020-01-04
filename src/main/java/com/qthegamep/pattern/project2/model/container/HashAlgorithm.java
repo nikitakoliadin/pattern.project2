@@ -2,15 +2,15 @@ package com.qthegamep.pattern.project2.model.container;
 
 public enum HashAlgorithm {
 
-    MD5("MD5");
+    MD5_HASH_ALGORITHM("MD5");
 
-    private String algorithm;
+    private String algorithmName;
 
-    HashAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
+    HashAlgorithm(String algorithmName) {
+        this.algorithmName = algorithmName;
     }
 
-    public String getAlgorithm() {
-        return algorithm;
+    public String getAlgorithmName() {
+        return algorithmName;
     }
 }

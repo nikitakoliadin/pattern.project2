@@ -14,5 +14,5 @@ public @interface Cacheable {
 
     KeyAlgorithm keyAlgorithm() default KeyAlgorithm.FULL_SIGNATURE_WITH_FULL_ARGUMENTS;
 
-    HashAlgorithm hashAlgorithm() default HashAlgorithm.MD5;
+    HashAlgorithm hashAlgorithm() default HashAlgorithm.MD5_HASH_ALGORITHM;
 }
