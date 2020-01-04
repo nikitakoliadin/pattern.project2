@@ -16,15 +16,15 @@ public class KeyBuilderServiceImpl implements KeyBuilderService {
     public String buildCacheKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) {
         LOG.debug("Cache key algorithm: {}", cacheable.keyAlgorithm());
         switch (cacheable.keyAlgorithm()) {
-            case FULL_SIGNATURE: {
+            case FULL_SIGNATURE_KEY_ALGORITHM: {
                 Signature signature = thisJoinPoint.getSignature();
                 return signature.toString();
             }
-            case FULL_ARGUMENTS: {
+            case FULL_ARGUMENTS_KEY_ALGORITHM: {
                 Object[] arguments = thisJoinPoint.getArgs();
                 return Arrays.toString(arguments);
             }
-            case FULL_SIGNATURE_WITH_FULL_ARGUMENTS:
+            case FULL_SIGNATURE_WITH_FULL_ARGUMENTS_KEY_ALGORITHM:
             default: {
                 Signature signature = thisJoinPoint.getSignature();
                 Object[] arguments = thisJoinPoint.getArgs();

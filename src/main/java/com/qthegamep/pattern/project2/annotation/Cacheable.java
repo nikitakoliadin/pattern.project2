@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Cacheable {
 
-    KeyAlgorithm keyAlgorithm() default KeyAlgorithm.FULL_SIGNATURE_WITH_FULL_ARGUMENTS;
+    KeyAlgorithm keyAlgorithm() default KeyAlgorithm.FULL_SIGNATURE_WITH_FULL_ARGUMENTS_KEY_ALGORITHM;
 
     HashAlgorithm hashAlgorithm() default HashAlgorithm.MD5_HASH_ALGORITHM;
 }
