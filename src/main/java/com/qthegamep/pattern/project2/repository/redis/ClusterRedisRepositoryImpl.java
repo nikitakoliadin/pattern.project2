@@ -12,9 +12,9 @@ import javax.inject.Inject;
 import java.util.Map;
 import java.util.Optional;
 
-public class RedisClusterRepositoryImpl implements RedisRepository {
+public class ClusterRedisRepositoryImpl implements RedisRepository {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RedisClusterRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClusterRedisRepositoryImpl.class);
 
     @Property(value = "redis.cluster.default.ttl")
     private Integer defaultTtl;
@@ -24,7 +24,7 @@ public class RedisClusterRepositoryImpl implements RedisRepository {
     private JedisCluster jedisCluster;
 
     @Inject
-    public RedisClusterRepositoryImpl(JedisCluster jedisCluster) {
+    public ClusterRedisRepositoryImpl(JedisCluster jedisCluster) {
         this.jedisCluster = jedisCluster;
     }
 

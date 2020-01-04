@@ -8,7 +8,7 @@ import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository;
 import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepositoryImpl;
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepository;
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepositoryImpl;
-import com.qthegamep.pattern.project2.repository.redis.RedisClusterRepositoryImpl;
+import com.qthegamep.pattern.project2.repository.redis.ClusterRedisRepositoryImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisPoolRepositoryImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
 import com.qthegamep.pattern.project2.service.*;
@@ -319,7 +319,7 @@ public class ApplicationBinder extends AbstractBinder {
             if (Constants.POOL_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
                 bind(RedisPoolRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else if (Constants.CLUSTER_REDIS_TYPE.getValue().equalsIgnoreCase(redisType)) {
-                bind(RedisClusterRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
+                bind(ClusterRedisRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else {
                 throw new RedisRepositoryApplicationBinderRuntimeException(Error.REDIS_NOT_EXISTING_TYPE_ERROR);
             }
