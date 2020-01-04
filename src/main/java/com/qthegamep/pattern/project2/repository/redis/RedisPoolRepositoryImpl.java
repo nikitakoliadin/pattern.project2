@@ -19,8 +19,8 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
 
     @Property(value = "redis.pool.default.ttl")
     private Integer defaultTtl;
-    @Property(value = "redis.pool.fall.when.error")
-    private Boolean fallWhenError;
+    @Property(value = "redis.pool.should.fall.when.error")
+    private Boolean shouldFallWhenError;
 
     private JedisPool jedisPool;
 
@@ -52,7 +52,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
             jedis.expire(key, ttl);
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
-            if (fallWhenError) {
+            if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_SAVE_ERROR);
             } else {
                 LOG.error("Error when save to Redis. Key: {} Value: {} TTL: {} RequestId: {}", key, value, ttl, requestId, e);
@@ -83,7 +83,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
             jedis.expire(key, ttl);
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
-            if (fallWhenError) {
+            if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_SAVE_ALL_ERROR);
             } else {
                 LOG.error("Error when save all to Redis. Key: {} Values: {}, TTL: {} RequestId: {}", key, value, ttl, requestId, e);
@@ -109,7 +109,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
             }
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
-            if (fallWhenError) {
+            if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_READ_ERROR);
             } else {
                 LOG.error("Error when read from Redis. Key: {} RequestId: {}", key, requestId, e);
@@ -136,7 +136,7 @@ public class RedisPoolRepositoryImpl implements RedisRepository {
             }
         } catch (Exception e) {
             Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
-            if (fallWhenError) {
+            if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_READ_ALL_ERROR);
             } else {
                 LOG.error("Error when read all from Redis. Key: {} RequestId: {}", key, requestId, e);
