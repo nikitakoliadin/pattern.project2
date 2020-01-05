@@ -18,6 +18,8 @@ public class RequestIdFilter implements ContainerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(RequestIdFilter.class);
 
+    private static final String X_REQUEST_ID_HEADER = "x-request-id";
+
     private GenerationService generationService;
 
     @Inject
@@ -29,9 +31,9 @@ public class RequestIdFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext containerRequestContext) {
         String requestIdHeader = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER);
         if (requestIdHeader == null || requestIdHeader.isEmpty()) {
-            String requestId = containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER) == null
+            String requestId = containerRequestContext.getHeaderString(X_REQUEST_ID_HEADER) == null
                     ? generationService.generateUniqueId(10L)
-                    : containerRequestContext.getHeaderString(Constants.X_REQUEST_ID_HEADER);
+                    : containerRequestContext.getHeaderString(X_REQUEST_ID_HEADER);
             LOG.debug("RequestId: {}", requestId);
             MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
             headers.add(Constants.REQUEST_ID_HEADER, requestId);

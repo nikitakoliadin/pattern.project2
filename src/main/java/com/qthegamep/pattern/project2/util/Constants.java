@@ -7,7 +7,6 @@ public class Constants {
     public static final String JSON_DATE_FIELD_NAME = "$date";
     public static final String START_TIME_HEADER = "startTime";
     public static final String DURATION_HEADER = "duration";
-    public static final String X_REQUEST_ID_HEADER = "x-request-id";
     public static final String REQUEST_ID_HEADER = "requestId";
     public static final String X_FORWARDED_FOR_HEADER = "X-Forwarded-For";
     public static final String ERROR_MESSAGES_LOCALIZATION = "localization.error_messages";
