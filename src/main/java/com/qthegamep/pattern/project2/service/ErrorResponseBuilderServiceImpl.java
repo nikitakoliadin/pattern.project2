@@ -3,7 +3,6 @@ package com.qthegamep.pattern.project2.service;
 import com.qthegamep.pattern.project2.model.container.ServiceLocale;
 import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.model.container.Error;
-import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +12,8 @@ import java.util.stream.Collectors;
 public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ErrorResponseBuilderServiceImpl.class);
+
+    private static final String ERROR_MESSAGES_LOCALIZATION = "localization.error_messages";
 
     private final List<Locale> availableLocales;
     private final Locale defaultLocale;
@@ -35,7 +36,7 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
         Locale locale = getLocale(requestLocales);
         LOG.debug("Locale: {} RequestId: {}", locale, requestId);
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle(Constants.ERROR_MESSAGES_LOCALIZATION, locale);
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(ERROR_MESSAGES_LOCALIZATION, locale);
             String errorMessage = resourceBundle.getString(error.name());
             LOG.debug("Message: {} RequestId: {}", errorMessage, requestId);
             errorResponse.setErrorMessage(errorMessage);

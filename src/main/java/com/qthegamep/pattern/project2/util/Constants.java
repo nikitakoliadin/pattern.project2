@@ -8,7 +8,6 @@ public class Constants {
     public static final String START_TIME_HEADER = "startTime";
     public static final String DURATION_HEADER = "duration";
     public static final String REQUEST_ID_HEADER = "requestId";
-    public static final String ERROR_MESSAGES_LOCALIZATION = "localization.error_messages";
     public static final String GRIZZLY = "grizzly";
     public static final String APPLICATION_GRIZZLY_POOL_NAME = "application-grizzly-worker-thread-";
     public static final String METRICS_GRIZZLY_POOL_NAME = "metrics-grizzly-worker-thread-";
