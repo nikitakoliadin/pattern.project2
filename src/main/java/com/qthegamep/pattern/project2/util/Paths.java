@@ -8,4 +8,7 @@ public class Paths {
     public static final String DOCS_PATH = "/docs/";
     public static final String SWAGGER_OPEN_API_JSON_PATH = "/swagger/openapi.json";
     public static final String SWAGGER_OPEN_API_YAML_PATH = "/swagger/openapi.yaml";
+
+    private Paths() {
+    }
 }
