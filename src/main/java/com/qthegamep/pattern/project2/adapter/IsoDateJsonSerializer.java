@@ -14,7 +14,7 @@ class IsoDateJsonSerializer extends JsonSerializer<Date> {
 
     @Override
     public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.MONGO_UTC_DATE_FORMAT);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.MONGO_UTC_DATE_PATTERN);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone(Constants.GMT_TIMEZONE));
         String isoDate = simpleDateFormat.format(date);
         jsonGenerator.writeStartObject(Constants.JSON_DATE_FIELD_NAME);
