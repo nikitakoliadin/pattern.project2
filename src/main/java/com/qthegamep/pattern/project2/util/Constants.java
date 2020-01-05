@@ -17,7 +17,6 @@ public class Constants {
     public static final String CLUSTER_REDIS_TYPE = "cluster";
     public static final String SERVER_IP_PROPERTY = "serverIp";
     public static final String DOCKER_IMAGE_NAME_PROPERTY = "docker.image.name";
-    public static final String LOGGER_REPLACE_PATTERN = "\\{}";
     public static final String REDIS = "redis";
 
     private Constants() {
