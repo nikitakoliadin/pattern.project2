@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.filter;
 
+import com.google.common.net.HttpHeaders;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.glassfish.grizzly.http.server.Request;
 import org.slf4j.Logger;
@@ -36,8 +37,8 @@ public class ResponseLogFilter implements ContainerResponseFilter {
 
     private String getClientIp() {
         Request request = requestProvider.get();
-        return request.getHeader(Constants.X_FORWARDED_FOR_HEADER) == null
+        return request.getHeader(HttpHeaders.X_FORWARDED_FOR) == null
                 ? request.getRemoteAddr()
-                : request.getHeader(Constants.X_FORWARDED_FOR_HEADER);
+                : request.getHeader(HttpHeaders.X_FORWARDED_FOR);
     }
 }
