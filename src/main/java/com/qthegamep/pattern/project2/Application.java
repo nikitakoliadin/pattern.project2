@@ -30,6 +30,10 @@ public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
+    private static final String APPLICATION_GRIZZLY_POOL_NAME = "application-grizzly-worker-thread-";
+    private static final String METRICS_GRIZZLY_POOL_NAME = "metrics-grizzly-worker-thread-";
+    private static final String HTTP = "http://";
+
     public static void main(String[] args) throws ApplicationConfigInitializationException, InterruptedException {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.init();
@@ -39,13 +43,13 @@ public class Application {
         String host = System.getProperty("application.host", "0.0.0.0");
         String port = System.getProperty("application.port", "8080");
         String applicationContext = System.getProperty("application.context", "");
-        String applicationUrl = Constants.HTTP + host + ":" + port + applicationContext;
+        String applicationUrl = HTTP + host + ":" + port + applicationContext;
         HttpServer applicationHttpServer = startServer(applicationUrl, applicationProperties);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         String swaggerPath = addSwaggerUIMapping(applicationHttpServer, applicationContext + swaggerUrl);
         String monitoringPort = System.getProperty("application.monitoring.port", "8081");
         String monitoringContext = System.getProperty("application.monitoring.context", "/");
-        String monitoringUrl = Constants.HTTP + host + ":" + monitoringPort + monitoringContext;
+        String monitoringUrl = HTTP + host + ":" + monitoringPort + monitoringContext;
         HttpServer monitoringHttpServer = startMonitoringServer(monitoringUrl);
         Runtime.getRuntime().addShutdownHook(new GrizzlyServersShutdownHook(applicationHttpServer, monitoringHttpServer));
         LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
@@ -74,7 +78,7 @@ public class Application {
             serverConfiguration.setJmxEnabled(true);
             TCPNIOTransport grizzlyTransport = httpServer.getListener(Constants.GRIZZLY).getTransport();
             ThreadPoolConfig threadPoolConfig = ThreadPoolConfig.defaultConfig()
-                    .setPoolName(Constants.APPLICATION_GRIZZLY_POOL_NAME)
+                    .setPoolName(APPLICATION_GRIZZLY_POOL_NAME)
                     .setCorePoolSize(Integer.parseInt(System.getProperty("application.server.core.pool.size")))
                     .setMaxPoolSize(Integer.parseInt(System.getProperty("application.server.max.pool.size")))
                     .setQueueLimit(Integer.parseInt(System.getProperty("application.server.queue.limit")));
@@ -114,7 +118,7 @@ public class Application {
         ServerConfiguration serverConfiguration = httpServer.getServerConfiguration();
         serverConfiguration.addHttpHandler(docsStaticHttpHandler, httpHandlerRegistration);
         NetworkListener grizzlyListener = httpServer.getListener(Constants.GRIZZLY);
-        return Constants.HTTP + grizzlyListener.getHost() + ":" + grizzlyListener.getPort() + contextPath + urlPattern;
+        return HTTP + grizzlyListener.getHost() + ":" + grizzlyListener.getPort() + contextPath + urlPattern;
     }
 
     private static HttpServer startMonitoringServer(String monitoringUrl) {
@@ -128,7 +132,7 @@ public class Application {
         try {
             TCPNIOTransport grizzlyTransport = httpServer.getListener(Constants.GRIZZLY).getTransport();
             ThreadPoolConfig threadPoolConfig = ThreadPoolConfig.defaultConfig()
-                    .setPoolName(Constants.METRICS_GRIZZLY_POOL_NAME)
+                    .setPoolName(METRICS_GRIZZLY_POOL_NAME)
                     .setCorePoolSize(Integer.parseInt(System.getProperty("metrics.server.core.pool.size")))
                     .setMaxPoolSize(Integer.parseInt(System.getProperty("metrics.server.max.pool.size")))
                     .setQueueLimit(Integer.parseInt(System.getProperty("metrics.server.queue.limit")));

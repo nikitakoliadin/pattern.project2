@@ -9,9 +9,6 @@ public class Constants {
     public static final String DURATION_HEADER = "duration";
     public static final String REQUEST_ID_HEADER = "requestId";
     public static final String GRIZZLY = "grizzly";
-    public static final String APPLICATION_GRIZZLY_POOL_NAME = "application-grizzly-worker-thread-";
-    public static final String METRICS_GRIZZLY_POOL_NAME = "metrics-grizzly-worker-thread-";
-    public static final String HTTP = "http://";
     public static final String JSON_OBJECT_ID_FIELD_NAME = "$oid";
     public static final String STANDALONE_MONGO_DB_TYPE = "standalone";
     public static final String CLUSTER_MONGO_DB_TYPE = "cluster";
