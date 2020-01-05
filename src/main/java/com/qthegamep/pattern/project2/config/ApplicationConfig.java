@@ -20,6 +20,8 @@ public class ApplicationConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationConfig.class);
 
+    private static final String DEFAULT_CONFIG_PROPERTIES_PATH = "/config.properties";
+
     private Properties applicationProperties;
 
     public void init() throws ApplicationConfigInitializationException {
@@ -86,7 +88,7 @@ public class ApplicationConfig {
 
     private void loadDefaultProperties() throws Exception {
         applicationProperties = new Properties();
-        try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(Constants.DEFAULT_CONFIG_PROPERTIES_PATH)) {
+        try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(DEFAULT_CONFIG_PROPERTIES_PATH)) {
             applicationProperties.load(inputStream);
             loadProperties(applicationProperties);
         }
