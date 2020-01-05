@@ -11,9 +11,6 @@ public class Constants {
     public static final String X_REQUEST_ID_HEADER = "x-request-id";
     public static final String REQUEST_ID_HEADER = "requestId";
     public static final String X_FORWARDED_FOR_HEADER = "X-Forwarded-For";
-    public static final String UK_LANGUAGE = "uk";
-    public static final String RU_LANGUAGE = "ru";
-    public static final String DEFAULT_LANGUAGE = "uk";
     public static final String ERROR_MESSAGES_LOCALIZATION = "localization.error_messages";
     public static final String GRIZZLY = "grizzly";
     public static final String APPLICATION_GRIZZLY_POOL_NAME = "application-grizzly-worker-thread-";

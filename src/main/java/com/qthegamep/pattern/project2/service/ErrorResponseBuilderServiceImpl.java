@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.service;
 
+import com.qthegamep.pattern.project2.model.container.ServiceLocale;
 import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Constants;
@@ -13,11 +14,14 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
 
     private static final Logger LOG = LoggerFactory.getLogger(ErrorResponseBuilderServiceImpl.class);
 
-    private final List<Locale> availableLocales = new ArrayList<>();
+    private final List<Locale> availableLocales;
+    private final Locale defaultLocale;
 
     public ErrorResponseBuilderServiceImpl() {
-        availableLocales.add(new Locale(Constants.UK_LANGUAGE));
-        availableLocales.add(new Locale(Constants.RU_LANGUAGE));
+        availableLocales = Arrays.stream(ServiceLocale.values())
+                .map(ServiceLocale::getLocale)
+                .collect(Collectors.toList());
+        defaultLocale = ServiceLocale.values()[0].getLocale();
     }
 
     @Override
@@ -44,13 +48,13 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
 
     private Locale getLocale(List<Locale> requestLocales) {
         if (requestLocales == null) {
-            return new Locale(Constants.DEFAULT_LANGUAGE);
+            return defaultLocale;
         }
         List<Locale> requestAvailableLocales = requestLocales.stream()
                 .filter(availableLocales::contains)
                 .collect(Collectors.toList());
         if (requestAvailableLocales.isEmpty()) {
-            return new Locale(Constants.DEFAULT_LANGUAGE);
+            return defaultLocale;
         } else {
             String language = requestAvailableLocales.get(0).getLanguage();
             return new Locale(language);
