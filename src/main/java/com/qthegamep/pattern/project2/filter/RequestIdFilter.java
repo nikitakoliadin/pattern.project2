@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.filter;
 
-import com.qthegamep.pattern.project2.annotation.Property;
+import com.qthegamep.pattern.project2.binder.property.Property;
 import com.qthegamep.pattern.project2.service.GenerationService;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;

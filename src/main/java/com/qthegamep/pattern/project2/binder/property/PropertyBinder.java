@@ -1,18 +1,16 @@
-package com.qthegamep.pattern.project2.binder;
+package com.qthegamep.pattern.project2.binder.property;
 
-import com.qthegamep.pattern.project2.annotation.Property;
-import com.qthegamep.pattern.project2.config.PropertyInjectionResolver;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 import javax.inject.Singleton;
 
-public class ConfigurationBinder extends AbstractBinder {
+public class PropertyBinder extends AbstractBinder {
 
     private PropertyInjectionResolver propertyInjectionResolver;
 
-    private ConfigurationBinder(PropertyInjectionResolver propertyInjectionResolver) {
+    private PropertyBinder(PropertyInjectionResolver propertyInjectionResolver) {
         this.propertyInjectionResolver = propertyInjectionResolver;
     }
 
@@ -48,8 +46,8 @@ public class ConfigurationBinder extends AbstractBinder {
             return this;
         }
 
-        public ConfigurationBinder build() {
-            return new ConfigurationBinder(propertyInjectionResolver);
+        public PropertyBinder build() {
+            return new PropertyBinder(propertyInjectionResolver);
         }
     }
 }

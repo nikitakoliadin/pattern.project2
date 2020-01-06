@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2;
 
-import com.qthegamep.pattern.project2.binder.ApplicationBinder;
-import com.qthegamep.pattern.project2.binder.ConfigurationBinder;
+import com.qthegamep.pattern.project2.binder.application.ApplicationBinder;
+import com.qthegamep.pattern.project2.binder.property.PropertyBinder;
 import com.qthegamep.pattern.project2.config.*;
 import com.qthegamep.pattern.project2.probe.GrizzlyThreadPoolProbe;
 import com.qthegamep.pattern.project2.probe.TaskQueueSizeProbe;
@@ -65,7 +65,7 @@ public class Application {
                 .addProperties(applicationProperties)
                 .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                 .packages(Application.class.getPackage().getName())
-                .register(ConfigurationBinder.builder().build())
+                .register(PropertyBinder.builder().build())
                 .register(ApplicationBinder.builder().build());
         new AspectRegistrarConfig().register(resourceConfig);
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig, false);

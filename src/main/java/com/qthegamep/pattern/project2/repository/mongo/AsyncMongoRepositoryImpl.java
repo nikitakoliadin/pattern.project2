@@ -2,7 +2,7 @@ package com.qthegamep.pattern.project2.repository.mongo;
 
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
-import com.qthegamep.pattern.project2.annotation.Property;
+import com.qthegamep.pattern.project2.binder.property.Property;
 import com.qthegamep.pattern.project2.repository.mongo.callback.AsyncInsertCallback;
 import com.qthegamep.pattern.project2.exception.compile.AsyncMongoRepositoryException;
 import com.qthegamep.pattern.project2.model.entity.Error;

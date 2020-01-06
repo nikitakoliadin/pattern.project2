@@ -1,7 +1,6 @@
-package com.qthegamep.pattern.project2.config;
+package com.qthegamep.pattern.project2.binder.property;
 
 import com.google.common.base.Defaults;
-import com.qthegamep.pattern.project2.annotation.Property;
 import org.apache.commons.lang3.ClassUtils;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
@@ -14,7 +13,7 @@ import javax.ws.rs.core.Context;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public class PropertyInjectionResolver implements InjectionResolver<Property> {
+class PropertyInjectionResolver implements InjectionResolver<Property> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PropertyInjectionResolver.class);
 

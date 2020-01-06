@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.binder;
+package com.qthegamep.pattern.project2.binder.application;
 
 import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicationBinderRuntimeException;
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper;

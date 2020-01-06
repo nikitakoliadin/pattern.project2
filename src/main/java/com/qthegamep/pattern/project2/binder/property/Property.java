@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.annotation;
+package com.qthegamep.pattern.project2.binder.property;
 
 import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
