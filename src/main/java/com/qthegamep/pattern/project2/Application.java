@@ -66,7 +66,7 @@ public class Application {
                 .packages(Application.class.getPackage().getName())
                 .register(ConfigurationBinder.builder().build())
                 .register(ApplicationBinder.builder().build());
-        new AspectRegistrar().register(resourceConfig);
+        new AspectRegistrarConfig().register(resourceConfig);
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig, false);
         configServer(httpServer);
         return httpServer;

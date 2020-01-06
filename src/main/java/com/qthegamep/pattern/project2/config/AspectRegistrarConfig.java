@@ -6,9 +6,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AspectRegistrar {
+public class AspectRegistrarConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AspectRegistrar.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AspectRegistrarConfig.class);
 
     private final boolean registerCacheAspect = Boolean.parseBoolean(System.getProperty("aop.register.cache.aspect"));
 
