@@ -7,6 +7,7 @@ import com.qthegamep.pattern.project2.probe.GrizzlyThreadPoolProbe;
 import com.qthegamep.pattern.project2.probe.TaskQueueSizeProbe;
 import com.qthegamep.pattern.project2.exception.initialization.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.model.container.IoStrategy;
+import com.qthegamep.pattern.project2.service.IOStrategyFactoryServiceImpl;
 import com.qthegamep.pattern.project2.servlet.HealthCheckerServletImpl;
 import com.qthegamep.pattern.project2.util.Constants;
 import com.qthegamep.pattern.project2.util.Paths;
@@ -86,7 +87,7 @@ public class Application {
             grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("application.server.selector.runners.multiplier")));
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
-            grizzlyTransport.setIOStrategy(new IOStrategyFactoryConfig().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
+            grizzlyTransport.setIOStrategy(new IOStrategyFactoryServiceImpl().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
             addProbes(grizzlyTransport);
             httpServer.start();
             LOG.info("\nBlocking Transport(T/F): {}\nNum SelectorRunners: {}\nNum WorkerThreads: {}\nNum KernelThreadPool: {}\nQueue limit: {}",
@@ -139,7 +140,7 @@ public class Application {
             grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("metrics.server.selector.runners.multiplier")));
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
-            grizzlyTransport.setIOStrategy(new IOStrategyFactoryConfig().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
+            grizzlyTransport.setIOStrategy(new IOStrategyFactoryServiceImpl().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
             mapServlets(httpServer);
             httpServer.start();
             LOG.info("\nBlocking Transport(T/F): {}\nNum SelectorRunners: {}\nNum WorkerThreads: {}\nNum KernelThreadPool: {}\nQueue limit: {}",

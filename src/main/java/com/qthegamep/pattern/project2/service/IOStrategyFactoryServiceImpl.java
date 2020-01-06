@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.config;
+package com.qthegamep.pattern.project2.service;
 
 import com.qthegamep.pattern.project2.model.container.IoStrategy;
 import org.glassfish.grizzly.IOStrategy;
@@ -9,10 +9,11 @@ import org.glassfish.grizzly.strategies.WorkerThreadIOStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IOStrategyFactoryConfig {
+public class IOStrategyFactoryServiceImpl implements IOStrategyFactoryService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IOStrategyFactoryConfig.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IOStrategyFactoryServiceImpl.class);
 
+    @Override
     public IOStrategy createIOStrategy(IoStrategy ioStrategy) {
         LOG.info("IO strategy: {}", ioStrategy);
         switch (ioStrategy) {

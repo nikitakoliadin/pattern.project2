@@ -49,6 +49,7 @@ public class ApplicationBinder extends AbstractBinder {
     private KeyBuilderService keyBuilderService;
     private GeneralExceptionMapper generalExceptionMapper;
     private ValidationService validationService;
+    private IOStrategyFactoryService ioStrategyFactoryService;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
@@ -68,7 +69,8 @@ public class ApplicationBinder extends AbstractBinder {
                               CryptoService cryptoService,
                               KeyBuilderService keyBuilderService,
                               GeneralExceptionMapper generalExceptionMapper,
-                              ValidationService validationService) {
+                              ValidationService validationService,
+                              IOStrategyFactoryService ioStrategyFactoryService) {
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -85,6 +87,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.keyBuilderService = keyBuilderService;
         this.generalExceptionMapper = generalExceptionMapper;
         this.validationService = validationService;
+        this.ioStrategyFactoryService = ioStrategyFactoryService;
     }
 
     public ConverterService getConverterService() {
@@ -151,6 +154,10 @@ public class ApplicationBinder extends AbstractBinder {
         return validationService;
     }
 
+    public IOStrategyFactoryService getIoStrategyFactoryService() {
+        return ioStrategyFactoryService;
+    }
+
     public static ApplicationBinderBuilder builder() {
         return new ApplicationBinderBuilder();
     }
@@ -173,6 +180,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindKeyBuilder();
         bindGeneralExceptionMapper();
         bindValidationService();
+        bindIOStrategyFactoryService();
     }
 
     private void bindConverterService() {
@@ -360,6 +368,14 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindIOStrategyFactoryService() {
+        if (ioStrategyFactoryService == null) {
+            bind(IOStrategyFactoryServiceImpl.class).to(IOStrategyFactoryService.class).in(Singleton.class);
+        } else {
+            bind(ioStrategyFactoryService).to(IOStrategyFactoryService.class).in(Singleton.class);
+        }
+    }
+
     public static class ApplicationBinderBuilder {
 
         private ConverterService converterService;
@@ -378,6 +394,7 @@ public class ApplicationBinder extends AbstractBinder {
         private KeyBuilderService keyBuilderService;
         private GeneralExceptionMapper generalExceptionMapper;
         private ValidationService validationService;
+        private IOStrategyFactoryService ioStrategyFactoryService;
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -459,6 +476,11 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public ApplicationBinderBuilder setIoStrategyFactoryService(IOStrategyFactoryService ioStrategyFactoryService) {
+            this.ioStrategyFactoryService = ioStrategyFactoryService;
+            return this;
+        }
+
         public ApplicationBinder build() {
             return new ApplicationBinder(
                     converterService,
@@ -476,7 +498,8 @@ public class ApplicationBinder extends AbstractBinder {
                     cryptoService,
                     keyBuilderService,
                     generalExceptionMapper,
-                    validationService);
+                    validationService,
+                    ioStrategyFactoryService);
         }
     }
 }
