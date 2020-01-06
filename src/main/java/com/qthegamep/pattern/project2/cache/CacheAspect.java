@@ -72,7 +72,7 @@ public class CacheAspect {
     }
 
     private String getKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) throws CryptoServiceException {
-        String key = keyBuilderService.buildCacheKey(thisJoinPoint, cacheable);
+        String key = keyBuilderService.buildCacheKey(thisJoinPoint, cacheable.keyAlgorithm());
         String encodedKey = cryptoService.encodeTo(key, cacheable.hashAlgorithm());
         LOG.debug("Encoded key: {}", encodedKey);
         return encodedKey;
