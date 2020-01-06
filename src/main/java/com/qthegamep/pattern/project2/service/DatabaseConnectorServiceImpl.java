@@ -10,7 +10,7 @@ import com.mongodb.connection.ClusterSettings;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.event.CommandListener;
 import com.mongodb.event.ConnectionPoolListener;
-import com.qthegamep.pattern.project2.callback.MongoShutdownServerCallback;
+import com.qthegamep.pattern.project2.repository.mongo.callback.ShutdownServerCallback;
 import com.qthegamep.pattern.project2.exception.runtime.AsyncMongoDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.CloseRedisClustersDatabaseConnectorServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.RedisDatabaseConnectorServiceRuntimeException;
@@ -431,7 +431,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         database.listCollectionNames().forEach(
                 document -> {
                 },
-                new MongoShutdownServerCallback());
+                new ShutdownServerCallback());
     }
 
     private void checkRedisPoolConnection(JedisPool redisPool) {

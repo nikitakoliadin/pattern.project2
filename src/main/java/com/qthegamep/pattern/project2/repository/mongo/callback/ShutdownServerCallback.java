@@ -1,12 +1,12 @@
-package com.qthegamep.pattern.project2.callback;
+package com.qthegamep.pattern.project2.repository.mongo.callback;
 
 import com.mongodb.async.SingleResultCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MongoShutdownServerCallback implements SingleResultCallback<Void> {
+public class ShutdownServerCallback implements SingleResultCallback<Void> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MongoShutdownServerCallback.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShutdownServerCallback.class);
 
     @Override
     public void onResult(Void aVoid, Throwable throwable) {
