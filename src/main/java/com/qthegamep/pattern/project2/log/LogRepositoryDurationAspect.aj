@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.aspect;
+package com.qthegamep.pattern.project2.log;
 
 import org.aspectj.lang.Signature;
 import org.slf4j.Logger;
