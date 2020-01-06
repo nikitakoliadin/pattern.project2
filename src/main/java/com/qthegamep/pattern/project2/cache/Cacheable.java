@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.annotation;
+package com.qthegamep.pattern.project2.cache;
 
 import com.qthegamep.pattern.project2.model.container.HashAlgorithm;
 import com.qthegamep.pattern.project2.model.container.KeyAlgorithm;

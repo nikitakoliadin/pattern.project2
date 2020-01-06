@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
-import com.qthegamep.pattern.project2.aspect.CacheAspect;
+import com.qthegamep.pattern.project2.cache.CacheAspect;
 import org.aspectj.lang.Aspects;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
