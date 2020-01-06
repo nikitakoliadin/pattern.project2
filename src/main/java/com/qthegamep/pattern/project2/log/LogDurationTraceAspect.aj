@@ -14,10 +14,6 @@ public aspect LogDurationTraceAspect {
 
     pointcut all(): execution(* *(..)) && if(LOG.isTraceEnabled());
 
-    public LogDurationTraceAspect() {
-        LOG.warn("Enable log duration trace aspect: {}", LOG.isTraceEnabled());
-    }
-
     Object around(): all() {
         Signature signature = thisJoinPoint.getSignature();
         Object[] args = thisJoinPoint.getArgs();
