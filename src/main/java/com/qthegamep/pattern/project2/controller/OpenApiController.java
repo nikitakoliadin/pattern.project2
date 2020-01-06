@@ -27,7 +27,7 @@ import javax.ws.rs.core.*;
         security = {@SecurityRequirement(name = "Authorization")})
 @SecurityScheme(
         name = "Authorization",
-        description = "Use 'Bearer sid' token for authorisation. Bearer test",
+        description = "Use 'Bearer sid' token for authorisation. For example - 'Bearer test'",
         type = SecuritySchemeType.APIKEY,
         in = SecuritySchemeIn.HEADER,
         paramName = "Authorization")
