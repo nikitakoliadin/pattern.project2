@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class GrizzlyServersShutdownHook extends Thread {
+public class ShutdownHookConfig extends Thread {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GrizzlyServersShutdownHook.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShutdownHookConfig.class);
 
     private static final int GRACE_PERIOD = Integer.parseInt(System.getProperty("shutdown.hook.grace.period"));
     private static final TimeUnit GRACE_PERIOD_TIME_UNIT = TimeUnit.SECONDS;
 
     private final HttpServer[] httpServers;
 
-    public GrizzlyServersShutdownHook(HttpServer... httpServers) {
+    public ShutdownHookConfig(HttpServer... httpServers) {
         this.httpServers = httpServers;
     }
 

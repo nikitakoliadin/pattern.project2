@@ -51,7 +51,7 @@ public class Application {
         String monitoringContext = System.getProperty("application.monitoring.context", "/");
         String monitoringUrl = HTTP + host + ":" + monitoringPort + monitoringContext;
         HttpServer monitoringHttpServer = startMonitoringServer(monitoringUrl);
-        Runtime.getRuntime().addShutdownHook(new GrizzlyServersShutdownHook(applicationHttpServer, monitoringHttpServer));
+        Runtime.getRuntime().addShutdownHook(new ShutdownHookConfig(applicationHttpServer, monitoringHttpServer));
         LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
         LOG.info("Swagger openApi available at {}", swaggerPath);
         LOG.info("Monitoring started at {}", monitoringUrl);
