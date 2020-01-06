@@ -45,9 +45,7 @@ public class ApplicationConfig {
     public Map<String, Object> getApplicationProperties() {
         return applicationProperties.entrySet()
                 .stream()
-                .collect(Collectors.toMap(
-                        e -> String.valueOf(e.getKey()),
-                        Map.Entry::getValue));
+                .collect(Collectors.toMap(e -> String.valueOf(e.getKey()), Map.Entry::getValue));
     }
 
     private void loadServerIp() throws SocketException {
