@@ -8,7 +8,7 @@ import com.qthegamep.pattern.project2.probe.TaskQueueSizeProbe;
 import com.qthegamep.pattern.project2.exception.initialization.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.model.container.IoStrategy;
 import com.qthegamep.pattern.project2.service.IOStrategyFactoryServiceImpl;
-import com.qthegamep.pattern.project2.servlet.HealthCheckerServletImpl;
+import com.qthegamep.pattern.project2.controller.HealthCheckerControllerImpl;
 import com.qthegamep.pattern.project2.util.Constants;
 import com.qthegamep.pattern.project2.util.Paths;
 import io.prometheus.client.exporter.MetricsServlet;
@@ -160,7 +160,7 @@ public class Application {
         metricsContext.addServlet("Prometheus metrics servlet", new MetricsServlet());
         metricsContext.deploy(httpServer);
         WebappContext healthCheckerContext = new WebappContext("Health checker", Paths.TEST_PATH);
-        healthCheckerContext.addServlet("Health checker servlet", new HealthCheckerServletImpl());
+        healthCheckerContext.addServlet("Health checker servlet", new HealthCheckerControllerImpl());
         healthCheckerContext.deploy(httpServer);
     }
 }
