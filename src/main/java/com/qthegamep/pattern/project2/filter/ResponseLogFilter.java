@@ -28,7 +28,9 @@ public class ResponseLogFilter implements ContainerResponseFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) {
-        String path = containerRequestContext.getUriInfo().getRequestUri().toString();
+        String path = containerRequestContext.getUriInfo()
+                .getRequestUri()
+                .toString();
         String requestId = containerRequestContext.getHeaderString(Constants.REQUEST_ID_HEADER);
         String clientIp = getClientIp();
         String duration = containerResponseContext.getHeaderString(Constants.DURATION_HEADER);
