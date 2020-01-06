@@ -9,9 +9,9 @@ import org.glassfish.grizzly.strategies.WorkerThreadIOStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IOStrategyFactory {
+public class IOStrategyFactoryConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IOStrategyFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IOStrategyFactoryConfig.class);
 
     public IOStrategy createIOStrategy(IoStrategy ioStrategy) {
         LOG.info("IO strategy: {}", ioStrategy);

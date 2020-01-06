@@ -86,7 +86,7 @@ public class Application {
             grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("application.server.selector.runners.multiplier")));
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
-            grizzlyTransport.setIOStrategy(new IOStrategyFactory().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
+            grizzlyTransport.setIOStrategy(new IOStrategyFactoryConfig().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
             addProbes(grizzlyTransport);
             httpServer.start();
             LOG.info("\nBlocking Transport(T/F): {}\nNum SelectorRunners: {}\nNum WorkerThreads: {}\nNum KernelThreadPool: {}\nQueue limit: {}",
@@ -139,7 +139,7 @@ public class Application {
             grizzlyTransport.setSelectorRunnersCount(Runtime.getRuntime().availableProcessors() * Integer.parseInt(System.getProperty("metrics.server.selector.runners.multiplier")));
             grizzlyTransport.setWorkerThreadPoolConfig(threadPoolConfig);
             grizzlyTransport.setKernelThreadPoolConfig(threadPoolConfig);
-            grizzlyTransport.setIOStrategy(new IOStrategyFactory().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
+            grizzlyTransport.setIOStrategy(new IOStrategyFactoryConfig().createIOStrategy(IoStrategy.DYNAMIC_IO_STRATEGY));
             mapServlets(httpServer);
             httpServer.start();
             LOG.info("\nBlocking Transport(T/F): {}\nNum SelectorRunners: {}\nNum WorkerThreads: {}\nNum KernelThreadPool: {}\nQueue limit: {}",
