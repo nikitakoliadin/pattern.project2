@@ -9,15 +9,12 @@ import io.micrometer.core.instrument.binder.MeterBinder;
 
 public class ResponseStatusMeter implements MeterBinder {
 
-    private static final String RESPONSE_STATUS = "response.status";
-    private static final String RESPONSE_CODE_TAG = "response.code";
-
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        Meters.RESPONSE_STATUS_METER.forEach((key, value) -> Gauge.builder(RESPONSE_STATUS, value::get)
+        Meters.RESPONSE_STATUS_METER.forEach((key, value) -> Gauge.builder("response.status", value::get)
                 .description("The response status")
                 .baseUnit(Constants.GRIZZLY)
-                .tags(Tags.of(RESPONSE_CODE_TAG, key))
+                .tags(Tags.of("response.code", key))
                 .register(meterRegistry));
     }
 }
