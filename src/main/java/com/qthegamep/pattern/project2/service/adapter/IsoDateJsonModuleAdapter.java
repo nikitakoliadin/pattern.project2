@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import java.util.Date;
 
-public class IsoDateModuleAdapter {
+public class IsoDateJsonModuleAdapter {
 
     public SimpleModule buildModule() {
         return new SimpleModule()
