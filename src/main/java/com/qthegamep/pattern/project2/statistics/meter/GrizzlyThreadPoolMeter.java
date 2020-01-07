@@ -22,11 +22,11 @@ public class GrizzlyThreadPoolMeter implements MeterBinder {
                 .description("The selector runners of the Grizzly server")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
-        Gauge.builder("available.threads", Meters.AVAILABLE_THREADS_METER::get)
+        Gauge.builder("available.threads", Meters.AVAILABLE_GRIZZLY_THREADS_METER::get)
                 .description("The current number of available threads in Grizzly thread pool")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
-        Gauge.builder("worked.threads", () -> Integer.parseInt(System.getProperty("application.server.core.pool.size")) - Meters.AVAILABLE_THREADS_METER.get())
+        Gauge.builder("worked.threads", () -> Integer.parseInt(System.getProperty("application.server.core.pool.size")) - Meters.AVAILABLE_GRIZZLY_THREADS_METER.get())
                 .description("The current number of worked threads in Grizzly thread pool")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);

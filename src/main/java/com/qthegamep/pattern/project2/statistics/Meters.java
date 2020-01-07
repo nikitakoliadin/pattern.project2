@@ -16,7 +16,7 @@ public class Meters {
 
     public static final AtomicLong TASK_QUEUE_SIZE_METER = new AtomicLong();
 
-    public static final AtomicLong AVAILABLE_THREADS_METER = new AtomicLong(Integer.parseInt(System.getProperty("application.server.core.pool.size")));
+    public static final AtomicLong AVAILABLE_GRIZZLY_THREADS_METER = new AtomicLong(Integer.parseInt(System.getProperty("application.server.core.pool.size")));
 
     public static final Map<String, AtomicLong> ERROR_TYPES_METER = Arrays.stream(Error.values())
             .collect(Collectors.toMap(

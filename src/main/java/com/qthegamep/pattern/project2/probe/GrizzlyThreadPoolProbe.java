@@ -12,13 +12,13 @@ public class GrizzlyThreadPoolProbe extends ThreadPoolProbe.Adapter {
 
     @Override
     public void onTaskDequeueEvent(AbstractThreadPool threadPool, Runnable task) {
-        long availableThreads = Meters.AVAILABLE_THREADS_METER.decrementAndGet();
-        LOG.debug("Available threads before task {}", availableThreads);
+        long availableGrizzlyThreads = Meters.AVAILABLE_GRIZZLY_THREADS_METER.decrementAndGet();
+        LOG.debug("Available Grizzly threads before task {}", availableGrizzlyThreads);
     }
 
     @Override
     public void onTaskCompleteEvent(AbstractThreadPool threadPool, Runnable task) {
-        long availableThreads = Meters.AVAILABLE_THREADS_METER.incrementAndGet();
-        LOG.debug("Available threads after task {}", availableThreads);
+        long availableGrizzlyThreads = Meters.AVAILABLE_GRIZZLY_THREADS_METER.incrementAndGet();
+        LOG.debug("Available Grizzly threads after task {}", availableGrizzlyThreads);
     }
 }
