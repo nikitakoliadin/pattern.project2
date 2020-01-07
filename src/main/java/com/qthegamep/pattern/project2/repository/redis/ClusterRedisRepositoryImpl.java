@@ -16,10 +16,10 @@ public class ClusterRedisRepositoryImpl implements RedisRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClusterRedisRepositoryImpl.class);
 
-    @Property(value = "redis.cluster.default.ttl")
-    private Integer defaultTtl;
     @Property(value = "redis.cluster.should.fall.when.error")
     private Boolean shouldFallWhenError;
+    @Property(value = "redis.cluster.default.ttl")
+    private Integer defaultTtl;
 
     private JedisCluster jedisCluster;
 
