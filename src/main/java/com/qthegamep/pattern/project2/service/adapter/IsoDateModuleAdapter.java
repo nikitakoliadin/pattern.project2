@@ -1,4 +1,4 @@
-package com.qthegamep.pattern.project2.adapter;
+package com.qthegamep.pattern.project2.service.adapter;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
