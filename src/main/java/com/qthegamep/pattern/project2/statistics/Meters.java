@@ -29,7 +29,7 @@ public class Meters {
             .collect(Collectors.toMap(
                     value -> String.valueOf(value.getStatusCode()),
                     value -> new AtomicLong(),
-                    (a, b) -> b,
+                    (key, value) -> value,
                     ConcurrentHashMap::new));
 
     public static final Map<String, AtomicLong> REQUEST_COUNTER_METER = Arrays.stream(Paths.class.getFields())
