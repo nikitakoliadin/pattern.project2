@@ -46,7 +46,7 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
     }
 
     private void registerRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
-        registerTimeMetric(Meters.REQUEST_TIME_METER, requestContext, responseContext, requestId);
+        registerTimeMetric(Meters.AVERAGE_REQUEST_TIME_METER, requestContext, responseContext, requestId);
     }
 
     private void registerMaxRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {

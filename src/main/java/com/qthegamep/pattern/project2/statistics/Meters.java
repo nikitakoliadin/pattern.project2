@@ -46,7 +46,7 @@ public class Meters {
                     (key, value) -> value,
                     ConcurrentHashMap::new));
 
-    public static final Map<String, List<AtomicLong>> REQUEST_TIME_METER = Arrays.stream(Paths.class.getFields())
+    public static final Map<String, List<AtomicLong>> AVERAGE_REQUEST_TIME_METER = Arrays.stream(Paths.class.getFields())
             .map(field -> {
                 try {
                     return String.valueOf(field.get(null));
@@ -57,7 +57,7 @@ public class Meters {
             .collect(Collectors.toMap(
                     value -> value,
                     value -> new CopyOnWriteArrayList<>(),
-                    (a, b) -> b,
+                    (key, value) -> value,
                     ConcurrentHashMap::new));
 
     public static final Map<String, List<AtomicLong>> MAX_REQUEST_TIME_METER = Arrays.stream(Paths.class.getFields())

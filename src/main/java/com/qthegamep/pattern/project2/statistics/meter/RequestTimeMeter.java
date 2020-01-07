@@ -16,7 +16,7 @@ public class RequestTimeMeter implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        Meters.REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder("request.time",
+        Meters.AVERAGE_REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder("request.time",
                 () -> {
                     double result = Arrays.stream(value.toArray())
                             .mapToLong(num -> ((AtomicLong) num).get())
