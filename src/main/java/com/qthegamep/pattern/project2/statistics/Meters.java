@@ -22,7 +22,7 @@ public class Meters {
             .collect(Collectors.toMap(
                     value -> String.valueOf(value.getErrorCode()),
                     value -> new AtomicLong(),
-                    (a, b) -> b,
+                    (key, value) -> value,
                     ConcurrentHashMap::new));
 
     public static final Map<String, AtomicLong> RESPONSE_STATUS_METER = Arrays.stream(Response.Status.values())
