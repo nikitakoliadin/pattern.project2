@@ -12,13 +12,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class RequestTimeMeter implements MeterBinder {
 
-    private static final String REQUEST_TIME = "request.time";
-    private static final String MAX_REQUEST_TIME = "max.request.time";
     private static final String PATH_TAG = "path";
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        Meters.REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder(REQUEST_TIME,
+        Meters.REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder("request.time",
                 () -> {
                     double result = Arrays.stream(value.toArray())
                             .mapToLong(num -> ((AtomicLong) num).get())
@@ -31,7 +29,7 @@ public class RequestTimeMeter implements MeterBinder {
                 .baseUnit(Constants.GRIZZLY)
                 .tags(Tags.of(PATH_TAG, key))
                 .register(meterRegistry));
-        Meters.MAX_REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder(MAX_REQUEST_TIME,
+        Meters.MAX_REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder("max.request.time",
                 () -> {
                     long result = Arrays.stream(value.toArray())
                             .mapToLong(num -> ((AtomicLong) num).get())
