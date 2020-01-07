@@ -43,7 +43,7 @@ public class Meters {
             .collect(Collectors.toMap(
                     value -> value,
                     value -> new AtomicLong(),
-                    (a, b) -> b,
+                    (key, value) -> value,
                     ConcurrentHashMap::new));
 
     public static final Map<String, List<AtomicLong>> REQUEST_TIME_METER = Arrays.stream(Paths.class.getFields())
