@@ -71,7 +71,7 @@ public class Meters {
             .collect(Collectors.toMap(
                     value -> value,
                     value -> new CopyOnWriteArrayList<>(),
-                    (a, b) -> b,
+                    (key, value) -> value,
                     ConcurrentHashMap::new));
 
     public static final AtomicLong REDIS_ERROR_COUNTER_METER = new AtomicLong();
