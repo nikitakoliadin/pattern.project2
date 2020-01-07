@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.qthegamep.pattern.project2.service.adapter.IsoDateJsonModuleAdapter;
-import com.qthegamep.pattern.project2.service.adapter.ObjectIdModuleAdapter;
+import com.qthegamep.pattern.project2.service.adapter.ObjectIdJsonModuleAdapter;
 import com.qthegamep.pattern.project2.exception.runtime.JsonConverterServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.XmlConverterServiceRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
@@ -24,7 +24,7 @@ public class ConverterServiceImpl implements ConverterService {
             .enable(SerializationFeature.INDENT_OUTPUT)
             .configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true)
             .registerModule(new IsoDateJsonModuleAdapter().buildModule())
-            .registerModule(new ObjectIdModuleAdapter().buildModule());
+            .registerModule(new ObjectIdJsonModuleAdapter().buildModule());
     private final XmlMapper xml = new XmlMapper();
 
     @Override
