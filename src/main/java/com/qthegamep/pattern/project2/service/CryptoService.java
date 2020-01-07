@@ -5,7 +5,7 @@ import com.qthegamep.pattern.project2.model.container.HashAlgorithm;
 
 public interface CryptoService {
 
-    String encodeTo(String data, HashAlgorithm hashAlgorithm) throws CryptoServiceException;
+    String encode(String data, HashAlgorithm hashAlgorithm) throws CryptoServiceException;
 
-    String encodeTo(String data, HashAlgorithm hashAlgorithm, String requestId) throws CryptoServiceException;
+    String encode(String data, HashAlgorithm hashAlgorithm, String requestId) throws CryptoServiceException;
 }
