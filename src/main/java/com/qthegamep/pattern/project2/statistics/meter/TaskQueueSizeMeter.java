@@ -8,16 +8,13 @@ import io.micrometer.core.instrument.binder.MeterBinder;
 
 public class TaskQueueSizeMeter implements MeterBinder {
 
-    private static final String TASK_QUEUE_SIZE = "task.queue.size";
-    private static final String TASK_QUEUE_LIMIT = "task.queue.limit";
-
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        Gauge.builder(TASK_QUEUE_SIZE, Meters.TASK_QUEUE_SIZE_METER::get)
+        Gauge.builder("task.queue.size", Meters.TASK_QUEUE_SIZE_METER::get)
                 .description("The current number of tasks in queue")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
-        Gauge.builder(TASK_QUEUE_LIMIT, () -> Integer.parseInt(System.getProperty("application.server.queue.limit")))
+        Gauge.builder("task.queue.limit", () -> Integer.parseInt(System.getProperty("application.server.queue.limit")))
                 .description("The limit size of the task queue. If limit value is negative then queue has infinity limit")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
