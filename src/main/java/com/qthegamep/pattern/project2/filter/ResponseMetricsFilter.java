@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.filter;
 
-import com.qthegamep.pattern.project2.metric.Metrics;
+import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +31,14 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
 
     private void registerResponseStatusMetric(ContainerResponseContext responseContext, String requestId) {
         Response.StatusType responseStatusInfo = responseContext.getStatusInfo();
-        long responseCodeCount = Metrics.RESPONSE_STATUS_METRIC.get(String.valueOf(responseStatusInfo.getStatusCode())).incrementAndGet();
+        long responseCodeCount = Meters.RESPONSE_STATUS_METER.get(String.valueOf(responseStatusInfo.getStatusCode())).incrementAndGet();
         LOG.debug("Response status: {} Code: {} Count: {} RequestId: {}", responseStatusInfo, responseStatusInfo.getStatusCode(), responseCodeCount, requestId);
     }
 
     private void registerRequestCounterMetric(ContainerRequestContext requestContext, String requestId) {
         String path = "/" + requestContext.getUriInfo().getPath();
-        if (Metrics.REQUEST_COUNTER_METRIC.containsKey(path)) {
-            long requestCount = Metrics.REQUEST_COUNTER_METRIC.get(path).incrementAndGet();
+        if (Meters.REQUEST_COUNTER_METER.containsKey(path)) {
+            long requestCount = Meters.REQUEST_COUNTER_METER.get(path).incrementAndGet();
             LOG.debug("Path: [{}] Count: {} RequestId: {}", path, requestCount, requestId);
         } else {
             LOG.debug("Path: [{}] not exists. RequestId: {}", path, requestId);
@@ -46,11 +46,11 @@ public class ResponseMetricsFilter implements ContainerResponseFilter {
     }
 
     private void registerRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
-        registerTimeMetric(Metrics.REQUEST_TIME_METRIC, requestContext, responseContext, requestId);
+        registerTimeMetric(Meters.REQUEST_TIME_METER, requestContext, responseContext, requestId);
     }
 
     private void registerMaxRequestTimeMetric(ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {
-        registerTimeMetric(Metrics.MAX_REQUEST_TIME_METRIC, requestContext, responseContext, requestId);
+        registerTimeMetric(Meters.MAX_REQUEST_TIME_METER, requestContext, responseContext, requestId);
     }
 
     private void registerTimeMetric(Map<String, List<AtomicLong>> metric, ContainerRequestContext requestContext, ContainerResponseContext responseContext, String requestId) {

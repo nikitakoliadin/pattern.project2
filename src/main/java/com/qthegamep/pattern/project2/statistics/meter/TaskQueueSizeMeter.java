@@ -1,18 +1,19 @@
-package com.qthegamep.pattern.project2.metric;
+package com.qthegamep.pattern.project2.statistics.meter;
 
+import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.util.Constants;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 
-public class TaskQueueSizeMetric implements MeterBinder {
+public class TaskQueueSizeMeter implements MeterBinder {
 
     private static final String TASK_QUEUE_SIZE = "task.queue.size";
     private static final String TASK_QUEUE_LIMIT = "task.queue.limit";
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        Gauge.builder(TASK_QUEUE_SIZE, Metrics.TASK_QUEUE_SIZE_METRIC::get)
+        Gauge.builder(TASK_QUEUE_SIZE, Meters.TASK_QUEUE_SIZE_METER::get)
                 .description("The current number of tasks in queue")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);

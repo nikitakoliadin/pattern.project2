@@ -2,7 +2,7 @@ package com.qthegamep.pattern.project2.repository.redis;
 
 import com.qthegamep.pattern.project2.binder.property.Property;
 import com.qthegamep.pattern.project2.exception.compile.RedisRepositoryException;
-import com.qthegamep.pattern.project2.metric.Metrics;
+import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.model.container.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class PoolRedisRepositoryImpl implements RedisRepository {
             jedis.set(key, value);
             jedis.expire(key, ttl);
         } catch (Exception e) {
-            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
+            Meters.REDIS_ERROR_COUNTER_METER.incrementAndGet();
             if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_SAVE_ERROR);
             } else {
@@ -82,7 +82,7 @@ public class PoolRedisRepositoryImpl implements RedisRepository {
             jedis.hmset(key, value);
             jedis.expire(key, ttl);
         } catch (Exception e) {
-            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
+            Meters.REDIS_ERROR_COUNTER_METER.incrementAndGet();
             if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_SAVE_ALL_ERROR);
             } else {
@@ -108,7 +108,7 @@ public class PoolRedisRepositoryImpl implements RedisRepository {
                 return Optional.of(result);
             }
         } catch (Exception e) {
-            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
+            Meters.REDIS_ERROR_COUNTER_METER.incrementAndGet();
             if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_READ_ERROR);
             } else {
@@ -135,7 +135,7 @@ public class PoolRedisRepositoryImpl implements RedisRepository {
                 return Optional.of(result);
             }
         } catch (Exception e) {
-            Metrics.REDIS_ERROR_COUNTER_METRIC.incrementAndGet();
+            Meters.REDIS_ERROR_COUNTER_METER.incrementAndGet();
             if (shouldFallWhenError) {
                 throw new RedisRepositoryException(e, Error.REDIS_READ_ALL_ERROR);
             } else {

@@ -2,7 +2,7 @@ package com.qthegamep.pattern.project2.exception.mapper;
 
 import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.exception.ServiceException;
-import com.qthegamep.pattern.project2.metric.Metrics;
+import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.service.ErrorResponseBuilderService;
 import com.qthegamep.pattern.project2.util.Constants;
@@ -62,7 +62,7 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
 
     private void registerMetrics(Error error, String requestId) {
         String errorCode = String.valueOf(error.getErrorCode());
-        long errorCount = Metrics.ERROR_TYPES_METRIC.get(errorCode).incrementAndGet();
+        long errorCount = Meters.ERROR_TYPES_METER.get(errorCode).incrementAndGet();
         LOG.debug("Error code: {} Error count: {} RequestId: {}", errorCode, errorCount, requestId);
     }
 

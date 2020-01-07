@@ -1,5 +1,6 @@
-package com.qthegamep.pattern.project2.metric;
+package com.qthegamep.pattern.project2.statistics.meter;
 
+import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.util.Constants;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -9,7 +10,7 @@ import io.micrometer.core.instrument.binder.MeterBinder;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class RequestTimeMetric implements MeterBinder {
+public class RequestTimeMeter implements MeterBinder {
 
     private static final String REQUEST_TIME = "request.time";
     private static final String MAX_REQUEST_TIME = "max.request.time";
@@ -17,7 +18,7 @@ public class RequestTimeMetric implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry meterRegistry) {
-        Metrics.REQUEST_TIME_METRIC.forEach((key, value) -> Gauge.builder(REQUEST_TIME,
+        Meters.REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder(REQUEST_TIME,
                 () -> {
                     double result = Arrays.stream(value.toArray())
                             .mapToLong(num -> ((AtomicLong) num).get())
@@ -30,7 +31,7 @@ public class RequestTimeMetric implements MeterBinder {
                 .baseUnit(Constants.GRIZZLY)
                 .tags(Tags.of(PATH_TAG, key))
                 .register(meterRegistry));
-        Metrics.MAX_REQUEST_TIME_METRIC.forEach((key, value) -> Gauge.builder(MAX_REQUEST_TIME,
+        Meters.MAX_REQUEST_TIME_METER.forEach((key, value) -> Gauge.builder(MAX_REQUEST_TIME,
                 () -> {
                     long result = Arrays.stream(value.toArray())
                             .mapToLong(num -> ((AtomicLong) num).get())

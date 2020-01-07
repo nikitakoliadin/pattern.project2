@@ -1,11 +1,12 @@
-package com.qthegamep.pattern.project2.metric;
+package com.qthegamep.pattern.project2.statistics.meter;
 
+import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.util.Constants;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 
-public class GrizzlyThreadPoolMetric implements MeterBinder {
+public class GrizzlyThreadPoolMeter implements MeterBinder {
 
     private static final String CORE_POOL_SIZE = "core.pool.size";
     private static final String MAX_POOL_SIZE = "max.pool.size";
@@ -27,11 +28,11 @@ public class GrizzlyThreadPoolMetric implements MeterBinder {
                 .description("The selector runners of the Grizzly server")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
-        Gauge.builder(AVAILABLE_THREADS, Metrics.AVAILABLE_THREADS_METRIC::get)
+        Gauge.builder(AVAILABLE_THREADS, Meters.AVAILABLE_THREADS_METER::get)
                 .description("The current number of available threads in Grizzly thread pool")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
-        Gauge.builder(WORKED_THREADS, () -> Integer.parseInt(System.getProperty("application.server.core.pool.size")) - Metrics.AVAILABLE_THREADS_METRIC.get())
+        Gauge.builder(WORKED_THREADS, () -> Integer.parseInt(System.getProperty("application.server.core.pool.size")) - Meters.AVAILABLE_THREADS_METER.get())
                 .description("The current number of worked threads in Grizzly thread pool")
                 .baseUnit(Constants.GRIZZLY)
                 .register(meterRegistry);
