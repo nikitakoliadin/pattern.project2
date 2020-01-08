@@ -18,16 +18,16 @@ public class PropertyBinder extends AbstractBinder {
         return propertyInjectionResolver;
     }
 
-    public static ConfigurationBinderBuilder builder() {
-        return new ConfigurationBinderBuilder();
+    public static PropertyBinderBuilder builder() {
+        return new PropertyBinderBuilder();
     }
 
     @Override
     protected void configure() {
-        bindConfigurationInjectionResolver();
+        bindPropertyInjectionResolver();
     }
 
-    private void bindConfigurationInjectionResolver() {
+    private void bindPropertyInjectionResolver() {
         if (propertyInjectionResolver == null) {
             bind(PropertyInjectionResolver.class).to(new TypeLiteral<InjectionResolver<Property>>() {
             }).in(Singleton.class);
@@ -37,11 +37,11 @@ public class PropertyBinder extends AbstractBinder {
         }
     }
 
-    public static class ConfigurationBinderBuilder {
+    public static class PropertyBinderBuilder {
 
         private PropertyInjectionResolver propertyInjectionResolver;
 
-        public ConfigurationBinderBuilder setPropertyInjectionResolver(PropertyInjectionResolver propertyInjectionResolver) {
+        public PropertyBinderBuilder setPropertyInjectionResolver(PropertyInjectionResolver propertyInjectionResolver) {
             this.propertyInjectionResolver = propertyInjectionResolver;
             return this;
         }
