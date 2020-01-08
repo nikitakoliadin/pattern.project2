@@ -6,6 +6,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.async.client.MongoClientSettings;
 import com.mongodb.async.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.connection.ClusterSettings;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.event.CommandListener;
@@ -18,6 +19,7 @@ import com.qthegamep.pattern.project2.exception.runtime.SyncMongoDatabaseConnect
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Constants;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.bson.codecs.configuration.CodecRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.*;
@@ -38,47 +40,62 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB() {
-        return connectToSyncMongoDB(null, null, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToSyncMongoDB(null, null, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(String connectionType) {
-        return connectToSyncMongoDB(null, null, connectionType);
+        return connectToSyncMongoDB(null, null, null, connectionType);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener) {
-        return connectToSyncMongoDB(commandListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToSyncMongoDB(commandListener, null, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, String connectionType) {
-        return connectToSyncMongoDB(commandListener, null, connectionType);
+        return connectToSyncMongoDB(commandListener, null, null, connectionType);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(ConnectionPoolListener connectionPoolListener) {
-        return connectToSyncMongoDB(null, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToSyncMongoDB(null, connectionPoolListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(ConnectionPoolListener connectionPoolListener, String connectionType) {
-        return connectToSyncMongoDB(null, connectionPoolListener, connectionType);
+        return connectToSyncMongoDB(null, connectionPoolListener, null, connectionType);
+    }
+
+    @Override
+    public MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry) {
+        return connectToSyncMongoDB(null, null, codecRegistry, Constants.STANDALONE_MONGO_DB_TYPE);
+    }
+
+    @Override
+    public MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry, String connectionType) {
+        return connectToSyncMongoDB(null, null, codecRegistry, connectionType);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
-        return connectToSyncMongoDB(commandListener, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToSyncMongoDB(commandListener, connectionPoolListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType) {
+        return connectToSyncMongoDB(commandListener, connectionPoolListener, null, connectionType);
+    }
+
+    @Override
+    public MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, String connectionType) {
         LOG.debug("Sync MongoDB type: {}", connectionType);
         try {
             if (Constants.STANDALONE_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
-                return connectToStandaloneSyncMongoDB(commandListener, connectionPoolListener);
+                return connectToStandaloneSyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             } else if (Constants.CLUSTER_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
-                return connectToClusterSyncMongoDB(commandListener, connectionPoolListener);
+                return connectToClusterSyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             } else {
                 throw new SyncMongoDatabaseConnectorServiceRuntimeException(Error.MONGO_DB_NOT_EXISTING_TYPE_ERROR);
             }
@@ -103,46 +120,61 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB() {
-        return connectToAsyncMongoDB(null, null, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToAsyncMongoDB(null, null, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(String connectionType) {
-        return connectToAsyncMongoDB(null, null, connectionType);
+        return connectToAsyncMongoDB(null, null, null, connectionType);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener) {
-        return connectToAsyncMongoDB(commandListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToAsyncMongoDB(commandListener, null, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, String connectionType) {
-        return connectToAsyncMongoDB(commandListener, null, connectionType);
+        return connectToAsyncMongoDB(commandListener, null, null, connectionType);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(ConnectionPoolListener connectionPoolListener) {
-        return connectToAsyncMongoDB(null, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToAsyncMongoDB(null, connectionPoolListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(ConnectionPoolListener connectionPoolListener, String connectionType) {
-        return connectToAsyncMongoDB(null, connectionPoolListener, connectionType);
+        return connectToAsyncMongoDB(null, connectionPoolListener, null, connectionType);
+    }
+
+    @Override
+    public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CodecRegistry codecRegistry) {
+        return connectToAsyncMongoDB(null, null, codecRegistry, Constants.STANDALONE_MONGO_DB_TYPE);
+    }
+
+    @Override
+    public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CodecRegistry codecRegistry, String connectionType) {
+        return connectToAsyncMongoDB(null, null, codecRegistry, connectionType);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
-        return connectToAsyncMongoDB(commandListener, connectionPoolListener, Constants.STANDALONE_MONGO_DB_TYPE);
+        return connectToAsyncMongoDB(commandListener, connectionPoolListener, null, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType) {
+        return connectToAsyncMongoDB(commandListener, connectionPoolListener, null, connectionType);
+    }
+
+    @Override
+    public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, String connectionType) {
         try {
             if (Constants.STANDALONE_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
-                return connectToStandaloneAsyncMongoDB(commandListener, connectionPoolListener);
+                return connectToStandaloneAsyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             } else if (Constants.CLUSTER_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
-                return connectToClusterAsyncMongoDB(commandListener, connectionPoolListener);
+                return connectToClusterAsyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             } else {
                 throw new AsyncMongoDatabaseConnectorServiceRuntimeException(Error.MONGO_DB_NOT_EXISTING_TYPE_ERROR);
             }
@@ -270,7 +302,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         closeRedisClusters();
     }
 
-    private com.mongodb.client.MongoDatabase connectToStandaloneSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
+    private com.mongodb.client.MongoDatabase connectToStandaloneSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
         String host = System.getProperty("sync.mongodb.standalone.host");
         String port = System.getProperty("sync.mongodb.standalone.port");
         String user = System.getProperty("sync.mongodb.standalone.user");
@@ -279,7 +311,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         LOG.debug("Standalone sync MongoDB properties -> Host: {} Port: {} User: {} DB: {} Password: {}", host, port, user, db, password);
         ServerAddress serverAddress = new ServerAddress(host, Integer.parseInt(port));
         MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(user, db, password.toCharArray());
-        MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener);
+        MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener, codecRegistry);
         com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(serverAddress, Collections.singletonList(mongoCredential), mongoClientOptions);
         com.mongodb.client.MongoDatabase database = mongoClient.getDatabase(db);
         checkSyncMongoDBConnection(database);
@@ -288,7 +320,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         return database;
     }
 
-    private com.mongodb.client.MongoDatabase connectToClusterSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
+    private com.mongodb.client.MongoDatabase connectToClusterSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
         List<String> hosts = getSyncMongoDBListOfHosts();
         String port = System.getProperty("sync.mongodb.cluster.port");
         String user = System.getProperty("sync.mongodb.cluster.user");
@@ -299,7 +331,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                 .map(host -> new ServerAddress(host, Integer.parseInt(port)))
                 .collect(Collectors.toList());
         MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(user, db, password.toCharArray());
-        MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener);
+        MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener, codecRegistry);
         com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(serverAddresses, Collections.singletonList(mongoCredential), mongoClientOptions);
         com.mongodb.client.MongoDatabase database = mongoClient.getDatabase(db);
         checkSyncMongoDBConnection(database);
@@ -309,7 +341,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         return database;
     }
 
-    private com.mongodb.async.client.MongoDatabase connectToStandaloneAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
+    private com.mongodb.async.client.MongoDatabase connectToStandaloneAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
         String host = System.getProperty("async.mongodb.standalone.host");
         String port = System.getProperty("async.mongodb.standalone.port");
         String user = System.getProperty("async.mongodb.standalone.user");
@@ -321,7 +353,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         ClusterSettings clusterSettings = ClusterSettings.builder()
                 .hosts(Collections.singletonList(serverAddress))
                 .build();
-        MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, mongoCredential, clusterSettings);
+        MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, codecRegistry, mongoCredential, clusterSettings);
         com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
         com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(db);
         checkAsyncMongoDBConnection(database);
@@ -330,7 +362,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         return database;
     }
 
-    private com.mongodb.async.client.MongoDatabase connectToClusterAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
+    private com.mongodb.async.client.MongoDatabase connectToClusterAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
         List<String> hosts = getAsyncMongoDBListOfHosts();
         String port = System.getProperty("async.mongodb.cluster.port");
         String user = System.getProperty("async.mongodb.cluster.user");
@@ -344,7 +376,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         ClusterSettings clusterSettings = ClusterSettings.builder()
                 .hosts(serverAddresses)
                 .build();
-        MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, mongoCredential, clusterSettings);
+        MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, codecRegistry, mongoCredential, clusterSettings);
         com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
         com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(db);
         checkAsyncMongoDBConnection(database);
@@ -354,7 +386,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         return database;
     }
 
-    private MongoClientOptions buildSyncMongoClientOptions(CommandListener commandListener, ConnectionPoolListener connectionPoolListener) {
+    private MongoClientOptions buildSyncMongoClientOptions(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
         MongoClientOptions.Builder mongoClientOptionsBuilder = MongoClientOptions.builder();
         if (commandListener != null) {
             mongoClientOptionsBuilder = mongoClientOptionsBuilder.addCommandListener(commandListener);
@@ -362,10 +394,13 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         if (connectionPoolListener != null) {
             mongoClientOptionsBuilder = mongoClientOptionsBuilder.addConnectionPoolListener(connectionPoolListener);
         }
+        if (codecRegistry != null) {
+            mongoClientOptionsBuilder = mongoClientOptionsBuilder.codecRegistry(codecRegistry);
+        }
         return mongoClientOptionsBuilder.build();
     }
 
-    private MongoClientSettings buildAsyncMongoClientSettings(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, MongoCredential mongoCredential, ClusterSettings clusterSettings) {
+    private MongoClientSettings buildAsyncMongoClientSettings(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, MongoCredential mongoCredential, ClusterSettings clusterSettings) {
         MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder();
         if (commandListener != null) {
             mongoClientSettingsBuilder.addCommandListener(commandListener);
@@ -375,6 +410,9 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                     .addConnectionPoolListener(connectionPoolListener)
                     .build();
             mongoClientSettingsBuilder.connectionPoolSettings(connectionPoolSettings);
+        }
+        if (codecRegistry != null) {
+            mongoClientSettingsBuilder.codecRegistry(codecRegistry);
         }
         return mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
                 .clusterSettings(clusterSettings)
