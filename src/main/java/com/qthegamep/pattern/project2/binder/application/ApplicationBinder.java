@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.binder.application;
 
+import com.mongodb.MongoClient;
 import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicationBinderRuntimeException;
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper;
 import com.qthegamep.pattern.project2.statistics.meter.*;
@@ -21,6 +22,9 @@ import io.micrometer.core.instrument.binder.system.*;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.CollectorRegistry;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +41,7 @@ public class ApplicationBinder extends AbstractBinder {
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
     private PrometheusMeterRegistry prometheusMeterRegistry;
+    private CodecRegistry codecRegistry;
     private DatabaseConnectorService databaseConnectorService;
     private com.mongodb.client.MongoDatabase syncMongoDatabase;
     private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
@@ -58,6 +63,7 @@ public class ApplicationBinder extends AbstractBinder {
                               GenerationService generationService,
                               ErrorResponseBuilderService errorResponseBuilderService,
                               PrometheusMeterRegistry prometheusMeterRegistry,
+                              CodecRegistry codecRegistry,
                               DatabaseConnectorService databaseConnectorService,
                               com.mongodb.client.MongoDatabase syncMongoDatabase,
                               com.mongodb.async.client.MongoDatabase asyncMongoDatabase,
@@ -75,6 +81,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
         this.prometheusMeterRegistry = prometheusMeterRegistry;
+        this.codecRegistry = codecRegistry;
         this.databaseConnectorService = databaseConnectorService;
         this.syncMongoDatabase = syncMongoDatabase;
         this.asyncMongoDatabase = asyncMongoDatabase;
@@ -104,6 +111,10 @@ public class ApplicationBinder extends AbstractBinder {
 
     public PrometheusMeterRegistry getPrometheusMeterRegistry() {
         return prometheusMeterRegistry;
+    }
+
+    public CodecRegistry getCodecRegistry() {
+        return codecRegistry;
     }
 
     public DatabaseConnectorService getDatabaseConnectorService() {
@@ -168,6 +179,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindGenerationService();
         bindErrorResponseBuilderService();
         bindPrometheusMeterRegistry();
+        bindCodecRegistry();
         bindDatabaseConnector();
         bindSyncMongoDatabase();
         bindAsyncMongoDatabase();
@@ -228,6 +240,20 @@ public class ApplicationBinder extends AbstractBinder {
             bind(newPrometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
         } else {
             bind(prometheusMeterRegistry).to(PrometheusMeterRegistry.class).in(Singleton.class);
+        }
+    }
+
+    private void bindCodecRegistry() {
+        if (codecRegistry == null) {
+            codecRegistry = CodecRegistries.fromRegistries(
+                    MongoClient.getDefaultCodecRegistry(),
+                    CodecRegistries.fromProviders(
+                            PojoCodecProvider.builder()
+                                    .automatic(true)
+                                    .build()));
+            bind(codecRegistry).to(CodecRegistry.class).in(Singleton.class);
+        } else {
+            bind(codecRegistry).to(CodecRegistry.class).in(Singleton.class);
         }
     }
 
@@ -382,6 +408,7 @@ public class ApplicationBinder extends AbstractBinder {
         private GenerationService generationService;
         private ErrorResponseBuilderService errorResponseBuilderService;
         private PrometheusMeterRegistry prometheusMeterRegistry;
+        private CodecRegistry codecRegistry;
         private DatabaseConnectorService databaseConnectorService;
         private com.mongodb.client.MongoDatabase syncMongoDatabase;
         private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
@@ -413,6 +440,11 @@ public class ApplicationBinder extends AbstractBinder {
 
         public ApplicationBinderBuilder setPrometheusMeterRegistry(PrometheusMeterRegistry prometheusMeterRegistry) {
             this.prometheusMeterRegistry = prometheusMeterRegistry;
+            return this;
+        }
+
+        public ApplicationBinderBuilder setCodecRegistry(CodecRegistry codecRegistry) {
+            this.codecRegistry = codecRegistry;
             return this;
         }
 
@@ -487,6 +519,7 @@ public class ApplicationBinder extends AbstractBinder {
                     generationService,
                     errorResponseBuilderService,
                     prometheusMeterRegistry,
+                    codecRegistry,
                     databaseConnectorService,
                     syncMongoDatabase,
                     asyncMongoDatabase,
