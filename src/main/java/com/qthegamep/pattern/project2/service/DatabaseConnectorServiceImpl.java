@@ -6,7 +6,6 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.async.client.MongoClientSettings;
 import com.mongodb.async.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.connection.ClusterSettings;
 import com.mongodb.connection.ConnectionPoolSettings;
 import com.mongodb.event.CommandListener;
@@ -69,12 +68,12 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     }
 
     @Override
-    public MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry) {
+    public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry) {
         return connectToSyncMongoDB(null, null, codecRegistry, Constants.STANDALONE_MONGO_DB_TYPE);
     }
 
     @Override
-    public MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry, String connectionType) {
+    public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry, String connectionType) {
         return connectToSyncMongoDB(null, null, codecRegistry, connectionType);
     }
 
@@ -89,7 +88,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     }
 
     @Override
-    public MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, String connectionType) {
+    public com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, String connectionType) {
         LOG.debug("Sync MongoDB type: {}", connectionType);
         try {
             if (Constants.STANDALONE_MONGO_DB_TYPE.equalsIgnoreCase(connectionType)) {
