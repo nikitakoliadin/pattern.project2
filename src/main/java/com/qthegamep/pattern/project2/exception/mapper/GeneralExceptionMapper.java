@@ -1,7 +1,9 @@
 package com.qthegamep.pattern.project2.exception.mapper;
 
+import com.qthegamep.pattern.project2.binder.property.Property;
 import com.qthegamep.pattern.project2.model.dto.ErrorResponse;
 import com.qthegamep.pattern.project2.exception.ServiceException;
+import com.qthegamep.pattern.project2.model.mapper.ErrorMapper;
 import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.service.ErrorResponseBuilderService;
@@ -27,6 +29,11 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
 
     private static final Logger LOG = LoggerFactory.getLogger(GeneralExceptionMapper.class);
 
+    @Property(value = "mongodb.save.all.errors")
+    private boolean mongoDbSaveAllErrors;
+    @Property(value = "exception.mapper.append.request.id")
+    private boolean exceptionMapperAppendRequestId;
+
     private HttpHeaders httpHeaders;
     private ErrorResponseBuilderService errorResponseBuilderService;
 
@@ -43,7 +50,8 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
         String requestId = httpHeaders.getHeaderString(Constants.REQUEST_ID_HEADER);
         LOG.error("Error. RequestId: {}", requestId, exception);
         ErrorResponse errorResponse = errorResponseBuilderService.buildResponse(error, requestLocales, requestId);
-        errorResponse.setErrorMessage(errorResponse.getErrorMessage() + " Request ID: " + requestId);
+        saveError(errorResponse, requestId);
+        errorResponse.setErrorMessage(buildErrorMessage(errorResponse.getErrorMessage(), error, exception, requestId));
         registerMetrics(error, requestId);
         return buildResponse(errorResponse);
     }
@@ -58,6 +66,29 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
         } else {
             return Error.INTERNAL_ERROR;
         }
+    }
+
+    private void saveError(ErrorResponse errorResponse, String requestId) {
+        LOG.debug("Should save error to database: {} RequestId: {}", mongoDbSaveAllErrors, requestId);
+        if (mongoDbSaveAllErrors) {
+            try {
+                com.qthegamep.pattern.project2.model.entity.Error error = ErrorMapper.INSTANCE.errorResponseToError(errorResponse);
+                error.setRequestId(requestId);
+                // TODO: IMPLEMENTS SAVE ERROR
+            } catch (Exception e) {
+                LOG.error("Error while saving error to database. RequestId: {}", requestId, e);
+            }
+        }
+    }
+
+    private String buildErrorMessage(String errorResponseMessage, Error error, Exception exception, String requestId) {
+        if (Error.INVALID_REQUEST_RESPONSE_ERROR.equals(error) || Error.VALIDATION_ERROR.equals(error)) {
+            errorResponseMessage += " {" + exception.getMessage() + "}";
+        }
+        if (exceptionMapperAppendRequestId) {
+            errorResponseMessage += " Request ID: " + requestId;
+        }
+        return errorResponseMessage;
     }
 
     private void registerMetrics(Error error, String requestId) {
