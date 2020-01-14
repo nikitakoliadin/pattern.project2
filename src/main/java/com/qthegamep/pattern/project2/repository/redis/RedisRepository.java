@@ -30,4 +30,8 @@ public interface RedisRepository {
     Optional<Map<String, String>> readAll(String key) throws RedisRepositoryException;
 
     Optional<Map<String, String>> readAll(String key, String requestId) throws RedisRepositoryException;
+
+    void remove(String key) throws RedisRepositoryException;
+
+    void remove(String key, String requestId) throws RedisRepositoryException;
 }

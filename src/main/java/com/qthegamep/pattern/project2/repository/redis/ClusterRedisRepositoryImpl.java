@@ -143,4 +143,24 @@ public class ClusterRedisRepositoryImpl implements RedisRepository {
             }
         }
     }
+
+    @Override
+    public void remove(String key) throws RedisRepositoryException {
+        remove(key, null);
+    }
+
+    @Override
+    public void remove(String key, String requestId) throws RedisRepositoryException {
+        LOG.debug("Remove from Redis -> Key: {} RequestId: {}", key, requestId);
+        try {
+            jedisCluster.del(key);
+        } catch (Exception e) {
+            Meters.REDIS_ERROR_COUNTER_METER.incrementAndGet();
+            if (shouldFallWhenError) {
+                throw new RedisRepositoryException(e, Error.REDIS_REMOVE_ERROR);
+            } else {
+                LOG.error("Error when remove from Redis. Key: {} RequestId: {}", key, requestId, e);
+            }
+        }
+    }
 }
