@@ -25,7 +25,8 @@ public enum Error {
     ENCODE_HASH_ERROR(519),
     INVALID_REQUEST_RESPONSE_ERROR(520),
     VALIDATION_ERROR(521),
-    RETRY_ERROR(522);
+    RETRY_ERROR(522),
+    REDIS_REMOVE_ERROR(523);
 
     private int errorCode;
 
