@@ -49,6 +49,10 @@
         <!-- JaCoCo plugin -->
         <jacoco-plugin.version>0.8.2</jacoco-plugin.version>
 
+        <!-- GMavenPlus plugin -->
+        <gmavenplus-plugin.version>1.6.2</gmavenplus-plugin.version>
+        <gmavenplus-plugin.directory>src/test</gmavenplus-plugin.directory>
+
         <!-- Sonar plugin -->
         <sonar-plugin.version>3.5.0.1254</sonar-plugin.version>
         <sonar-plugin.jacoco.reportPath>${project.build.directory}/jacoco.exec</sonar-plugin.jacoco.reportPath>
@@ -98,6 +102,11 @@
         <prometheus.micrometer-registry-prometheus.version>1.3.0</prometheus.micrometer-registry-prometheus.version>
 
         <!-- Test -->
+        <test.junit.version>4.12</test.junit.version>
+        <test.spock-core.version>1.3-groovy-2.5</test.spock-core.version>
+        <test.assertj-core.version>3.11.1</test.assertj-core.version>
+        <test.mockito-core.version>2.23.0</test.mockito-core.version>
+        <test.jersey-test-framework.version>2.28</test.jersey-test-framework.version>
         <test.org-jacoco-agent.version>0.8.2</test.org-jacoco-agent.version>
 
         <!-- Others -->
@@ -218,6 +227,31 @@
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- GMavenPlus plugin -->
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>${gmavenplus-plugin.version}</version>
+                <configuration>
+                    <testSources>
+                        <testSource>
+                            <directory>${gmavenplus-plugin.directory}</directory>
+                            <includes>
+                                <include>**/*.groovy</include>
+                            </includes>
+                        </testSource>
+                    </testSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addTestSources</goal>
+                            <goal>compileTests</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -382,6 +416,53 @@
         </dependency>
 
         <!-- Test -->
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${test.junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.spockframework/spock-core -->
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>${test.spock-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${test.assertj-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${test.mockito-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.test-framework/jersey-test-framework-core -->
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework</groupId>
+            <artifactId>jersey-test-framework-core</artifactId>
+            <version>${test.jersey-test-framework.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.test-framework.providers/jersey-test-framework-provider-grizzly2 -->
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+            <version>${test.jersey-test-framework.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.agent -->
         <dependency>
             <groupId>org.jacoco</groupId>
