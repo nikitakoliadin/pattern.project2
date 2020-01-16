@@ -61,11 +61,10 @@
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.coverage.exclusions>
             **/model/**/*,
-            **/entity/**/*,
-            **/dto/**/*,
             **/exception/**/*,
-            **/aspect/**/*,
+            **/log/**/*,
             **/config/**/*,
+            **/util/**/*,
             **/Application.java
         </sonar.coverage.exclusions>
 
@@ -193,12 +192,11 @@
                     <append>true</append>
                     <excludes>
                         <exclude>**/model/**/*</exclude>
-                        <exclude>**/entity/**/*</exclude>
-                        <exclude>**/dto/**/*</exclude>
                         <exclude>**/exception/**/*</exclude>
-                        <exclude>**/aspect/**/*</exclude>
+                        <exclude>**/log/**/*</exclude>
                         <exclude>**/config/**/*</exclude>
-                        <exclude>**/Application.*</exclude>
+                        <exclude>**/util/**/*</exclude>
+                        <exclude>**/Application.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
