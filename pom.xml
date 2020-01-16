@@ -530,5 +530,53 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- Skip unit test profile -->
+        <profile>
+            <id>skip-unit-test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Surefire plugin -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                        <configuration>
+                            <testFailureIgnore>${surefire-plugin.testFailureIgnore}</testFailureIgnore>
+                            <excludes>
+                                <exclude>**/*UnitTest*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Skip integration test profile -->
+        <profile>
+            <id>skip-integration-test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Surefire plugin -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                        <configuration>
+                            <testFailureIgnore>${surefire-plugin.testFailureIgnore}</testFailureIgnore>
+                            <excludes>
+                                <exclude>**/*IntegrationTest*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
