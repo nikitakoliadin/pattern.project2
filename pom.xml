@@ -576,5 +576,30 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- Skip all test profile -->
+        <profile>
+            <id>skip-all-test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Surefire plugin -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                        <configuration>
+                            <testFailureIgnore>${surefire-plugin.testFailureIgnore}</testFailureIgnore>
+                            <excludes>
+                                <exclude>**/*UnitTest*</exclude>
+                                <exclude>**/*IntegrationTest*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
