@@ -29,16 +29,18 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
 
     private static final Logger LOG = LoggerFactory.getLogger(GeneralExceptionMapper.class);
 
-    @Property(value = "mongodb.save.all.errors")
     private boolean mongoDbSaveAllErrors;
-    @Property(value = "exception.mapper.append.request.id")
     private boolean exceptionMapperAppendRequestId;
-
     private HttpHeaders httpHeaders;
     private ErrorResponseBuilderService errorResponseBuilderService;
 
     @Inject
-    public GeneralExceptionMapper(@Context HttpHeaders httpHeaders, ErrorResponseBuilderService errorResponseBuilderService) {
+    public GeneralExceptionMapper(@Property(value = "mongodb.save.all.errors") boolean mongoDbSaveAllErrors,
+                                  @Property(value = "exception.mapper.append.request.id") boolean exceptionMapperAppendRequestId,
+                                  @Context HttpHeaders httpHeaders,
+                                  ErrorResponseBuilderService errorResponseBuilderService) {
+        this.mongoDbSaveAllErrors = mongoDbSaveAllErrors;
+        this.exceptionMapperAppendRequestId = exceptionMapperAppendRequestId;
         this.httpHeaders = httpHeaders;
         this.errorResponseBuilderService = errorResponseBuilderService;
     }
