@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ class PropertyInjectionResolver implements InjectionResolver<Property> {
     @Override
     public Object resolve(Injectee injectee, ServiceHandle<?> serviceHandle) {
         Type requiredType = injectee.getRequiredType();
-        Property annotation = injectee.getParent().getAnnotation(Property.class);
+        Property annotation = getPropertyAnnotation(injectee);
         Map<String, Object> properties = application.getProperties();
         String key = annotation.value();
         Object value = properties.get(key);
@@ -40,12 +41,25 @@ class PropertyInjectionResolver implements InjectionResolver<Property> {
 
     @Override
     public boolean isConstructorParameterIndicator() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isMethodParameterIndicator() {
         return false;
+    }
+
+    private Property getPropertyAnnotation(Injectee injectee) {
+        Property annotation = injectee.getParent().getAnnotation(Property.class);
+        if (annotation == null) {
+            for (Annotation requiredQualifier : injectee.getRequiredQualifiers()) {
+                if (requiredQualifier instanceof Property) {
+                    annotation = (Property) requiredQualifier;
+                    break;
+                }
+            }
+        }
+        return annotation;
     }
 
     private Object parse(Object value, Type requiredType) {
