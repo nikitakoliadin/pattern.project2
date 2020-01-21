@@ -17,15 +17,16 @@ public class PoolRedisRepositoryImpl implements RedisRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(PoolRedisRepositoryImpl.class);
 
-    @Property(value = "redis.pool.should.fall.when.error")
     private Boolean shouldFallWhenError;
-    @Property(value = "redis.pool.default.ttl")
     private Integer defaultTtl;
-
     private JedisPool jedisPool;
 
     @Inject
-    public PoolRedisRepositoryImpl(JedisPool jedisPool) {
+    public PoolRedisRepositoryImpl(@Property(value = "redis.pool.should.fall.when.error") Boolean shouldFallWhenError,
+                                   @Property(value = "redis.pool.default.ttl") Integer defaultTtl,
+                                   JedisPool jedisPool) {
+        this.shouldFallWhenError = shouldFallWhenError;
+        this.defaultTtl = defaultTtl;
         this.jedisPool = jedisPool;
     }
 
