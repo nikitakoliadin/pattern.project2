@@ -21,13 +21,13 @@ public class RequestIdFilter implements ContainerRequestFilter {
 
     private static final String X_REQUEST_ID_HEADER = "x-request-id";
 
-    @Property(value = "filter.default.request.id.length")
     private Long defaultRequestIdLength;
-
     private GenerationService generationService;
 
     @Inject
-    public RequestIdFilter(GenerationService generationService) {
+    public RequestIdFilter(@Property(value = "filter.default.request.id.length") Long defaultRequestIdLength,
+                           GenerationService generationService) {
+        this.defaultRequestIdLength = defaultRequestIdLength;
         this.generationService = generationService;
     }
 
