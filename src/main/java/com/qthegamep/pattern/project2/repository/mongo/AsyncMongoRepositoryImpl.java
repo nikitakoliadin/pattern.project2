@@ -15,13 +15,13 @@ public class AsyncMongoRepositoryImpl implements AsyncMongoRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(AsyncMongoRepositoryImpl.class);
 
-    @Property(value = "mongodb.error.collection.name")
     private String errorCollectionName;
-
     private MongoDatabase mongoDatabase;
 
     @Inject
-    public AsyncMongoRepositoryImpl(MongoDatabase mongoDatabase) {
+    public AsyncMongoRepositoryImpl(@Property(value = "mongodb.error.collection.name") String errorCollectionName,
+                                    MongoDatabase mongoDatabase) {
+        this.errorCollectionName = errorCollectionName;
         this.mongoDatabase = mongoDatabase;
     }
 
