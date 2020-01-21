@@ -14,13 +14,13 @@ public class SyncMongoRepositoryImpl implements SyncMongoRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(SyncMongoRepositoryImpl.class);
 
-    @Property(value = "mongodb.error.collection.name")
     private String errorCollectionName;
-
     private MongoDatabase mongoDatabase;
 
     @Inject
-    public SyncMongoRepositoryImpl(MongoDatabase mongoDatabase) {
+    public SyncMongoRepositoryImpl(@Property(value = "mongodb.error.collection.name") String errorCollectionName,
+                                   MongoDatabase mongoDatabase) {
+        this.errorCollectionName = errorCollectionName;
         this.mongoDatabase = mongoDatabase;
     }
 
