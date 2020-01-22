@@ -7,6 +7,11 @@ abstract class GeneralServiceRuntimeException extends RuntimeException implement
 
     private final Error error;
 
+    GeneralServiceRuntimeException(String message) {
+        super(message);
+        this.error = Error.INTERNAL_ERROR;
+    }
+
     GeneralServiceRuntimeException(Error error) {
         this.error = error;
     }
@@ -16,7 +21,7 @@ abstract class GeneralServiceRuntimeException extends RuntimeException implement
         this.error = error;
     }
 
-    public GeneralServiceRuntimeException(String message, Error error) {
+    GeneralServiceRuntimeException(String message, Error error) {
         super(message);
         this.error = error;
     }
