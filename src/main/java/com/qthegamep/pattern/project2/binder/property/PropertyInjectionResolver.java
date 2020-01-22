@@ -1,6 +1,7 @@
 package com.qthegamep.pattern.project2.binder.property;
 
 import com.google.common.base.Defaults;
+import com.qthegamep.pattern.project2.exception.runtime.PropertyInjectionResolverRuntimeException;
 import org.apache.commons.lang3.ClassUtils;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
@@ -58,6 +59,9 @@ class PropertyInjectionResolver implements InjectionResolver<Property> {
                     break;
                 }
             }
+        }
+        if (annotation == null) {
+            throw new PropertyInjectionResolverRuntimeException("Can't find Property annotation!");
         }
         return annotation;
     }
