@@ -47,7 +47,7 @@ class PropertyInjectionResolver implements InjectionResolver<Property> {
 
     @Override
     public boolean isMethodParameterIndicator() {
-        return false;
+        return true;
     }
 
     private Property getPropertyAnnotation(Injectee injectee) {
