@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -31,7 +30,7 @@ import javax.ws.rs.core.*;
         type = SecuritySchemeType.APIKEY,
         in = SecuritySchemeIn.HEADER,
         paramName = "Authorization")
-@Singleton
+@FunctionalInterface
 public interface OpenApiController {
 
     @Operation(
