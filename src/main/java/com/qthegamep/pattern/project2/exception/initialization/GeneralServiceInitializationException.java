@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.exception.initialization;
 import com.qthegamep.pattern.project2.exception.ServiceException;
 import com.qthegamep.pattern.project2.model.container.Error;
 
-abstract class GeneralServiceInitializationException extends Exception implements ServiceException {
+public abstract class GeneralServiceInitializationException extends Exception implements ServiceException {
 
     private final Error error;
 
