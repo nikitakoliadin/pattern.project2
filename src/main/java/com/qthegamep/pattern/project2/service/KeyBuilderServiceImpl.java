@@ -16,20 +16,29 @@ public class KeyBuilderServiceImpl implements KeyBuilderService {
     public String buildCacheKey(ProceedingJoinPoint thisJoinPoint, KeyAlgorithm keyAlgorithm) {
         LOG.debug("Cache key algorithm: {}", keyAlgorithm);
         switch (keyAlgorithm) {
-            case FULL_SIGNATURE_KEY_ALGORITHM: {
-                Signature signature = thisJoinPoint.getSignature();
-                return signature.toString();
-            }
-            case FULL_ARGUMENTS_KEY_ALGORITHM: {
-                Object[] arguments = thisJoinPoint.getArgs();
-                return Arrays.toString(arguments);
-            }
+            case FULL_SIGNATURE_KEY_ALGORITHM:
+                return keyWithFullSignatureKeyAlgorithm(thisJoinPoint);
+            case FULL_ARGUMENTS_KEY_ALGORITHM:
+                return keyWithFullArgumentsKeyAlgorithm(thisJoinPoint);
             case FULL_SIGNATURE_WITH_FULL_ARGUMENTS_KEY_ALGORITHM:
-            default: {
-                Signature signature = thisJoinPoint.getSignature();
-                Object[] arguments = thisJoinPoint.getArgs();
-                return signature.toString() + Arrays.toString(arguments);
-            }
+            default:
+                return keyWithSignatureWithFullArgumentsKeyAlgorithm(thisJoinPoint);
         }
+    }
+
+    private String keyWithFullSignatureKeyAlgorithm(ProceedingJoinPoint thisJoinPoint) {
+        Signature signature = thisJoinPoint.getSignature();
+        return signature.toString();
+    }
+
+    private String keyWithFullArgumentsKeyAlgorithm(ProceedingJoinPoint thisJoinPoint) {
+        Object[] arguments = thisJoinPoint.getArgs();
+        return Arrays.toString(arguments);
+    }
+
+    private String keyWithSignatureWithFullArgumentsKeyAlgorithm(ProceedingJoinPoint thisJoinPoint) {
+        Signature signature = thisJoinPoint.getSignature();
+        Object[] arguments = thisJoinPoint.getArgs();
+        return signature.toString() + Arrays.toString(arguments);
     }
 }
