@@ -8,7 +8,7 @@ import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepository
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository
 import com.qthegamep.pattern.project2.service.ConverterService
-import com.qthegamep.pattern.project2.service.CryptoService
+import com.qthegamep.pattern.project2.service.HashService
 import com.qthegamep.pattern.project2.service.DatabaseConnectorService
 import com.qthegamep.pattern.project2.service.ErrorResponseBuilderService
 import com.qthegamep.pattern.project2.service.GenerationService
@@ -48,7 +48,7 @@ class BaseSpecificationUnitTest extends Specification {
         SyncMongoRepository syncMongoRepositoryMock = Mock()
         AsyncMongoRepository asyncMongoRepositoryMock = Mock()
         RedisRepository redisRepositoryMock = Mock()
-        CryptoService cryptoServiceMock = Mock()
+        HashService hashServiceMock = Mock()
         KeyBuilderService keyBuilderServiceMock = Mock()
         GeneralExceptionMapper generalExceptionMapperMock = Mock()
         ValidationService validationServiceMock = Mock()
@@ -68,7 +68,7 @@ class BaseSpecificationUnitTest extends Specification {
                 .setSyncMongoRepository(syncMongoRepositoryMock)
                 .setAsyncMongoRepository(asyncMongoRepositoryMock)
                 .setRedisRepository(redisRepositoryMock)
-                .setCryptoService(cryptoServiceMock)
+                .setHashService(hashServiceMock)
                 .setKeyBuilderService(keyBuilderServiceMock)
                 .setGeneralExceptionMapper(generalExceptionMapperMock)
                 .setValidationService(validationServiceMock)

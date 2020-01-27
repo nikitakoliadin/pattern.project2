@@ -50,7 +50,7 @@ public class ApplicationBinder extends AbstractBinder {
     private SyncMongoRepository syncMongoRepository;
     private AsyncMongoRepository asyncMongoRepository;
     private RedisRepository redisRepository;
-    private CryptoService cryptoService;
+    private HashService hashService;
     private KeyBuilderService keyBuilderService;
     private GeneralExceptionMapper generalExceptionMapper;
     private ValidationService validationService;
@@ -72,7 +72,7 @@ public class ApplicationBinder extends AbstractBinder {
                               SyncMongoRepository syncMongoRepository,
                               AsyncMongoRepository asyncMongoRepository,
                               RedisRepository redisRepository,
-                              CryptoService cryptoService,
+                              HashService hashService,
                               KeyBuilderService keyBuilderService,
                               GeneralExceptionMapper generalExceptionMapper,
                               ValidationService validationService,
@@ -90,7 +90,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.syncMongoRepository = syncMongoRepository;
         this.asyncMongoRepository = asyncMongoRepository;
         this.redisRepository = redisRepository;
-        this.cryptoService = cryptoService;
+        this.hashService = hashService;
         this.keyBuilderService = keyBuilderService;
         this.generalExceptionMapper = generalExceptionMapper;
         this.validationService = validationService;
@@ -149,8 +149,8 @@ public class ApplicationBinder extends AbstractBinder {
         return redisRepository;
     }
 
-    public CryptoService getCryptoService() {
-        return cryptoService;
+    public HashService getHashService() {
+        return hashService;
     }
 
     public KeyBuilderService getKeyBuilderService() {
@@ -188,7 +188,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindSyncMongoRepository();
         bindAsyncMongoRepository();
         bindRedisRepository();
-        bindCryptoService();
+        bindHashService();
         bindKeyBuilder();
         bindGeneralExceptionMapper();
         bindValidationService();
@@ -362,11 +362,11 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
-    private void bindCryptoService() {
-        if (cryptoService == null) {
-            bind(CryptoServiceImpl.class).to(CryptoService.class).in(Singleton.class);
+    private void bindHashService() {
+        if (hashService == null) {
+            bind(HashServiceImpl.class).to(HashService.class).in(Singleton.class);
         } else {
-            bind(cryptoService).to(CryptoService.class).in(Singleton.class);
+            bind(hashService).to(HashService.class).in(Singleton.class);
         }
     }
 
@@ -417,7 +417,7 @@ public class ApplicationBinder extends AbstractBinder {
         private SyncMongoRepository syncMongoRepository;
         private AsyncMongoRepository asyncMongoRepository;
         private RedisRepository redisRepository;
-        private CryptoService cryptoService;
+        private HashService hashService;
         private KeyBuilderService keyBuilderService;
         private GeneralExceptionMapper generalExceptionMapper;
         private ValidationService validationService;
@@ -488,8 +488,8 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
-        public ApplicationBinderBuilder setCryptoService(CryptoService cryptoService) {
-            this.cryptoService = cryptoService;
+        public ApplicationBinderBuilder setHashService(HashService hashService) {
+            this.hashService = hashService;
             return this;
         }
 
@@ -528,7 +528,7 @@ public class ApplicationBinder extends AbstractBinder {
                     syncMongoRepository,
                     asyncMongoRepository,
                     redisRepository,
-                    cryptoService,
+                    hashService,
                     keyBuilderService,
                     generalExceptionMapper,
                     validationService,

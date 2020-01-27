@@ -3,7 +3,7 @@ package com.qthegamep.pattern.project2.cache;
 import com.qthegamep.pattern.project2.exception.compile.CryptoServiceException;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
 import com.qthegamep.pattern.project2.service.ConverterService;
-import com.qthegamep.pattern.project2.service.CryptoService;
+import com.qthegamep.pattern.project2.service.HashService;
 import com.qthegamep.pattern.project2.service.KeyBuilderService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,7 +25,7 @@ public class CacheAspect {
     private final boolean enableCacheAspect = Boolean.parseBoolean(System.getProperty("aop.enable.cache.aspect"));
 
     @Inject
-    private CryptoService cryptoService;
+    private HashService hashService;
     @Inject
     private ConverterService converterService;
     @Inject
@@ -73,7 +73,7 @@ public class CacheAspect {
 
     private String getKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) throws CryptoServiceException {
         String key = keyBuilderService.buildCacheKey(thisJoinPoint, cacheable.keyAlgorithm());
-        String encodedKey = cryptoService.encode(key, cacheable.hashAlgorithm());
+        String encodedKey = hashService.encode(key, cacheable.hashAlgorithm());
         LOG.debug("Encoded key: {}", encodedKey);
         return encodedKey;
     }

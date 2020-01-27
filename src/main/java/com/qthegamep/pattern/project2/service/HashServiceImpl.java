@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 
-public class CryptoServiceImpl implements CryptoService {
+public class HashServiceImpl implements HashService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CryptoServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HashServiceImpl.class);
 
     @Override
     public String encode(String data, HashAlgorithm hashAlgorithm) throws CryptoServiceException {
