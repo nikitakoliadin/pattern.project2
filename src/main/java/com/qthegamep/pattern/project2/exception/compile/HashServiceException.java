@@ -2,13 +2,13 @@ package com.qthegamep.pattern.project2.exception.compile;
 
 import com.qthegamep.pattern.project2.model.container.Error;
 
-public class CryptoServiceException extends GeneralServiceException {
+public class HashServiceException extends GeneralServiceException {
 
-    public CryptoServiceException(Error error) {
+    public HashServiceException(Error error) {
         super(error);
     }
 
-    public CryptoServiceException(Throwable cause, Error error) {
+    public HashServiceException(Throwable cause, Error error) {
         super(cause, error);
     }
 }

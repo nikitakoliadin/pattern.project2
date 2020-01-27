@@ -1,6 +1,6 @@
 package com.qthegamep.pattern.project2.cache;
 
-import com.qthegamep.pattern.project2.exception.compile.CryptoServiceException;
+import com.qthegamep.pattern.project2.exception.compile.HashServiceException;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
 import com.qthegamep.pattern.project2.service.ConverterService;
 import com.qthegamep.pattern.project2.service.HashService;
@@ -71,7 +71,7 @@ public class CacheAspect {
         }
     }
 
-    private String getKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) throws CryptoServiceException {
+    private String getKey(ProceedingJoinPoint thisJoinPoint, Cacheable cacheable) throws HashServiceException {
         String key = keyBuilderService.buildCacheKey(thisJoinPoint, cacheable.keyAlgorithm());
         String encodedKey = hashService.encode(key, cacheable.hashAlgorithm());
         LOG.debug("Encoded key: {}", encodedKey);
