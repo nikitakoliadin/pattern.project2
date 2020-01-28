@@ -14,8 +14,8 @@ public class ShutdownHookConfig extends Thread {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShutdownHookConfig.class);
 
-    private static final int GRACE_PERIOD = Integer.parseInt(System.getProperty("shutdown.hook.grace.period"));
-    private static final TimeUnit GRACE_PERIOD_TIME_UNIT = TimeUnit.SECONDS;
+    private int gracePeriod = Integer.parseInt(System.getProperty("shutdown.hook.grace.period"));
+    private TimeUnit gracePeriodTimeUnit = TimeUnit.SECONDS;
 
     private final HttpServer[] httpServers;
 
@@ -28,9 +28,9 @@ public class ShutdownHookConfig extends Thread {
         LOG.warn("Shutting down servers...");
         try {
             List<GrizzlyFuture<HttpServer>> futures = Arrays.stream(httpServers)
-                    .map(httpServer -> httpServer.shutdown(GRACE_PERIOD, GRACE_PERIOD_TIME_UNIT))
+                    .map(httpServer -> httpServer.shutdown(gracePeriod, gracePeriodTimeUnit))
                     .collect(Collectors.toList());
-            LOG.info("Waiting for servers to shut down... Grace period is {} {}", GRACE_PERIOD, GRACE_PERIOD_TIME_UNIT);
+            LOG.info("Waiting for servers to shut down... Grace period is {} {}", gracePeriod, gracePeriodTimeUnit);
             for (GrizzlyFuture<HttpServer> future : futures) {
                 future.get();
             }
