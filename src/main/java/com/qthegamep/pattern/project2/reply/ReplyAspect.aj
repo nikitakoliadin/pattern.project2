@@ -27,7 +27,7 @@ public aspect ReplyAspect {
             try {
                 return proceed(reply);
             } catch (Throwable e) {
-                LOG.warn("Error while execute: {} With error: {} Try to reply iteration: {}", signature, e, i);
+                LOG.error("Error while execute: {} With error: {} Try to reply iteration: {}", signature, e, i + 1);
                 if (i == (replyTimes - 1)) {
                     if (e instanceof ServiceException) {
                         throw new RetryRuntimeException(e, ((ServiceException) e).getError());
