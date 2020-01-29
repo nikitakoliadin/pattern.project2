@@ -251,10 +251,8 @@ public class ApplicationBinder extends AbstractBinder {
                             PojoCodecProvider.builder()
                                     .automatic(true)
                                     .build()));
-            bind(codecRegistry).to(CodecRegistry.class).in(Singleton.class);
-        } else {
-            bind(codecRegistry).to(CodecRegistry.class).in(Singleton.class);
         }
+        bind(codecRegistry).to(CodecRegistry.class).in(Singleton.class);
     }
 
     private void bindDatabaseConnector() {
@@ -326,10 +324,8 @@ public class ApplicationBinder extends AbstractBinder {
                     asyncMongoDbClusterUser,
                     asyncMongoDbClusterDb,
                     asyncMongoDbClusterPassword);
-            bind(databaseConnectorService).to(DatabaseConnectorService.class).in(Singleton.class);
-        } else {
-            bind(databaseConnectorService).to(DatabaseConnectorService.class).in(Singleton.class);
         }
+        bind(databaseConnectorService).to(DatabaseConnectorService.class).in(Singleton.class);
     }
 
     private void bindSyncMongoDatabase() {
