@@ -122,6 +122,7 @@ public class ApplicationConfig {
                 String dockerImageName = lines.get(0);
                 LOG.info("Docker image name: {}", dockerImageName);
                 System.setProperty(Constants.DOCKER_IMAGE_NAME_PROPERTY, dockerImageName);
+                applicationProperties.put(Constants.DOCKER_IMAGE_NAME_PROPERTY, dockerImageName);
             }
         } else {
             LOG.warn("Docker image name file: {} not exists!", dockerImageNameFilePath);
