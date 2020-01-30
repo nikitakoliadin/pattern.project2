@@ -1,7 +1,7 @@
 package com.qthegamep.pattern.project2.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 import javax.validation.constraints.NotEmpty;
@@ -10,28 +10,19 @@ import java.util.Objects;
 
 public class Error {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty(
-            value = "_id",
-            required = true)
+    @BsonId
     private ObjectId objectId;
 
     @NotEmpty
-    @JsonProperty(
-            value = "requestId",
-            required = true)
+    @BsonProperty(value = "requestId")
     private String requestId;
 
     @NotNull
-    @JsonProperty(
-            value = "errorCode",
-            required = true)
+    @BsonProperty(value = "errorCode")
     private Integer errorCode;
 
     @NotEmpty
-    @JsonProperty(
-            value = "errorMessage",
-            required = true)
+    @BsonProperty(value = "errorMessage")
     private String errorMessage;
 
     public ObjectId getObjectId() {
