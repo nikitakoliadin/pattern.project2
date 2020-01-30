@@ -30,16 +30,22 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
     private static final Logger LOG = LoggerFactory.getLogger(GeneralExceptionMapper.class);
 
     private boolean mongoDbSaveAllErrors;
+    private String dockerImageName;
+    private boolean exceptionMapperAppendDockerImageName;
     private boolean exceptionMapperAppendRequestId;
     private HttpHeaders httpHeaders;
     private ErrorResponseBuilderService errorResponseBuilderService;
 
     @Inject
     public GeneralExceptionMapper(@Property(value = "mongodb.save.all.errors") boolean mongoDbSaveAllErrors,
+                                  @Property(value = "docker.image.name") String dockerImageName,
+                                  @Property(value = "exception.mapper.append.docker.image.name") boolean exceptionMapperAppendDockerImageName,
                                   @Property(value = "exception.mapper.append.request.id") boolean exceptionMapperAppendRequestId,
                                   @Context HttpHeaders httpHeaders,
                                   ErrorResponseBuilderService errorResponseBuilderService) {
         this.mongoDbSaveAllErrors = mongoDbSaveAllErrors;
+        this.dockerImageName = dockerImageName;
+        this.exceptionMapperAppendDockerImageName = exceptionMapperAppendDockerImageName;
         this.exceptionMapperAppendRequestId = exceptionMapperAppendRequestId;
         this.httpHeaders = httpHeaders;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -86,6 +92,9 @@ public class GeneralExceptionMapper implements ExceptionMapper<Exception> {
     private String buildErrorMessage(String errorResponseMessage, Error error, Exception exception, String requestId) {
         if (Error.INVALID_REQUEST_RESPONSE_ERROR.equals(error) || Error.VALIDATION_ERROR.equals(error)) {
             errorResponseMessage += " {" + exception.getMessage() + "}";
+        }
+        if (exceptionMapperAppendDockerImageName) {
+            errorResponseMessage += " [POD: " + dockerImageName + "]";
         }
         if (exceptionMapperAppendRequestId) {
             errorResponseMessage += " Request ID: " + requestId;
