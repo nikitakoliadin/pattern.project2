@@ -30,7 +30,8 @@ public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenAp
     private Application application;
 
     @Inject
-    public OpenApiControllerImpl(@Context ServletConfig servletConfig, @Context Application application) {
+    public OpenApiControllerImpl(@Context ServletConfig servletConfig,
+                                 @Context Application application) {
         this.servletConfig = servletConfig;
         this.application = application;
         openApiConfiguration = new SwaggerConfiguration()
