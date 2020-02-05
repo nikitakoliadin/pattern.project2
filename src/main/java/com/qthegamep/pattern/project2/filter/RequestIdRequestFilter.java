@@ -15,9 +15,9 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @PreMatching
 @Priority(10)
-public class RequestIdFilter implements ContainerRequestFilter {
+public class RequestIdRequestFilter implements ContainerRequestFilter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RequestIdFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RequestIdRequestFilter.class);
 
     private static final String X_REQUEST_ID_HEADER = "x-request-id";
 
@@ -25,8 +25,8 @@ public class RequestIdFilter implements ContainerRequestFilter {
     private GenerationService generationService;
 
     @Inject
-    public RequestIdFilter(@Property(value = "filter.default.request.id.length") Long defaultRequestIdLength,
-                           GenerationService generationService) {
+    public RequestIdRequestFilter(@Property(value = "filter.default.request.id.length") Long defaultRequestIdLength,
+                                  GenerationService generationService) {
         this.defaultRequestIdLength = defaultRequestIdLength;
         this.generationService = generationService;
     }
