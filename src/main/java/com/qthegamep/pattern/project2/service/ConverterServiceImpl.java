@@ -1,16 +1,13 @@
 package com.qthegamep.pattern.project2.service;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.qthegamep.pattern.project2.service.adapter.IsoDateJsonModuleAdapter;
-import com.qthegamep.pattern.project2.service.adapter.ObjectIdJsonModuleAdapter;
 import com.qthegamep.pattern.project2.exception.runtime.JsonConverterServiceRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.XmlConverterServiceRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
 
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +17,15 @@ import java.util.stream.Collectors;
 
 public class ConverterServiceImpl implements ConverterService {
 
-    private final ObjectMapper json = new ObjectMapper()
-            .enable(SerializationFeature.INDENT_OUTPUT)
-            .configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true)
-            .registerModule(new IsoDateJsonModuleAdapter().buildModule())
-            .registerModule(new ObjectIdJsonModuleAdapter().buildModule());
-    private final XmlMapper xml = new XmlMapper();
+    private ObjectMapper json;
+    private XmlMapper xml;
+
+    @Inject
+    public ConverterServiceImpl(ObjectMapper json,
+                                XmlMapper xml) {
+        this.json = json;
+        this.xml = xml;
+    }
 
     @Override
     public <T> T fromJson(String entity, Class<T> modelClass) {

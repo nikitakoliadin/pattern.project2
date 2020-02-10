@@ -1,5 +1,7 @@
 package com.qthegamep.pattern.project2
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.mongodb.client.MongoDatabase
 import com.qthegamep.pattern.project2.binder.application.ApplicationBinder
 import com.qthegamep.pattern.project2.config.ApplicationConfig
@@ -37,6 +39,8 @@ class BaseSpecificationUnitTest extends Specification {
         applicationConfig.init()
 
         OpenAPIConfiguration openAPIConfigurationMock = Mock()
+        ObjectMapper objectMapperMock = Mock()
+        XmlMapper xmlMapperMock = Mock()
         ConverterService converterServiceMock = Mock()
         GenerationService generationServiceMock = Mock()
         ErrorResponseBuilderService errorResponseBuilderServiceMock = Mock()
@@ -58,6 +62,8 @@ class BaseSpecificationUnitTest extends Specification {
 
         applicationBinder = ApplicationBinder.builder()
                 .setOpenAPIConfiguration(openAPIConfigurationMock)
+                .setObjectMapper(objectMapperMock)
+                .setXmlMapper(xmlMapperMock)
                 .setConverterService(converterServiceMock)
                 .setGenerationService(generationServiceMock)
                 .setErrorResponseBuilderService(errorResponseBuilderServiceMock)

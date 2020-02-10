@@ -1,8 +1,14 @@
 package com.qthegamep.pattern.project2.binder.application;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mongodb.MongoClient;
 import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicationBinderRuntimeException;
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper;
+import com.qthegamep.pattern.project2.service.adapter.IsoDateJsonModuleAdapter;
+import com.qthegamep.pattern.project2.service.adapter.ObjectIdJsonModuleAdapter;
 import com.qthegamep.pattern.project2.statistics.meter.*;
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository;
@@ -41,6 +47,8 @@ public class ApplicationBinder extends AbstractBinder {
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationBinder.class);
 
     private OpenAPIConfiguration openAPIConfiguration;
+    private ObjectMapper objectMapper;
+    private XmlMapper xmlMapper;
     private ConverterService converterService;
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
@@ -64,6 +72,8 @@ public class ApplicationBinder extends AbstractBinder {
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
     private ApplicationBinder(OpenAPIConfiguration openAPIConfiguration,
+                              ObjectMapper objectMapper,
+                              XmlMapper xmlMapper,
                               ConverterService converterService,
                               GenerationService generationService,
                               ErrorResponseBuilderService errorResponseBuilderService,
@@ -83,6 +93,8 @@ public class ApplicationBinder extends AbstractBinder {
                               ValidationService validationService,
                               IOStrategyFactoryService ioStrategyFactoryService) {
         this.openAPIConfiguration = openAPIConfiguration;
+        this.objectMapper = objectMapper;
+        this.xmlMapper = xmlMapper;
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -105,6 +117,14 @@ public class ApplicationBinder extends AbstractBinder {
 
     public OpenAPIConfiguration getOpenAPIConfiguration() {
         return openAPIConfiguration;
+    }
+
+    public ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
+    public XmlMapper getXmlMapper() {
+        return xmlMapper;
     }
 
     public ConverterService getConverterService() {
@@ -186,6 +206,8 @@ public class ApplicationBinder extends AbstractBinder {
     @Override
     protected void configure() {
         bindOpenAPIConfiguration();
+        bindObjectMapper();
+        bindXmlMapper();
         bindConverterService();
         bindGenerationService();
         bindErrorResponseBuilderService();
@@ -213,6 +235,25 @@ public class ApplicationBinder extends AbstractBinder {
                     .prettyPrint(true);
         }
         bind(openAPIConfiguration).to(OpenAPIConfiguration.class).in(Singleton.class);
+    }
+
+    private void bindObjectMapper() {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper()
+                    .enable(SerializationFeature.INDENT_OUTPUT)
+                    .configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true)
+                    .registerModule(new IsoDateJsonModuleAdapter().buildModule())
+                    .registerModule(new ObjectIdJsonModuleAdapter().buildModule());
+        }
+        bind(objectMapper).to(ObjectMapper.class).in(Singleton.class);
+    }
+
+    private void bindXmlMapper() {
+        if (xmlMapper == null) {
+            bindAsContract(XmlMapper.class).to(Singleton.class);
+        } else {
+            bind(xmlMapper).to(XmlMapper.class).in(Singleton.class);
+        }
     }
 
     private void bindConverterService() {
@@ -487,6 +528,8 @@ public class ApplicationBinder extends AbstractBinder {
     public static class ApplicationBinderBuilder {
 
         private OpenAPIConfiguration openAPIConfiguration;
+        private ObjectMapper objectMapper;
+        private XmlMapper xmlMapper;
         private ConverterService converterService;
         private GenerationService generationService;
         private ErrorResponseBuilderService errorResponseBuilderService;
@@ -508,6 +551,16 @@ public class ApplicationBinder extends AbstractBinder {
 
         public ApplicationBinderBuilder setOpenAPIConfiguration(OpenAPIConfiguration openAPIConfiguration) {
             this.openAPIConfiguration = openAPIConfiguration;
+            return this;
+        }
+
+        public ApplicationBinderBuilder setObjectMapper(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+            return this;
+        }
+
+        public ApplicationBinderBuilder setXmlMapper(XmlMapper xmlMapper) {
+            this.xmlMapper = xmlMapper;
             return this;
         }
 
@@ -604,6 +657,8 @@ public class ApplicationBinder extends AbstractBinder {
         public ApplicationBinder build() {
             return new ApplicationBinder(
                     openAPIConfiguration,
+                    objectMapper,
+                    xmlMapper,
                     converterService,
                     generationService,
                     errorResponseBuilderService,
