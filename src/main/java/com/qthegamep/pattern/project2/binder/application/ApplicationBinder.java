@@ -22,6 +22,9 @@ import io.micrometer.core.instrument.binder.system.*;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.CollectorRegistry;
+import io.swagger.v3.oas.integration.SwaggerConfiguration;
+import io.swagger.v3.oas.integration.api.OpenAPIConfiguration;
+import io.swagger.v3.oas.models.OpenAPI;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -37,6 +40,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationBinder.class);
 
+    private OpenAPIConfiguration openAPIConfiguration;
     private ConverterService converterService;
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
@@ -59,7 +63,8 @@ public class ApplicationBinder extends AbstractBinder {
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ConverterService converterService,
+    private ApplicationBinder(OpenAPIConfiguration openAPIConfiguration,
+                              ConverterService converterService,
                               GenerationService generationService,
                               ErrorResponseBuilderService errorResponseBuilderService,
                               PrometheusMeterRegistry prometheusMeterRegistry,
@@ -77,6 +82,7 @@ public class ApplicationBinder extends AbstractBinder {
                               GeneralExceptionMapper generalExceptionMapper,
                               ValidationService validationService,
                               IOStrategyFactoryService ioStrategyFactoryService) {
+        this.openAPIConfiguration = openAPIConfiguration;
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -95,6 +101,10 @@ public class ApplicationBinder extends AbstractBinder {
         this.generalExceptionMapper = generalExceptionMapper;
         this.validationService = validationService;
         this.ioStrategyFactoryService = ioStrategyFactoryService;
+    }
+
+    public OpenAPIConfiguration getOpenAPIConfiguration() {
+        return openAPIConfiguration;
     }
 
     public ConverterService getConverterService() {
@@ -175,6 +185,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     @Override
     protected void configure() {
+        bindOpenAPIConfiguration();
         bindConverterService();
         bindGenerationService();
         bindErrorResponseBuilderService();
@@ -193,6 +204,15 @@ public class ApplicationBinder extends AbstractBinder {
         bindGeneralExceptionMapper();
         bindValidationService();
         bindIOStrategyFactoryService();
+    }
+
+    private void bindOpenAPIConfiguration() {
+        if (openAPIConfiguration == null) {
+            openAPIConfiguration = new SwaggerConfiguration()
+                    .openAPI(new OpenAPI())
+                    .prettyPrint(true);
+        }
+        bind(openAPIConfiguration).to(OpenAPIConfiguration.class).in(Singleton.class);
     }
 
     private void bindConverterService() {
@@ -466,6 +486,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     public static class ApplicationBinderBuilder {
 
+        private OpenAPIConfiguration openAPIConfiguration;
         private ConverterService converterService;
         private GenerationService generationService;
         private ErrorResponseBuilderService errorResponseBuilderService;
@@ -484,6 +505,11 @@ public class ApplicationBinder extends AbstractBinder {
         private GeneralExceptionMapper generalExceptionMapper;
         private ValidationService validationService;
         private IOStrategyFactoryService ioStrategyFactoryService;
+
+        public ApplicationBinderBuilder setOpenAPIConfiguration(OpenAPIConfiguration openAPIConfiguration) {
+            this.openAPIConfiguration = openAPIConfiguration;
+            return this;
+        }
 
         public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
@@ -577,6 +603,7 @@ public class ApplicationBinder extends AbstractBinder {
 
         public ApplicationBinder build() {
             return new ApplicationBinder(
+                    openAPIConfiguration,
                     converterService,
                     generationService,
                     errorResponseBuilderService,

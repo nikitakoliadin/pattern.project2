@@ -16,6 +16,7 @@ import com.qthegamep.pattern.project2.service.IOStrategyFactoryService
 import com.qthegamep.pattern.project2.service.KeyBuilderService
 import com.qthegamep.pattern.project2.service.ValidationService
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.swagger.v3.oas.integration.api.OpenAPIConfiguration
 import org.bson.codecs.configuration.CodecRegistry
 import org.glassfish.jersey.internal.inject.InjectionManager
 import org.glassfish.jersey.internal.inject.Injections
@@ -35,6 +36,7 @@ class BaseSpecificationUnitTest extends Specification {
         applicationConfig = new ApplicationConfig()
         applicationConfig.init()
 
+        OpenAPIConfiguration openAPIConfigurationMock = Mock()
         ConverterService converterServiceMock = Mock()
         GenerationService generationServiceMock = Mock()
         ErrorResponseBuilderService errorResponseBuilderServiceMock = Mock()
@@ -55,6 +57,7 @@ class BaseSpecificationUnitTest extends Specification {
         IOStrategyFactoryService ioStrategyFactoryServiceMock = Mock()
 
         applicationBinder = ApplicationBinder.builder()
+                .setOpenAPIConfiguration(openAPIConfigurationMock)
                 .setConverterService(converterServiceMock)
                 .setGenerationService(generationServiceMock)
                 .setErrorResponseBuilderService(errorResponseBuilderServiceMock)

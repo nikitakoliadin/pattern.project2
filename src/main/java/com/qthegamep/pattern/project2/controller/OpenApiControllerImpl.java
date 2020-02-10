@@ -4,8 +4,7 @@ import com.qthegamep.pattern.project2.exception.compile.OpenApiControllerExcepti
 import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.util.Paths;
 import io.swagger.v3.jaxrs2.integration.resources.BaseOpenApiResource;
-import io.swagger.v3.oas.integration.SwaggerConfiguration;
-import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.integration.api.OpenAPIConfiguration;
 import io.swagger.v3.oas.models.servers.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,11 @@ public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenAp
 
     @Inject
     public OpenApiControllerImpl(@Context ServletConfig servletConfig,
-                                 @Context Application application) {
+                                 @Context Application application,
+                                 OpenAPIConfiguration openAPIConfiguration) {
         this.servletConfig = servletConfig;
         this.application = application;
-        openApiConfiguration = new SwaggerConfiguration()
-                .openAPI(new OpenAPI())
-                .prettyPrint(true);
+        this.openApiConfiguration = openAPIConfiguration;
     }
 
     @Override
