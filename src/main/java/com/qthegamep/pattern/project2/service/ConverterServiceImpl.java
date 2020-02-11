@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.qthegamep.pattern.project2.exception.runtime.JsonConverterServiceRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.StringConverterRuntimeException;
 import com.qthegamep.pattern.project2.exception.runtime.XmlConverterServiceRuntimeException;
 import com.qthegamep.pattern.project2.model.container.Error;
 
@@ -65,9 +66,12 @@ public class ConverterServiceImpl implements ConverterService {
 
     @Override
     public String toString(InputStream inputStream) {
-        return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-                .lines()
-                .parallel()
-                .collect(Collectors.joining("\n"));
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return bufferedReader.lines()
+                    .parallel()
+                    .collect(Collectors.joining("\n"));
+        } catch (Exception e) {
+            throw new StringConverterRuntimeException(e, Error.STRING_CONVERTER_ERROR);
+        }
     }
 }
