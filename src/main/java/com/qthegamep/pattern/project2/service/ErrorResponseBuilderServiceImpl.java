@@ -22,7 +22,7 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
         availableLocales = Arrays.stream(ServiceLocale.values())
                 .map(ServiceLocale::getLocale)
                 .collect(Collectors.toList());
-        defaultLocale = ServiceLocale.values()[0].getLocale();
+        defaultLocale = ServiceLocale.UK_LOCALE.getLocale();
     }
 
     @Override
