@@ -26,6 +26,8 @@ import redis.clients.jedis.JedisCluster
 import redis.clients.jedis.JedisPool
 import spock.lang.Specification
 
+import javax.validation.Validator
+
 class BaseSpecificationUnitTest extends Specification {
 
     protected ApplicationConfig applicationConfig
@@ -41,6 +43,7 @@ class BaseSpecificationUnitTest extends Specification {
         OpenAPIConfiguration openAPIConfigurationMock = Mock()
         ObjectMapper objectMapperMock = Mock()
         XmlMapper xmlMapperMock = Mock()
+        Validator validatorMock = Mock()
         ConverterService converterServiceMock = Mock()
         GenerationService generationServiceMock = Mock()
         ErrorResponseBuilderService errorResponseBuilderServiceMock = Mock()
@@ -64,6 +67,7 @@ class BaseSpecificationUnitTest extends Specification {
                 .setOpenAPIConfiguration(openAPIConfigurationMock)
                 .setObjectMapper(objectMapperMock)
                 .setXmlMapper(xmlMapperMock)
+                .setValidator(validatorMock)
                 .setConverterService(converterServiceMock)
                 .setGenerationService(generationServiceMock)
                 .setErrorResponseBuilderService(errorResponseBuilderServiceMock)

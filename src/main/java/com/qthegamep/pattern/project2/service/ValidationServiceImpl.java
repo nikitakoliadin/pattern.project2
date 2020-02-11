@@ -5,9 +5,8 @@ import com.qthegamep.pattern.project2.model.container.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.Validation;
+import javax.inject.Inject;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.stream.Collectors;
 
 public class ValidationServiceImpl implements ValidationService {
@@ -16,9 +15,9 @@ public class ValidationServiceImpl implements ValidationService {
 
     private Validator validator;
 
-    public ValidationServiceImpl() {
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
+    @Inject
+    public ValidationServiceImpl(Validator validator) {
+        this.validator = validator;
     }
 
     @Override

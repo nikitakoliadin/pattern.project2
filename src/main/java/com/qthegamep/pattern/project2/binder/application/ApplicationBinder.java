@@ -41,6 +41,9 @@ import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
 import javax.inject.Singleton;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 public class ApplicationBinder extends AbstractBinder {
 
@@ -49,6 +52,7 @@ public class ApplicationBinder extends AbstractBinder {
     private OpenAPIConfiguration openAPIConfiguration;
     private ObjectMapper objectMapper;
     private XmlMapper xmlMapper;
+    private Validator validator;
     private ConverterService converterService;
     private GenerationService generationService;
     private ErrorResponseBuilderService errorResponseBuilderService;
@@ -74,6 +78,7 @@ public class ApplicationBinder extends AbstractBinder {
     private ApplicationBinder(OpenAPIConfiguration openAPIConfiguration,
                               ObjectMapper objectMapper,
                               XmlMapper xmlMapper,
+                              Validator validator,
                               ConverterService converterService,
                               GenerationService generationService,
                               ErrorResponseBuilderService errorResponseBuilderService,
@@ -95,6 +100,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.openAPIConfiguration = openAPIConfiguration;
         this.objectMapper = objectMapper;
         this.xmlMapper = xmlMapper;
+        this.validator = validator;
         this.converterService = converterService;
         this.generationService = generationService;
         this.errorResponseBuilderService = errorResponseBuilderService;
@@ -125,6 +131,10 @@ public class ApplicationBinder extends AbstractBinder {
 
     public XmlMapper getXmlMapper() {
         return xmlMapper;
+    }
+
+    public Validator getValidator() {
+        return validator;
     }
 
     public ConverterService getConverterService() {
@@ -208,6 +218,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindOpenAPIConfiguration();
         bindObjectMapper();
         bindXmlMapper();
+        bindValidator();
         bindConverterService();
         bindGenerationService();
         bindErrorResponseBuilderService();
@@ -254,6 +265,14 @@ public class ApplicationBinder extends AbstractBinder {
         } else {
             bind(xmlMapper).to(XmlMapper.class).in(Singleton.class);
         }
+    }
+
+    private void bindValidator() {
+        if (validator == null) {
+            ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+            validator = validatorFactory.getValidator();
+        }
+        bind(validator).to(Validator.class).in(Singleton.class);
     }
 
     private void bindConverterService() {
@@ -530,6 +549,7 @@ public class ApplicationBinder extends AbstractBinder {
         private OpenAPIConfiguration openAPIConfiguration;
         private ObjectMapper objectMapper;
         private XmlMapper xmlMapper;
+        private Validator validator;
         private ConverterService converterService;
         private GenerationService generationService;
         private ErrorResponseBuilderService errorResponseBuilderService;
@@ -561,6 +581,11 @@ public class ApplicationBinder extends AbstractBinder {
 
         public ApplicationBinderBuilder setXmlMapper(XmlMapper xmlMapper) {
             this.xmlMapper = xmlMapper;
+            return this;
+        }
+
+        public ApplicationBinderBuilder setValidator(Validator validator) {
+            this.validator = validator;
             return this;
         }
 
@@ -659,6 +684,7 @@ public class ApplicationBinder extends AbstractBinder {
                     openAPIConfiguration,
                     objectMapper,
                     xmlMapper,
+                    validator,
                     converterService,
                     generationService,
                     errorResponseBuilderService,
