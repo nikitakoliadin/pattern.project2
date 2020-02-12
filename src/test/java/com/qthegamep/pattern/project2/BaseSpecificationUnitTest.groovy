@@ -17,6 +17,7 @@ import com.qthegamep.pattern.project2.service.GenerationService
 import com.qthegamep.pattern.project2.service.IOStrategyFactoryService
 import com.qthegamep.pattern.project2.service.KeyBuilderService
 import com.qthegamep.pattern.project2.service.ValidationService
+import com.qthegamep.pattern.project2.statistics.Meters
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.swagger.v3.oas.integration.api.OpenAPIConfiguration
 import org.bson.codecs.configuration.CodecRegistry
@@ -35,11 +36,19 @@ class BaseSpecificationUnitTest extends Specification {
     protected InjectionManager injectionManager
 
     void setup() {
-        System.setProperty("config.properties", "src/main/resources/config.properties")
+        setupApplicationConfig()
+        setupApplicationBinder()
+        setupInjectionManager()
+        setupMeters()
+    }
 
+    def setupApplicationConfig() {
+        System.setProperty("config.properties", "src/main/resources/config.properties")
         applicationConfig = new ApplicationConfig()
         applicationConfig.init()
+    }
 
+    def setupApplicationBinder() {
         OpenAPIConfiguration openAPIConfigurationMock = Mock()
         ObjectMapper objectMapperMock = Mock()
         XmlMapper xmlMapperMock = Mock()
@@ -62,7 +71,6 @@ class BaseSpecificationUnitTest extends Specification {
         GeneralExceptionMapper generalExceptionMapperMock = Mock()
         ValidationService validationServiceMock = Mock()
         IOStrategyFactoryService ioStrategyFactoryServiceMock = Mock()
-
         applicationBinder = ApplicationBinder.builder()
                 .setOpenAPIConfiguration(openAPIConfigurationMock)
                 .setObjectMapper(objectMapperMock)
@@ -87,9 +95,21 @@ class BaseSpecificationUnitTest extends Specification {
                 .setValidationService(validationServiceMock)
                 .setIoStrategyFactoryService(ioStrategyFactoryServiceMock)
                 .build()
+    }
 
+    def setupInjectionManager() {
         injectionManager = Injections.createInjectionManager()
         injectionManager.register(applicationBinder)
+    }
+
+    def setupMeters() {
+        Meters.TASK_QUEUE_SIZE_METER.set(0L)
+        Meters.AVAILABLE_GRIZZLY_THREADS_METER.set(0L)
+        Meters.ERROR_TYPES_METER.forEach({ key, value -> value.set(0L) })
+        Meters.RESPONSE_STATUS_METER.forEach({ key, value -> value.set(0L) })
+        Meters.REQUEST_COUNTER_METER.forEach({ key, value -> value.set(0L) })
+        Meters.AVERAGE_REQUEST_TIME_METER.forEach({ key, value -> value.clear() })
+        Meters.MAX_REQUEST_TIME_METER.forEach({ key, value -> value.clear() })
     }
 
     def getInstance(Class clazz) {
