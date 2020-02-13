@@ -65,7 +65,7 @@
             **/log/**/*,
             **/config/**/*,
             **/util/**/*,
-            **/Meters.java
+            **/Meters.java,
             **/Application.java
         </sonar.coverage.exclusions>
 
