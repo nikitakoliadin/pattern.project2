@@ -72,6 +72,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     private String asyncMongoDbClusterUser;
     private String asyncMongoDbClusterDb;
     private String asyncMongoDbClusterPassword;
+    private ExitManagerService exitManagerService;
 
     @Inject
     public DatabaseConnectorServiceImpl(@Property(value = "redis.pool.host") String redisPoolHost,
@@ -106,7 +107,8 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                                         @Property(value = "async.mongodb.cluster.port") String asyncMongoDbClusterPort,
                                         @Property(value = "async.mongodb.cluster.user") String asyncMongoDbClusterUser,
                                         @Property(value = "async.mongodb.cluster.db") String asyncMongoDbClusterDb,
-                                        @Property(value = "async.mongodb.cluster.pass") String asyncMongoDbClusterPassword) {
+                                        @Property(value = "async.mongodb.cluster.pass") String asyncMongoDbClusterPassword,
+                                        ExitManagerService exitManagerService) {
         this.redisPoolHost = redisPoolHost;
         this.redisPoolPort = redisPoolPort;
         this.redisPoolPassword = redisPoolPassword;
@@ -140,6 +142,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         this.asyncMongoDbClusterUser = asyncMongoDbClusterUser;
         this.asyncMongoDbClusterDb = asyncMongoDbClusterDb;
         this.asyncMongoDbClusterPassword = asyncMongoDbClusterPassword;
+        this.exitManagerService = exitManagerService;
     }
 
     @Override
@@ -540,7 +543,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         database.listCollectionNames().forEach(
                 document -> {
                 },
-                new ShutdownServerCallback());
+                new ShutdownServerCallback(exitManagerService));
     }
 
     private void checkRedisPoolConnection(JedisPool redisPool) {

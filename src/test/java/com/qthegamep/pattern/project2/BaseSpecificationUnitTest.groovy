@@ -10,6 +10,7 @@ import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepository
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository
 import com.qthegamep.pattern.project2.service.ConverterService
+import com.qthegamep.pattern.project2.service.ExitManagerService
 import com.qthegamep.pattern.project2.service.HashService
 import com.qthegamep.pattern.project2.service.DatabaseConnectorService
 import com.qthegamep.pattern.project2.service.ErrorResponseBuilderService
@@ -52,6 +53,7 @@ class BaseSpecificationUnitTest extends Specification {
     }
 
     def setupApplicationBinder() {
+        ExitManagerService exitManagerServiceMock = Mock()
         OpenAPIConfiguration openAPIConfigurationMock = Mock()
         ObjectMapper objectMapperMock = Mock()
         XmlMapper xmlMapperMock = Mock()
@@ -75,6 +77,7 @@ class BaseSpecificationUnitTest extends Specification {
         ValidationService validationServiceMock = Mock()
         IOStrategyFactoryService ioStrategyFactoryServiceMock = Mock()
         applicationBinder = ApplicationBinder.builder()
+                .setExitManagerService(exitManagerServiceMock)
                 .setOpenAPIConfiguration(openAPIConfigurationMock)
                 .setObjectMapper(objectMapperMock)
                 .setXmlMapper(xmlMapperMock)
@@ -128,6 +131,7 @@ class BaseSpecificationUnitTest extends Specification {
         !System.getProperty("system.type").isEmpty()
         !applicationConfig.getProperties().isEmpty()
         and: "correct application binder"
+        applicationBinder.getExitManagerService() != null
         applicationBinder.getOpenAPIConfiguration() != null
         applicationBinder.getObjectMapper() != null
         applicationBinder.getXmlMapper() != null
@@ -151,6 +155,7 @@ class BaseSpecificationUnitTest extends Specification {
         applicationBinder.getValidationService() != null
         applicationBinder.getIoStrategyFactoryService() != null
         and: "correct injection manager"
+        injectionManager.getInstance(applicationBinder.getExitManagerService().getClass()) != null
         injectionManager.getInstance(applicationBinder.getOpenAPIConfiguration().getClass()) != null
         injectionManager.getInstance(applicationBinder.getObjectMapper().getClass()) != null
         injectionManager.getInstance(applicationBinder.getXmlMapper().getClass()) != null

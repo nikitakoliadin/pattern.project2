@@ -49,6 +49,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationBinder.class);
 
+    private ExitManagerService exitManagerService;
     private OpenAPIConfiguration openAPIConfiguration;
     private ObjectMapper objectMapper;
     private XmlMapper xmlMapper;
@@ -75,7 +76,8 @@ public class ApplicationBinder extends AbstractBinder {
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(OpenAPIConfiguration openAPIConfiguration,
+    private ApplicationBinder(ExitManagerService exitManagerService,
+                              OpenAPIConfiguration openAPIConfiguration,
                               ObjectMapper objectMapper,
                               XmlMapper xmlMapper,
                               Validator validator,
@@ -97,6 +99,7 @@ public class ApplicationBinder extends AbstractBinder {
                               GeneralExceptionMapper generalExceptionMapper,
                               ValidationService validationService,
                               IOStrategyFactoryService ioStrategyFactoryService) {
+        this.exitManagerService = exitManagerService;
         this.openAPIConfiguration = openAPIConfiguration;
         this.objectMapper = objectMapper;
         this.xmlMapper = xmlMapper;
@@ -119,6 +122,10 @@ public class ApplicationBinder extends AbstractBinder {
         this.generalExceptionMapper = generalExceptionMapper;
         this.validationService = validationService;
         this.ioStrategyFactoryService = ioStrategyFactoryService;
+    }
+
+    public ExitManagerService getExitManagerService() {
+        return exitManagerService;
     }
 
     public OpenAPIConfiguration getOpenAPIConfiguration() {
@@ -215,6 +222,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     @Override
     protected void configure() {
+        bindExitManagerService();
         bindOpenAPIConfiguration();
         bindObjectMapper();
         bindXmlMapper();
@@ -237,6 +245,13 @@ public class ApplicationBinder extends AbstractBinder {
         bindGeneralExceptionMapper();
         bindValidationService();
         bindIOStrategyFactoryService();
+    }
+
+    private void bindExitManagerService() {
+        if (exitManagerService == null) {
+            exitManagerService = new ExitManagerServiceImpl();
+        }
+        bind(exitManagerService).to(ExitManagerService.class).in(Singleton.class);
     }
 
     private void bindOpenAPIConfiguration() {
@@ -403,7 +418,8 @@ public class ApplicationBinder extends AbstractBinder {
                     asyncMongoDbClusterPort,
                     asyncMongoDbClusterUser,
                     asyncMongoDbClusterDb,
-                    asyncMongoDbClusterPassword);
+                    asyncMongoDbClusterPassword,
+                    exitManagerService);
         }
         bind(databaseConnectorService).to(DatabaseConnectorService.class).in(Singleton.class);
     }
@@ -546,6 +562,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     public static class ApplicationBinderBuilder {
 
+        private ExitManagerService exitManagerService;
         private OpenAPIConfiguration openAPIConfiguration;
         private ObjectMapper objectMapper;
         private XmlMapper xmlMapper;
@@ -568,6 +585,11 @@ public class ApplicationBinder extends AbstractBinder {
         private GeneralExceptionMapper generalExceptionMapper;
         private ValidationService validationService;
         private IOStrategyFactoryService ioStrategyFactoryService;
+
+        public ApplicationBinderBuilder setExitManagerService(ExitManagerService exitManagerService) {
+            this.exitManagerService = exitManagerService;
+            return this;
+        }
 
         public ApplicationBinderBuilder setOpenAPIConfiguration(OpenAPIConfiguration openAPIConfiguration) {
             this.openAPIConfiguration = openAPIConfiguration;
@@ -681,6 +703,7 @@ public class ApplicationBinder extends AbstractBinder {
 
         public ApplicationBinder build() {
             return new ApplicationBinder(
+                    exitManagerService,
                     openAPIConfiguration,
                     objectMapper,
                     xmlMapper,
