@@ -18,7 +18,10 @@ import com.qthegamep.pattern.project2.service.IOStrategyFactoryService
 import com.qthegamep.pattern.project2.service.KeyBuilderService
 import com.qthegamep.pattern.project2.service.ValidationService
 import com.qthegamep.pattern.project2.statistics.Meters
+import io.micrometer.core.instrument.Clock
+import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.prometheus.client.CollectorRegistry
 import io.swagger.v3.oas.integration.api.OpenAPIConfiguration
 import org.bson.codecs.configuration.CodecRegistry
 import org.glassfish.jersey.internal.inject.InjectionManager
@@ -56,7 +59,7 @@ class BaseSpecificationUnitTest extends Specification {
         ConverterService converterServiceMock = Mock()
         GenerationService generationServiceMock = Mock()
         ErrorResponseBuilderService errorResponseBuilderServiceMock = Mock()
-        PrometheusMeterRegistry prometheusMeterRegistryMock = Mock()
+        PrometheusMeterRegistry prometheusMeterRegistryMock = Spy(new PrometheusMeterRegistry(PrometheusConfig.DEFAULT, CollectorRegistry.defaultRegistry, Clock.SYSTEM))
         CodecRegistry codecRegistryMock = Mock()
         DatabaseConnectorService databaseConnectorServiceMock = Mock()
         MongoDatabase syncMongoDatabaseMock = Mock()
@@ -117,9 +120,67 @@ class BaseSpecificationUnitTest extends Specification {
     }
 
     def "Should create objects for tests"() {
-        expect: "correct objects for tests"
+        expect: "not empty objects for tests"
         applicationConfig != null
         applicationBinder != null
         injectionManager != null
+        and: "correct application config"
+        !System.getProperty("system.type").isEmpty()
+        !applicationConfig.getProperties().isEmpty()
+        and: "correct application binder"
+        applicationBinder.getOpenAPIConfiguration() != null
+        applicationBinder.getObjectMapper() != null
+        applicationBinder.getXmlMapper() != null
+        applicationBinder.getValidator() != null
+        applicationBinder.getConverterService() != null
+        applicationBinder.getGenerationService() != null
+        applicationBinder.getErrorResponseBuilderService() != null
+        applicationBinder.getPrometheusMeterRegistry() != null
+        applicationBinder.getCodecRegistry() != null
+        applicationBinder.getDatabaseConnectorService() != null
+        applicationBinder.getSyncMongoDatabase() != null
+        applicationBinder.getAsyncMongoDatabase() != null
+        applicationBinder.getJedisPool() != null
+        applicationBinder.getJedisCluster() != null
+        applicationBinder.getSyncMongoRepository() != null
+        applicationBinder.getAsyncMongoRepository() != null
+        applicationBinder.getRedisRepository() != null
+        applicationBinder.getHashService() != null
+        applicationBinder.getKeyBuilderService() != null
+        applicationBinder.getGeneralExceptionMapper() != null
+        applicationBinder.getValidationService() != null
+        applicationBinder.getIoStrategyFactoryService() != null
+        and: "correct injection manager"
+        injectionManager.getInstance(applicationBinder.getOpenAPIConfiguration().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getObjectMapper().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getXmlMapper().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getValidator().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getConverterService().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getGenerationService().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getErrorResponseBuilderService().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getPrometheusMeterRegistry().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getCodecRegistry().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getDatabaseConnectorService().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getSyncMongoDatabase().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getAsyncMongoDatabase().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getJedisPool().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getJedisCluster().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getSyncMongoRepository().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getAsyncMongoRepository().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getRedisRepository().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getHashService().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getKeyBuilderService().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getGeneralExceptionMapper().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getValidationService().getClass()) != null
+        injectionManager.getInstance(applicationBinder.getIoStrategyFactoryService().getClass()) != null
+        and: "correct metrics"
+        Meters.TASK_QUEUE_SIZE_METER.get() == 0L
+        Meters.AVAILABLE_GRIZZLY_THREADS_METER.get() == 0L
+        Meters.ERROR_TYPES_METER.each { key, value -> value.get() == 0L }
+        Meters.RESPONSE_STATUS_METER.each { key, value -> value.get() == 0L }
+        Meters.REQUEST_COUNTER_METER.each { key, value -> value.get() == 0L }
+        Meters.AVERAGE_REQUEST_TIME_METER.each { key, value -> value.isEmpty() }
+        Meters.MAX_REQUEST_TIME_METER.each { key, value -> value.isEmpty() }
+        Meters.REDIS_ERROR_COUNTER_METER.get() == 0L
     }
 }
