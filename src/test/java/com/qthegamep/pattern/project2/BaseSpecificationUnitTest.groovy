@@ -155,29 +155,29 @@ class BaseSpecificationUnitTest extends Specification {
         applicationBinder.getValidationService() != null
         applicationBinder.getIoStrategyFactoryService() != null
         and: "correct injection manager"
-        injectionManager.getInstance(applicationBinder.getExitManagerService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getOpenAPIConfiguration().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getObjectMapper().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getXmlMapper().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getValidator().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getConverterService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getGenerationService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getErrorResponseBuilderService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getPrometheusMeterRegistry().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getCodecRegistry().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getDatabaseConnectorService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getSyncMongoDatabase().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getAsyncMongoDatabase().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getJedisPool().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getJedisCluster().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getSyncMongoRepository().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getAsyncMongoRepository().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getRedisRepository().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getHashService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getKeyBuilderService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getGeneralExceptionMapper().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getValidationService().getClass()) != null
-        injectionManager.getInstance(applicationBinder.getIoStrategyFactoryService().getClass()) != null
+        getInstance(applicationBinder.getExitManagerService().getClass()) != null
+        getInstance(applicationBinder.getOpenAPIConfiguration().getClass()) != null
+        getInstance(applicationBinder.getObjectMapper().getClass()) != null
+        getInstance(applicationBinder.getXmlMapper().getClass()) != null
+        getInstance(applicationBinder.getValidator().getClass()) != null
+        getInstance(applicationBinder.getConverterService().getClass()) != null
+        getInstance(applicationBinder.getGenerationService().getClass()) != null
+        getInstance(applicationBinder.getErrorResponseBuilderService().getClass()) != null
+        getInstance(applicationBinder.getPrometheusMeterRegistry().getClass()) != null
+        getInstance(applicationBinder.getCodecRegistry().getClass()) != null
+        getInstance(applicationBinder.getDatabaseConnectorService().getClass()) != null
+        getInstance(applicationBinder.getSyncMongoDatabase().getClass()) != null
+        getInstance(applicationBinder.getAsyncMongoDatabase().getClass()) != null
+        getInstance(applicationBinder.getJedisPool().getClass()) != null
+        getInstance(applicationBinder.getJedisCluster().getClass()) != null
+        getInstance(applicationBinder.getSyncMongoRepository().getClass()) != null
+        getInstance(applicationBinder.getAsyncMongoRepository().getClass()) != null
+        getInstance(applicationBinder.getRedisRepository().getClass()) != null
+        getInstance(applicationBinder.getHashService().getClass()) != null
+        getInstance(applicationBinder.getKeyBuilderService().getClass()) != null
+        getInstance(applicationBinder.getGeneralExceptionMapper().getClass()) != null
+        getInstance(applicationBinder.getValidationService().getClass()) != null
+        getInstance(applicationBinder.getIoStrategyFactoryService().getClass()) != null
         and: "correct metrics"
         Meters.TASK_QUEUE_SIZE_METER.get() == 0L
         Meters.AVAILABLE_GRIZZLY_THREADS_METER.get() == 0L
