@@ -9,6 +9,7 @@ import org.glassfish.hk2.api.ServiceHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
@@ -21,8 +22,12 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PropertyInjectionResolver.class);
 
-    @Context
     private Application application;
+
+    @Inject
+    public PropertyInjectionResolver(@Context Application application) {
+        this.application = application;
+    }
 
     @Override
     public Object resolve(Injectee injectee, ServiceHandle<?> serviceHandle) {
@@ -120,11 +125,8 @@ public class PropertyInjectionResolver implements InjectionResolver<Property> {
             return Float.parseFloat(value);
         } else if (requiredClass == Double.class || requiredClass == Double.TYPE) {
             return Double.parseDouble(value);
-        } else if (requiredClass == Void.class || requiredClass == Void.TYPE) {
-            return Void.TYPE;
         } else {
-            LOG.warn("Something was wrong when parse value: {} to primitive class: {}", value, requiredClass);
-            return null;
+            return Void.TYPE;
         }
     }
 
