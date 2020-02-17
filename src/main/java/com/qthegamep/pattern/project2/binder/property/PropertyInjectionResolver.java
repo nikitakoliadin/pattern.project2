@@ -9,13 +9,15 @@ import org.glassfish.hk2.api.ServiceHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-class PropertyInjectionResolver implements InjectionResolver<Property> {
+@Singleton
+public class PropertyInjectionResolver implements InjectionResolver<Property> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PropertyInjectionResolver.class);
 

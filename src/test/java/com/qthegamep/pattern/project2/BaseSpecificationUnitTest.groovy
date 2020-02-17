@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.mongodb.client.MongoDatabase
 import com.qthegamep.pattern.project2.binder.application.ApplicationBinder
+import com.qthegamep.pattern.project2.binder.property.PropertyBinder
+import com.qthegamep.pattern.project2.binder.property.PropertyInjectionResolver
 import com.qthegamep.pattern.project2.config.ApplicationConfig
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper
 import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository
@@ -36,11 +38,13 @@ import javax.validation.Validator
 class BaseSpecificationUnitTest extends Specification {
 
     protected ApplicationConfig applicationConfig
+    protected PropertyBinder propertyBinder
     protected ApplicationBinder applicationBinder
     protected InjectionManager injectionManager
 
     void setup() {
         setupApplicationConfig()
+        setupPropertyBinder()
         setupApplicationBinder()
         setupInjectionManager()
         setupMeters()
@@ -50,6 +54,13 @@ class BaseSpecificationUnitTest extends Specification {
         System.setProperty("config.properties", "src/main/resources/config.properties")
         applicationConfig = new ApplicationConfig()
         applicationConfig.init()
+    }
+
+    def setupPropertyBinder() {
+        PropertyInjectionResolver propertyInjectionResolverMock = new PropertyInjectionResolver()
+        propertyBinder = PropertyBinder.builder()
+                .setPropertyInjectionResolver(propertyInjectionResolverMock)
+                .build()
     }
 
     def setupApplicationBinder() {
@@ -105,6 +116,7 @@ class BaseSpecificationUnitTest extends Specification {
 
     def setupInjectionManager() {
         injectionManager = Injections.createInjectionManager()
+        injectionManager.register(propertyBinder)
         injectionManager.register(applicationBinder)
     }
 
@@ -125,11 +137,14 @@ class BaseSpecificationUnitTest extends Specification {
     def "Should create objects for tests"() {
         expect: "not empty objects for tests"
         applicationConfig != null
+        propertyBinder != null
         applicationBinder != null
         injectionManager != null
         and: "correct application config"
         !System.getProperty("system.type").isEmpty()
         !applicationConfig.getProperties().isEmpty()
+        and: "correct property binder"
+        propertyBinder.getPropertyInjectionResolver() != null
         and: "correct application binder"
         applicationBinder.getExitManagerService() != null
         applicationBinder.getOpenAPIConfiguration() != null
@@ -155,6 +170,7 @@ class BaseSpecificationUnitTest extends Specification {
         applicationBinder.getValidationService() != null
         applicationBinder.getIoStrategyFactoryService() != null
         and: "correct injection manager"
+        getInstance(propertyBinder.getPropertyInjectionResolver().getClass()) != null
         getInstance(applicationBinder.getExitManagerService().getClass()) != null
         getInstance(applicationBinder.getOpenAPIConfiguration().getClass()) != null
         getInstance(applicationBinder.getObjectMapper().getClass()) != null
