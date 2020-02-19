@@ -41,7 +41,7 @@ public class OpenApiControllerImpl extends BaseOpenApiResource implements OpenAp
     @GET
     @Path("/openapi.{type:json|yaml}")
     @Produces({MediaType.APPLICATION_JSON, "application/yaml"})
-    public Response OpenApi(@Context HttpHeaders headers,
+    public Response openApi(@Context HttpHeaders headers,
                             @Context UriInfo uriInfo,
                             @PathParam("type") String type) throws OpenApiControllerException {
         try {

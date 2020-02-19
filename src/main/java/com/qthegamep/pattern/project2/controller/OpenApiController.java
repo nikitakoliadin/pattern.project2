@@ -47,7 +47,7 @@ public interface OpenApiController {
     @GET
     @Path("/openapi.{type:json|yaml}")
     @Produces({MediaType.APPLICATION_JSON, "application/yaml"})
-    Response OpenApi(@Context HttpHeaders headers,
+    Response openApi(@Context HttpHeaders headers,
                      @Context UriInfo uriInfo,
                      @PathParam("type") String type) throws OpenApiControllerException;
 }
