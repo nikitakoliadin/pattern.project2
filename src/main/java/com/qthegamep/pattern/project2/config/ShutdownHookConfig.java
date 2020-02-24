@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.config;
 
+import com.qthegamep.pattern.project2.binder.application.ApplicationBinder;
 import org.glassfish.grizzly.GrizzlyFuture;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.slf4j.Logger;
@@ -17,14 +18,21 @@ public class ShutdownHookConfig extends Thread {
     private int gracePeriod = Integer.parseInt(System.getProperty("shutdown.hook.grace.period"));
     private TimeUnit gracePeriodTimeUnit = TimeUnit.SECONDS;
 
+    private ApplicationBinder applicationBinder;
     private final HttpServer[] httpServers;
 
-    public ShutdownHookConfig(HttpServer... httpServers) {
+    public ShutdownHookConfig(ApplicationBinder applicationBinder,
+                              HttpServer... httpServers) {
+        this.applicationBinder = applicationBinder;
         this.httpServers = httpServers;
     }
 
     @Override
     public void run() {
+        shutdownServers();
+    }
+
+    private void shutdownServers() {
         LOG.warn("Shutting down servers...");
         try {
             List<GrizzlyFuture<HttpServer>> futures = Arrays.stream(httpServers)

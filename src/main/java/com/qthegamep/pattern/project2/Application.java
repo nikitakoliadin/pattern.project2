@@ -45,28 +45,29 @@ public class Application {
         String port = System.getProperty("application.port", "8080");
         String applicationContext = System.getProperty("application.context", "");
         String applicationUrl = HTTP + host + ":" + port + applicationContext;
-        HttpServer applicationHttpServer = startServer(applicationUrl, applicationProperties);
+        ApplicationBinder applicationBinder = ApplicationBinder.builder().build();
+        HttpServer applicationHttpServer = startServer(applicationUrl, applicationProperties, applicationBinder);
         String swaggerUrl = System.getProperty("application.swagger.url", "/docs");
         String swaggerPath = addSwaggerUIMapping(applicationHttpServer, applicationContext + swaggerUrl);
         String monitoringPort = System.getProperty("application.monitoring.port", "8081");
         String monitoringContext = System.getProperty("application.monitoring.context", "/");
         String monitoringUrl = HTTP + host + ":" + monitoringPort + monitoringContext;
         HttpServer monitoringHttpServer = startMonitoringServer(monitoringUrl);
-        Runtime.getRuntime().addShutdownHook(new ShutdownHookConfig(applicationHttpServer, monitoringHttpServer));
+        Runtime.getRuntime().addShutdownHook(new ShutdownHookConfig(applicationBinder, applicationHttpServer, monitoringHttpServer));
         LOG.info("{} application started at {}", Application.class.getPackage().getName(), applicationUrl);
         LOG.info("Swagger openApi available at {}", swaggerPath);
         LOG.info("Monitoring started at {}", monitoringUrl);
         Thread.currentThread().join();
     }
 
-    private static HttpServer startServer(String applicationUrl, Map<String, Object> applicationProperties) {
+    private static HttpServer startServer(String applicationUrl, Map<String, Object> applicationProperties, ApplicationBinder applicationBinder) {
         URI applicationUri = URI.create(applicationUrl);
         ResourceConfig resourceConfig = new ResourceConfig()
                 .addProperties(applicationProperties)
                 .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                 .packages(Application.class.getPackage().getName())
                 .register(PropertyBinder.builder().build())
-                .register(ApplicationBinder.builder().build());
+                .register(applicationBinder);
         new AspectRegistrarConfig().register(resourceConfig);
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(applicationUri, resourceConfig, false);
         configServer(httpServer);
