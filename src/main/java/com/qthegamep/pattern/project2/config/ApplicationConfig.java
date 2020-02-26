@@ -37,7 +37,6 @@ public class ApplicationConfig {
             }
             loadDockerImageName();
         } catch (Exception e) {
-            LOG.error("ERROR", e);
             throw new ApplicationConfigInitializationException(e);
         }
     }
@@ -84,7 +83,7 @@ public class ApplicationConfig {
         return Optional.empty();
     }
 
-    private void loadDefaultProperties() throws Exception {
+    private void loadDefaultProperties() throws IOException {
         applicationProperties = new Properties();
         try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(DEFAULT_CONFIG_PROPERTIES_PATH)) {
             applicationProperties.load(inputStream);
@@ -92,7 +91,7 @@ public class ApplicationConfig {
         }
     }
 
-    private void loadCustomProperties(String path) throws Exception {
+    private void loadCustomProperties(String path) throws IOException {
         applicationProperties = new Properties();
         try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8)) {
             applicationProperties.load(inputStreamReader);
