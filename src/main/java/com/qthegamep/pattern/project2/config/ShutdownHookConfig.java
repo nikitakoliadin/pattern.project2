@@ -30,6 +30,7 @@ public class ShutdownHookConfig extends Thread {
     @Override
     public void run() {
         shutdownServers();
+        shutdownDatabaseConnections();
     }
 
     private void shutdownServers() {
@@ -46,5 +47,10 @@ public class ShutdownHookConfig extends Thread {
             LOG.error("Error while shutting down servers", e);
         }
         LOG.info("Servers stopped!");
+    }
+
+    private void shutdownDatabaseConnections() {
+        LOG.warn("Shutting down database connections");
+        applicationBinder.getDatabaseConnectorService().closeAll();
     }
 }
