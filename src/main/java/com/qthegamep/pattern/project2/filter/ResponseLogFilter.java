@@ -39,8 +39,9 @@ public class ResponseLogFilter implements ContainerResponseFilter {
 
     private String getClientIp() {
         Request request = requestProvider.get();
-        return request.getHeader(HttpHeaders.X_FORWARDED_FOR) == null
+        String xForwardedForHeader = request.getHeader(HttpHeaders.X_FORWARDED_FOR);
+        return xForwardedForHeader == null || xForwardedForHeader.isEmpty()
                 ? request.getRemoteAddr()
-                : request.getHeader(HttpHeaders.X_FORWARDED_FOR);
+                : xForwardedForHeader;
     }
 }
