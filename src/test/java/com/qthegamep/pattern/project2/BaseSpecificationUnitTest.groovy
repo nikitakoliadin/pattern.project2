@@ -34,6 +34,7 @@ import redis.clients.jedis.JedisPool
 import spock.lang.Specification
 
 import javax.validation.Validator
+import java.nio.file.Paths
 
 class BaseSpecificationUnitTest extends Specification {
 
@@ -51,7 +52,7 @@ class BaseSpecificationUnitTest extends Specification {
     }
 
     def setupApplicationConfig() {
-        System.setProperty("config.properties", "src/main/resources/config.properties")
+        System.setProperty("config.properties", getAbsolutePath("src/main/resources/config.properties"))
         applicationConfig = new ApplicationConfig()
         applicationConfig.init()
     }
@@ -132,6 +133,12 @@ class BaseSpecificationUnitTest extends Specification {
 
     def getInstance(Class clazz) {
         return injectionManager.getInstance(clazz)
+    }
+
+    def getAbsolutePath(String path) {
+        return Paths.get(path)
+                .toAbsolutePath()
+                .toString()
     }
 
     def "Should create objects for tests"() {
