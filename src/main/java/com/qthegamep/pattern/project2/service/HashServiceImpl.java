@@ -20,7 +20,7 @@ public class HashServiceImpl implements HashService {
 
     @Override
     public String encode(String data, HashAlgorithm hashAlgorithm, String requestId) throws HashServiceException {
-        LOG.debug("Encode: {} Algorithm: {} RequestId: {}", data, hashAlgorithm.getAlgorithmName(), requestId);
+        LOG.debug("Encode: {} Algorithm: {} RequestId: {}", data, hashAlgorithm, requestId);
         if (HashAlgorithm.MD5_HASH_ALGORITHM.equals(hashAlgorithm)) {
             return encode(data, hashAlgorithm.getAlgorithmName());
         } else {
