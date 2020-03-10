@@ -43,20 +43,20 @@ public class ShutdownHookConfig extends Thread {
             GrizzlyFuture<HttpServer> futureShutdown = mainServer.shutdown(gracePeriod, gracePeriodTimeUnit);
             LOG.info("Waiting for main server to shut down... Grace period is {} {}", gracePeriod, gracePeriodTimeUnit);
             futureShutdown.get();
+            LOG.info("Main server stopped!");
         } catch (Exception e) {
             LOG.error("Error while shutting down main server", e);
         }
-        LOG.info("Main server stopped!");
     }
 
     private void shutdownDatabaseConnections() {
         LOG.warn("Shutting down database connections");
         try {
             applicationBinder.getDatabaseConnectorService().closeAll();
+            LOG.info("Database connections closed!");
         } catch (Exception e) {
             LOG.error("Error while shutting down database connections");
         }
-        LOG.info("Database connections closed!");
     }
 
     private void shutdownOtherServers() {
@@ -69,9 +69,9 @@ public class ShutdownHookConfig extends Thread {
             for (GrizzlyFuture<HttpServer> futureShutdown : futureShutdowns) {
                 futureShutdown.get();
             }
+            LOG.info("Other servers stopped!");
         } catch (Exception e) {
             LOG.error("Error while shutting down other servers", e);
         }
-        LOG.info("Other servers stopped!");
     }
 }
