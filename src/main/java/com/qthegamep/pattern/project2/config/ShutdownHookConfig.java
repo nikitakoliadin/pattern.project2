@@ -20,7 +20,7 @@ public class ShutdownHookConfig extends Thread {
 
     private ApplicationBinder applicationBinder;
     private HttpServer mainServer;
-    private final HttpServer[] otherServers;
+    private HttpServer[] otherServers;
 
     public ShutdownHookConfig(ApplicationBinder applicationBinder,
                               HttpServer mainServer,
