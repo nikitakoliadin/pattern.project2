@@ -19,38 +19,59 @@ public class ShutdownHookConfig extends Thread {
     private TimeUnit gracePeriodTimeUnit = TimeUnit.SECONDS;
 
     private ApplicationBinder applicationBinder;
-    private final HttpServer[] httpServers;
+    private HttpServer mainServer;
+    private final HttpServer[] otherServers;
 
     public ShutdownHookConfig(ApplicationBinder applicationBinder,
-                              HttpServer... httpServers) {
+                              HttpServer mainServer,
+                              HttpServer... otherServers) {
         this.applicationBinder = applicationBinder;
-        this.httpServers = httpServers;
+        this.mainServer = mainServer;
+        this.otherServers = otherServers;
     }
 
     @Override
     public void run() {
-        shutdownServers();
+        shutdownMainServer();
         shutdownDatabaseConnections();
+        shutdownOtherServers();
     }
 
-    private void shutdownServers() {
-        LOG.warn("Shutting down servers...");
+    private void shutdownMainServer() {
+        LOG.warn("Shutting down main server...");
         try {
-            List<GrizzlyFuture<HttpServer>> futures = Arrays.stream(httpServers)
-                    .map(httpServer -> httpServer.shutdown(gracePeriod, gracePeriodTimeUnit))
-                    .collect(Collectors.toList());
-            LOG.info("Waiting for servers to shut down... Grace period is {} {}", gracePeriod, gracePeriodTimeUnit);
-            for (GrizzlyFuture<HttpServer> future : futures) {
-                future.get();
-            }
+            GrizzlyFuture<HttpServer> futureShutdown = mainServer.shutdown(gracePeriod, gracePeriodTimeUnit);
+            LOG.info("Waiting for main server to shut down... Grace period is {} {}", gracePeriod, gracePeriodTimeUnit);
+            futureShutdown.get();
         } catch (Exception e) {
-            LOG.error("Error while shutting down servers", e);
+            LOG.error("Error while shutting down main server", e);
         }
-        LOG.info("Servers stopped!");
+        LOG.info("Main server stopped!");
     }
 
     private void shutdownDatabaseConnections() {
         LOG.warn("Shutting down database connections");
-        applicationBinder.getDatabaseConnectorService().closeAll();
+        try {
+            applicationBinder.getDatabaseConnectorService().closeAll();
+        } catch (Exception e) {
+            LOG.error("Error while shutting down database connections");
+        }
+        LOG.info("Database connections closed!");
+    }
+
+    private void shutdownOtherServers() {
+        LOG.warn("Shutting down other servers...");
+        try {
+            List<GrizzlyFuture<HttpServer>> futureShutdowns = Arrays.stream(otherServers)
+                    .map(httpServer -> httpServer.shutdown(gracePeriod, gracePeriodTimeUnit))
+                    .collect(Collectors.toList());
+            LOG.info("Waiting for other servers to shut down... Grace period is {} {}", gracePeriod, gracePeriodTimeUnit);
+            for (GrizzlyFuture<HttpServer> futureShutdown : futureShutdowns) {
+                futureShutdown.get();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while shutting down other servers", e);
+        }
+        LOG.info("Other servers stopped!");
     }
 }

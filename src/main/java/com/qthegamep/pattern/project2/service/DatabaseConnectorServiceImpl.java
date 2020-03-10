@@ -220,7 +220,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public void closeSyncMongoDBConnections() {
-        LOG.debug("Sync MongoDB's to close: {}", syncMongoClients.size());
+        LOG.info("Sync MongoDB's to close: {}", syncMongoClients.size());
         syncMongoClients.forEach(Mongo::close);
         syncMongoClients.clear();
     }
@@ -299,7 +299,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public void closeAsyncMongoDBConnections() {
-        LOG.debug("Async MongoDB's to close: {}", asyncMongoClients.size());
+        LOG.info("Async MongoDB's to close: {}", asyncMongoClients.size());
         asyncMongoClients.forEach(com.mongodb.async.client.MongoClient::close);
         asyncMongoClients.clear();
     }
@@ -367,7 +367,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public void closeRedisPools() {
-        LOG.debug("Redis pools to close: {}", redisPools.size());
+        LOG.info("Redis pools to close: {}", redisPools.size());
         redisPools.forEach(JedisPool::close);
         redisPools.clear();
     }
@@ -375,7 +375,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     @Override
     public void closeRedisClusters() {
         try {
-            LOG.debug("Redis clusters to close: {}", redisClusters.size());
+            LOG.info("Redis clusters to close: {}", redisClusters.size());
             for (JedisCluster redisCluster : redisClusters) {
                 redisCluster.close();
             }
@@ -387,7 +387,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
 
     @Override
     public void closeAll() {
-        LOG.debug("Close all database connections");
+        LOG.info("Close all database connections");
         closeSyncMongoDBConnections();
         closeAsyncMongoDBConnections();
         closeRedisPools();
