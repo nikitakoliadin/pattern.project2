@@ -15,8 +15,8 @@ import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository;
 import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepositoryImpl;
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepository;
 import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepositoryImpl;
-import com.qthegamep.pattern.project2.repository.redis.ClusterRedisRepositoryImpl;
-import com.qthegamep.pattern.project2.repository.redis.PoolRedisRepositoryImpl;
+import com.qthegamep.pattern.project2.repository.redis.RedisRepositoryClusterImpl;
+import com.qthegamep.pattern.project2.repository.redis.RedisRepositoryPoolImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
 import com.qthegamep.pattern.project2.service.*;
 import com.qthegamep.pattern.project2.util.Constants;
@@ -509,9 +509,9 @@ public class ApplicationBinder extends AbstractBinder {
             String redisType = System.getProperty("redis.type");
             LOG.debug("Redis type: {}", redisType);
             if (Constants.POOL_REDIS_TYPE.equalsIgnoreCase(redisType)) {
-                bind(PoolRedisRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
+                bind(RedisRepositoryPoolImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else if (Constants.CLUSTER_REDIS_TYPE.equalsIgnoreCase(redisType)) {
-                bind(ClusterRedisRepositoryImpl.class).to(RedisRepository.class).in(Singleton.class);
+                bind(RedisRepositoryClusterImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else {
                 throw new RedisRepositoryApplicationBinderRuntimeException(Error.REDIS_NOT_EXISTING_TYPE_ERROR);
             }
