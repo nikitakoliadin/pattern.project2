@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mongodb.MongoClient;
 import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicationBinderRuntimeException;
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper;
+import com.qthegamep.pattern.project2.model.container.RedisConnection;
 import com.qthegamep.pattern.project2.service.adapter.IsoDateJsonModuleAdapter;
 import com.qthegamep.pattern.project2.service.adapter.ObjectIdJsonModuleAdapter;
 import com.qthegamep.pattern.project2.statistics.meter.*;
@@ -19,7 +20,6 @@ import com.qthegamep.pattern.project2.repository.redis.RedisRepositoryClusterImp
 import com.qthegamep.pattern.project2.repository.redis.RedisRepositoryPoolImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
 import com.qthegamep.pattern.project2.service.*;
-import com.qthegamep.pattern.project2.util.Constants;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.binder.jvm.*;
 import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
@@ -508,9 +508,9 @@ public class ApplicationBinder extends AbstractBinder {
         if (redisRepository == null) {
             String redisType = System.getProperty("redis.type");
             LOG.debug("Redis type: {}", redisType);
-            if (Constants.POOL_REDIS_TYPE.equalsIgnoreCase(redisType)) {
+            if (RedisConnection.POOL_REDIS_CONNECTION.getType().equalsIgnoreCase(redisType) || RedisConnection.MASTER_SLAVE_REDIS_CONNECTION.getType().equalsIgnoreCase(redisType)) {
                 bind(RedisRepositoryPoolImpl.class).to(RedisRepository.class).in(Singleton.class);
-            } else if (Constants.CLUSTER_REDIS_TYPE.equalsIgnoreCase(redisType)) {
+            } else if (RedisConnection.CLUSTER_REDIS_CONNECTION.getType().equalsIgnoreCase(redisType)) {
                 bind(RedisRepositoryClusterImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else {
                 throw new RedisRepositoryApplicationBinderRuntimeException(Error.REDIS_NOT_EXISTING_TYPE_ERROR);
