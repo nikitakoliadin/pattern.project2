@@ -50,7 +50,7 @@ public class ShutdownHookConfig extends Thread {
     }
 
     private void shutdownDatabaseConnections() {
-        LOG.warn("Shutting down database connections");
+        LOG.warn("Shutting down database connections...");
         try {
             applicationBinder.getDatabaseConnectorService().closeAll();
             LOG.info("Database connections closed!");
