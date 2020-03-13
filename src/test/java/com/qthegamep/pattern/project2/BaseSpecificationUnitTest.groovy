@@ -8,8 +8,8 @@ import com.qthegamep.pattern.project2.binder.property.PropertyBinder
 import com.qthegamep.pattern.project2.binder.property.PropertyInjectionResolver
 import com.qthegamep.pattern.project2.config.ApplicationConfig
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper
-import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository
-import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepository
+import com.qthegamep.pattern.project2.repository.mongo.MongoRepositoryAsync
+import com.qthegamep.pattern.project2.repository.mongo.MongoRepositorySync
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository
 import com.qthegamep.pattern.project2.service.ConverterService
 import com.qthegamep.pattern.project2.service.ExitManagerService
@@ -80,8 +80,8 @@ class BaseSpecificationUnitTest extends Specification {
         com.mongodb.async.client.MongoDatabase asyncMongoDatabaseMock = Mock()
         JedisPool jedisPoolMock = Mock()
         JedisCluster jedisClusterMock = Mock()
-        SyncMongoRepository syncMongoRepositoryMock = Mock()
-        AsyncMongoRepository asyncMongoRepositoryMock = Mock()
+        MongoRepositorySync mongoRepositorySyncMock = Mock()
+        MongoRepositoryAsync mongoRepositoryAsyncMock = Mock()
         RedisRepository redisRepositoryMock = Mock()
         HashService hashServiceMock = Mock()
         KeyBuilderService keyBuilderServiceMock = Mock()
@@ -104,8 +104,8 @@ class BaseSpecificationUnitTest extends Specification {
                 .setAsyncMongoDatabase(asyncMongoDatabaseMock)
                 .setJedisPool(jedisPoolMock)
                 .setJedisCluster(jedisClusterMock)
-                .setSyncMongoRepository(syncMongoRepositoryMock)
-                .setAsyncMongoRepository(asyncMongoRepositoryMock)
+                .setMongoRepositorySync(mongoRepositorySyncMock)
+                .setMongoRepositoryAsync(mongoRepositoryAsyncMock)
                 .setRedisRepository(redisRepositoryMock)
                 .setHashService(hashServiceMock)
                 .setKeyBuilderService(keyBuilderServiceMock)
@@ -168,8 +168,8 @@ class BaseSpecificationUnitTest extends Specification {
         applicationBinder.getAsyncMongoDatabase() != null
         applicationBinder.getJedisPool() != null
         applicationBinder.getJedisCluster() != null
-        applicationBinder.getSyncMongoRepository() != null
-        applicationBinder.getAsyncMongoRepository() != null
+        applicationBinder.getMongoRepositorySync() != null
+        applicationBinder.getMongoRepositoryAsync() != null
         applicationBinder.getRedisRepository() != null
         applicationBinder.getHashService() != null
         applicationBinder.getKeyBuilderService() != null
@@ -193,8 +193,8 @@ class BaseSpecificationUnitTest extends Specification {
         getInstance(applicationBinder.getAsyncMongoDatabase().getClass()) != null
         getInstance(applicationBinder.getJedisPool().getClass()) != null
         getInstance(applicationBinder.getJedisCluster().getClass()) != null
-        getInstance(applicationBinder.getSyncMongoRepository().getClass()) != null
-        getInstance(applicationBinder.getAsyncMongoRepository().getClass()) != null
+        getInstance(applicationBinder.getMongoRepositorySync().getClass()) != null
+        getInstance(applicationBinder.getMongoRepositoryAsync().getClass()) != null
         getInstance(applicationBinder.getRedisRepository().getClass()) != null
         getInstance(applicationBinder.getHashService().getClass()) != null
         getInstance(applicationBinder.getKeyBuilderService().getClass()) != null

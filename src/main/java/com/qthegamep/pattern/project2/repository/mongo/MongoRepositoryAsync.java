@@ -4,7 +4,7 @@ import com.qthegamep.pattern.project2.model.entity.Error;
 import com.qthegamep.pattern.project2.exception.compile.AsyncMongoRepositoryException;
 
 @FunctionalInterface
-public interface AsyncMongoRepository {
+public interface MongoRepositoryAsync {
 
     void saveError(Error error) throws AsyncMongoRepositoryException;
 }

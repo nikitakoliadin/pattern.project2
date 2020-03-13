@@ -10,15 +10,15 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-public class SyncMongoRepositoryImpl implements SyncMongoRepository {
+public class MongoRepositorySyncImpl implements MongoRepositorySync {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SyncMongoRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MongoRepositorySyncImpl.class);
 
     private String errorCollectionName;
     private MongoDatabase mongoDatabase;
 
     @Inject
-    public SyncMongoRepositoryImpl(@Property(value = "mongodb.error.collection.name") String errorCollectionName,
+    public MongoRepositorySyncImpl(@Property(value = "mongodb.error.collection.name") String errorCollectionName,
                                    MongoDatabase mongoDatabase) {
         this.errorCollectionName = errorCollectionName;
         this.mongoDatabase = mongoDatabase;

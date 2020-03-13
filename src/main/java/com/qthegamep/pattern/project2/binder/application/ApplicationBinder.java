@@ -12,10 +12,10 @@ import com.qthegamep.pattern.project2.service.adapter.IsoDateJsonModuleAdapter;
 import com.qthegamep.pattern.project2.service.adapter.ObjectIdJsonModuleAdapter;
 import com.qthegamep.pattern.project2.statistics.meter.*;
 import com.qthegamep.pattern.project2.model.container.Error;
-import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepository;
-import com.qthegamep.pattern.project2.repository.mongo.AsyncMongoRepositoryImpl;
-import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepository;
-import com.qthegamep.pattern.project2.repository.mongo.SyncMongoRepositoryImpl;
+import com.qthegamep.pattern.project2.repository.mongo.MongoRepositoryAsync;
+import com.qthegamep.pattern.project2.repository.mongo.MongoRepositoryAsyncImpl;
+import com.qthegamep.pattern.project2.repository.mongo.MongoRepositorySync;
+import com.qthegamep.pattern.project2.repository.mongo.MongoRepositorySyncImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepositoryClusterImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepositoryPoolImpl;
 import com.qthegamep.pattern.project2.repository.redis.RedisRepository;
@@ -64,8 +64,8 @@ public class ApplicationBinder extends AbstractBinder {
     private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
     private JedisPool jedisPool;
     private JedisCluster jedisCluster;
-    private SyncMongoRepository syncMongoRepository;
-    private AsyncMongoRepository asyncMongoRepository;
+    private MongoRepositorySync mongoRepositorySync;
+    private MongoRepositoryAsync mongoRepositoryAsync;
     private RedisRepository redisRepository;
     private HashService hashService;
     private KeyBuilderService keyBuilderService;
@@ -91,8 +91,8 @@ public class ApplicationBinder extends AbstractBinder {
                               com.mongodb.async.client.MongoDatabase asyncMongoDatabase,
                               JedisPool jedisPool,
                               JedisCluster jedisCluster,
-                              SyncMongoRepository syncMongoRepository,
-                              AsyncMongoRepository asyncMongoRepository,
+                              MongoRepositorySync mongoRepositorySync,
+                              MongoRepositoryAsync mongoRepositoryAsync,
                               RedisRepository redisRepository,
                               HashService hashService,
                               KeyBuilderService keyBuilderService,
@@ -114,8 +114,8 @@ public class ApplicationBinder extends AbstractBinder {
         this.asyncMongoDatabase = asyncMongoDatabase;
         this.jedisPool = jedisPool;
         this.jedisCluster = jedisCluster;
-        this.syncMongoRepository = syncMongoRepository;
-        this.asyncMongoRepository = asyncMongoRepository;
+        this.mongoRepositorySync = mongoRepositorySync;
+        this.mongoRepositoryAsync = mongoRepositoryAsync;
         this.redisRepository = redisRepository;
         this.hashService = hashService;
         this.keyBuilderService = keyBuilderService;
@@ -184,12 +184,12 @@ public class ApplicationBinder extends AbstractBinder {
         return jedisCluster;
     }
 
-    public SyncMongoRepository getSyncMongoRepository() {
-        return syncMongoRepository;
+    public MongoRepositorySync getMongoRepositorySync() {
+        return mongoRepositorySync;
     }
 
-    public AsyncMongoRepository getAsyncMongoRepository() {
-        return asyncMongoRepository;
+    public MongoRepositoryAsync getMongoRepositoryAsync() {
+        return mongoRepositoryAsync;
     }
 
     public RedisRepository getRedisRepository() {
@@ -237,8 +237,8 @@ public class ApplicationBinder extends AbstractBinder {
         bindAsyncMongoDatabase();
         bindJedisPool();
         bindJedisCluster();
-        bindSyncMongoRepository();
-        bindAsyncMongoRepository();
+        bindMongoRepositorySync();
+        bindMongoRepositoryAsync();
         bindRedisRepository();
         bindHashService();
         bindKeyBuilder();
@@ -488,19 +488,19 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
-    private void bindSyncMongoRepository() {
-        if (syncMongoRepository == null) {
-            bind(SyncMongoRepositoryImpl.class).to(SyncMongoRepository.class).in(Singleton.class);
+    private void bindMongoRepositorySync() {
+        if (mongoRepositorySync == null) {
+            bind(MongoRepositorySyncImpl.class).to(MongoRepositorySync.class).in(Singleton.class);
         } else {
-            bind(syncMongoRepository).to(SyncMongoRepository.class).in(Singleton.class);
+            bind(mongoRepositorySync).to(MongoRepositorySync.class).in(Singleton.class);
         }
     }
 
-    private void bindAsyncMongoRepository() {
-        if (asyncMongoRepository == null) {
-            bind(AsyncMongoRepositoryImpl.class).to(AsyncMongoRepository.class).in(Singleton.class);
+    private void bindMongoRepositoryAsync() {
+        if (mongoRepositoryAsync == null) {
+            bind(MongoRepositoryAsyncImpl.class).to(MongoRepositoryAsync.class).in(Singleton.class);
         } else {
-            bind(asyncMongoRepository).to(AsyncMongoRepository.class).in(Singleton.class);
+            bind(mongoRepositoryAsync).to(MongoRepositoryAsync.class).in(Singleton.class);
         }
     }
 
@@ -577,8 +577,8 @@ public class ApplicationBinder extends AbstractBinder {
         private com.mongodb.async.client.MongoDatabase asyncMongoDatabase;
         private JedisPool jedisPool;
         private JedisCluster jedisCluster;
-        private SyncMongoRepository syncMongoRepository;
-        private AsyncMongoRepository asyncMongoRepository;
+        private MongoRepositorySync mongoRepositorySync;
+        private MongoRepositoryAsync mongoRepositoryAsync;
         private RedisRepository redisRepository;
         private HashService hashService;
         private KeyBuilderService keyBuilderService;
@@ -661,13 +661,13 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
-        public ApplicationBinderBuilder setSyncMongoRepository(SyncMongoRepository syncMongoRepository) {
-            this.syncMongoRepository = syncMongoRepository;
+        public ApplicationBinderBuilder setMongoRepositorySync(MongoRepositorySync mongoRepositorySync) {
+            this.mongoRepositorySync = mongoRepositorySync;
             return this;
         }
 
-        public ApplicationBinderBuilder setAsyncMongoRepository(AsyncMongoRepository asyncMongoRepository) {
-            this.asyncMongoRepository = asyncMongoRepository;
+        public ApplicationBinderBuilder setMongoRepositoryAsync(MongoRepositoryAsync mongoRepositoryAsync) {
+            this.mongoRepositoryAsync = mongoRepositoryAsync;
             return this;
         }
 
@@ -718,8 +718,8 @@ public class ApplicationBinder extends AbstractBinder {
                     asyncMongoDatabase,
                     jedisPool,
                     jedisCluster,
-                    syncMongoRepository,
-                    asyncMongoRepository,
+                    mongoRepositorySync,
+                    mongoRepositoryAsync,
                     redisRepository,
                     hashService,
                     keyBuilderService,

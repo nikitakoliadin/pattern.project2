@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-public class AsyncMongoRepositoryImpl implements AsyncMongoRepository {
+public class MongoRepositoryAsyncImpl implements MongoRepositoryAsync {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AsyncMongoRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MongoRepositoryAsyncImpl.class);
 
     private String errorCollectionName;
     private MongoDatabase mongoDatabase;
 
     @Inject
-    public AsyncMongoRepositoryImpl(@Property(value = "mongodb.error.collection.name") String errorCollectionName,
+    public MongoRepositoryAsyncImpl(@Property(value = "mongodb.error.collection.name") String errorCollectionName,
                                     MongoDatabase mongoDatabase) {
         this.errorCollectionName = errorCollectionName;
         this.mongoDatabase = mongoDatabase;
