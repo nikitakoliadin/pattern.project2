@@ -4,7 +4,7 @@ import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
 import com.qthegamep.pattern.project2.binder.property.Property;
 import com.qthegamep.pattern.project2.repository.mongo.callback.AsyncInsertCallback;
-import com.qthegamep.pattern.project2.exception.compile.AsyncMongoRepositoryException;
+import com.qthegamep.pattern.project2.exception.compile.MongoRepositoryAsyncException;
 import com.qthegamep.pattern.project2.model.entity.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +26,13 @@ public class MongoRepositoryAsyncImpl implements MongoRepositoryAsync {
     }
 
     @Override
-    public void saveError(Error error) throws AsyncMongoRepositoryException {
+    public void saveError(Error error) throws MongoRepositoryAsyncException {
         try {
             MongoCollection<Error> errorCollection = mongoDatabase.getCollection(errorCollectionName, Error.class);
             LOG.debug("Async save error: {} RequestId: {}", error, error.getRequestId());
             errorCollection.insertOne(error, new AsyncInsertCallback(error.getRequestId()));
         } catch (Exception e) {
-            throw new AsyncMongoRepositoryException(e, com.qthegamep.pattern.project2.model.container.Error.MONGO_ASYNC_SAVE_ERROR_ERROR);
+            throw new MongoRepositoryAsyncException(e, com.qthegamep.pattern.project2.model.container.Error.MONGO_ASYNC_SAVE_ERROR_ERROR);
         }
     }
 }
