@@ -9,6 +9,7 @@ import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicati
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper;
 import com.qthegamep.pattern.project2.model.container.RedisConnection;
 import com.qthegamep.pattern.project2.service.adapter.IsoDateJsonModuleAdapter;
+import com.qthegamep.pattern.project2.service.adapter.NullJsonConventionAdapter;
 import com.qthegamep.pattern.project2.service.adapter.ObjectIdJsonModuleAdapter;
 import com.qthegamep.pattern.project2.statistics.meter.*;
 import com.qthegamep.pattern.project2.model.container.Error;
@@ -33,6 +34,7 @@ import io.swagger.v3.oas.integration.api.OpenAPIConfiguration;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.slf4j.Logger;
@@ -44,6 +46,7 @@ import javax.inject.Singleton;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.Arrays;
 
 public class ApplicationBinder extends AbstractBinder {
 
@@ -344,6 +347,10 @@ public class ApplicationBinder extends AbstractBinder {
                     MongoClient.getDefaultCodecRegistry(),
                     CodecRegistries.fromProviders(
                             PojoCodecProvider.builder()
+                                    .conventions(Arrays.asList(
+                                            Conventions.CLASS_AND_PROPERTY_CONVENTION,
+                                            Conventions.ANNOTATION_CONVENTION,
+                                            new NullJsonConventionAdapter()))
                                     .automatic(true)
                                     .build()));
         }
