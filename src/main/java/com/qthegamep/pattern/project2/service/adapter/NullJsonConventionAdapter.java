@@ -6,12 +6,12 @@ import org.bson.codecs.pojo.PropertyModelBuilder;
 
 public class NullJsonConventionAdapter implements Convention {
 
-    private static final String OBJECT_ID_FIELD_NAME = "objectId";
+    private static final String OBJECT_ID_WRITE_FIELD_NAME = "objectId";
 
     @Override
     public void apply(ClassModelBuilder<?> classModelBuilder) {
         for (PropertyModelBuilder<?> propertyModelBuilder : classModelBuilder.getPropertyModelBuilders()) {
-            if (!propertyModelBuilder.getName().equalsIgnoreCase(OBJECT_ID_FIELD_NAME)) {
+            if (!propertyModelBuilder.getWriteName().equalsIgnoreCase(OBJECT_ID_WRITE_FIELD_NAME)) {
                 propertyModelBuilder.propertySerialization(value -> true);
             }
         }
