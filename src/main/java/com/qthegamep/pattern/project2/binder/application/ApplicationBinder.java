@@ -439,7 +439,7 @@ public class ApplicationBinder extends AbstractBinder {
             if (Boolean.parseBoolean(syncMongoDbEnabled)) {
                 String syncMongoDbType = System.getProperty("sync.mongodb.type");
                 LOG.info("Sync MongoDB type: {}", syncMongoDbType);
-                com.mongodb.client.MongoDatabase newSyncMongoDatabase = databaseConnectorService.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, codecRegistry, MongoConnection.valueOf(syncMongoDbType.toLowerCase()));
+                com.mongodb.client.MongoDatabase newSyncMongoDatabase = databaseConnectorService.connectToSyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, codecRegistry, MongoConnection.valueOf(syncMongoDbType));
                 bind(newSyncMongoDatabase).to(com.mongodb.client.MongoDatabase.class).in(Singleton.class);
             } else {
                 LOG.warn("Sync MongoDB disabled! Don't use or remove SyncMongoDatabase binding!");
@@ -456,7 +456,7 @@ public class ApplicationBinder extends AbstractBinder {
             if (Boolean.parseBoolean(asyncMongoDbEnabled)) {
                 String asyncMongoDbType = System.getProperty("async.mongodb.type");
                 LOG.info("Async MongoDB type: {}", asyncMongoDbType);
-                com.mongodb.async.client.MongoDatabase newAsyncMongoDatabase = databaseConnectorService.connectToAsyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, codecRegistry, MongoConnection.valueOf(asyncMongoDbType.toLowerCase()));
+                com.mongodb.async.client.MongoDatabase newAsyncMongoDatabase = databaseConnectorService.connectToAsyncMongoDB(mongoMetricsCommandListener, mongoMetricsConnectionPoolListener, codecRegistry, MongoConnection.valueOf(asyncMongoDbType));
                 bind(newAsyncMongoDatabase).to(com.mongodb.async.client.MongoDatabase.class).to(Singleton.class);
             } else {
                 LOG.warn("Async MongoDB disabled! Don't use or remove AsyncMongoDatabase binding!");
