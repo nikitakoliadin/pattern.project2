@@ -2,6 +2,7 @@ package com.qthegamep.pattern.project2.service;
 
 import com.mongodb.event.CommandListener;
 import com.mongodb.event.ConnectionPoolListener;
+import com.qthegamep.pattern.project2.model.container.MongoConnection;
 import org.bson.codecs.configuration.CodecRegistry;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
@@ -12,25 +13,25 @@ public interface DatabaseConnectorService {
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB();
 
-    com.mongodb.client.MongoDatabase connectToSyncMongoDB(String connectionType);
+    com.mongodb.client.MongoDatabase connectToSyncMongoDB(MongoConnection connectionType);
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener);
 
-    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, String connectionType);
+    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, MongoConnection connectionType);
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB(ConnectionPoolListener connectionPoolListener);
 
-    com.mongodb.client.MongoDatabase connectToSyncMongoDB(ConnectionPoolListener connectionPoolListener, String connectionType);
+    com.mongodb.client.MongoDatabase connectToSyncMongoDB(ConnectionPoolListener connectionPoolListener, MongoConnection connectionType);
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry);
 
-    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry, String connectionType);
+    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CodecRegistry codecRegistry, MongoConnection connectionType);
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener);
 
-    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType);
+    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, MongoConnection connectionType);
 
-    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, String connectionType);
+    com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, MongoConnection connectionType);
 
     List<com.mongodb.MongoClient> getSyncMongoDBConnections();
 
@@ -38,25 +39,25 @@ public interface DatabaseConnectorService {
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB();
 
-    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(String connectionType);
+    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(MongoConnection connectionType);
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener);
 
-    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, String connectionType);
+    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, MongoConnection connectionType);
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(ConnectionPoolListener connectionPoolListener);
 
-    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(ConnectionPoolListener connectionPoolListener, String connectionType);
+    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(ConnectionPoolListener connectionPoolListener, MongoConnection connectionType);
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CodecRegistry codecRegistry);
 
-    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CodecRegistry codecRegistry, String connectionType);
+    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CodecRegistry codecRegistry, MongoConnection connectionType);
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener);
 
-    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, String connectionType);
+    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, MongoConnection connectionType);
 
-    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, String connectionType);
+    com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, MongoConnection connectionType);
 
     List<com.mongodb.async.client.MongoClient> getAsyncMongoDBConnections();
 

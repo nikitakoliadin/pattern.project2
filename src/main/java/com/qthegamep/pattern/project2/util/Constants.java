@@ -10,8 +10,6 @@ public class Constants {
     public static final String REQUEST_ID_HEADER = "requestId";
     public static final String GRIZZLY = "grizzly";
     public static final String JSON_OBJECT_ID_FIELD_NAME = "$oid";
-    public static final String STANDALONE_MONGO_DB_TYPE = "standalone";
-    public static final String CLUSTER_MONGO_DB_TYPE = "cluster";
     public static final String JSON_OBJECT_ID_KEY = "_id";
     public static final String SERVER_IP_PROPERTY = "serverIp";
     public static final String DOCKER_IMAGE_NAME_PROPERTY = "docker.image.name";
