@@ -206,8 +206,6 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                 default:
                     return connectToStandaloneSyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             }
-        } catch (SyncMongoDatabaseConnectorServiceRuntimeException e) {
-            throw new SyncMongoDatabaseConnectorServiceRuntimeException(e, e.getError());
         } catch (Exception e) {
             throw new SyncMongoDatabaseConnectorServiceRuntimeException(e, Error.SYNC_MONGO_DB_CONNECTOR_ERROR);
         }
@@ -285,8 +283,6 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                 default:
                     return connectToStandaloneAsyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             }
-        } catch (AsyncMongoDatabaseConnectorServiceRuntimeException e) {
-            throw new AsyncMongoDatabaseConnectorServiceRuntimeException(e, e.getError());
         } catch (Exception e) {
             throw new AsyncMongoDatabaseConnectorServiceRuntimeException(e, Error.ASYNC_MONGO_DB_CONNECTOR_ERROR);
         }
