@@ -18,8 +18,8 @@ public class PropertyBinder extends AbstractBinder {
         return propertyInjectionResolver;
     }
 
-    public static PropertyBinderBuilder builder() {
-        return new PropertyBinderBuilder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -37,11 +37,11 @@ public class PropertyBinder extends AbstractBinder {
         }
     }
 
-    public static class PropertyBinderBuilder {
+    public static class Builder {
 
         private PropertyInjectionResolver propertyInjectionResolver;
 
-        public PropertyBinderBuilder setPropertyInjectionResolver(PropertyInjectionResolver propertyInjectionResolver) {
+        public Builder setPropertyInjectionResolver(PropertyInjectionResolver propertyInjectionResolver) {
             this.propertyInjectionResolver = propertyInjectionResolver;
             return this;
         }

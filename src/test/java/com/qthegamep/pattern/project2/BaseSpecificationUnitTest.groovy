@@ -39,7 +39,9 @@ import java.nio.file.Paths
 class BaseSpecificationUnitTest extends Specification {
 
     protected ApplicationConfig applicationConfig
+    protected PropertyBinder.Builder propertyBinderBuilder
     protected PropertyBinder propertyBinder
+    protected ApplicationBinder.Builder applicationBinderBuilder
     protected ApplicationBinder applicationBinder
     protected InjectionManager injectionManager
 
@@ -59,9 +61,9 @@ class BaseSpecificationUnitTest extends Specification {
 
     def setupPropertyBinder() {
         PropertyInjectionResolver propertyInjectionResolverMock = new PropertyInjectionResolver()
-        propertyBinder = PropertyBinder.builder()
+        propertyBinderBuilder = PropertyBinder.builder()
                 .setPropertyInjectionResolver(propertyInjectionResolverMock)
-                .build()
+        propertyBinder = propertyBinderBuilder.build()
     }
 
     def setupApplicationBinder() {
@@ -88,7 +90,7 @@ class BaseSpecificationUnitTest extends Specification {
         GeneralExceptionMapper generalExceptionMapperMock = Mock()
         ValidationService validationServiceMock = Mock()
         IOStrategyFactoryService ioStrategyFactoryServiceMock = Mock()
-        applicationBinder = ApplicationBinder.builder()
+        applicationBinderBuilder = ApplicationBinder.builder()
                 .setExitManagerService(exitManagerServiceMock)
                 .setOpenAPIConfiguration(openAPIConfigurationMock)
                 .setObjectMapper(objectMapperMock)
@@ -112,7 +114,7 @@ class BaseSpecificationUnitTest extends Specification {
                 .setGeneralExceptionMapper(generalExceptionMapperMock)
                 .setValidationService(validationServiceMock)
                 .setIoStrategyFactoryService(ioStrategyFactoryServiceMock)
-                .build()
+        applicationBinder = applicationBinderBuilder.build()
     }
 
     def setupInjectionManager() {
@@ -144,7 +146,9 @@ class BaseSpecificationUnitTest extends Specification {
     def "Should create objects for tests"() {
         expect: "not empty objects for tests"
         applicationConfig != null
+        propertyBinderBuilder != null
         propertyBinder != null
+        applicationBinderBuilder != null
         applicationBinder != null
         injectionManager != null
         and: "correct application config"

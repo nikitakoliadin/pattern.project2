@@ -220,8 +220,8 @@ public class ApplicationBinder extends AbstractBinder {
         return ioStrategyFactoryService;
     }
 
-    public static ApplicationBinderBuilder builder() {
-        return new ApplicationBinderBuilder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -568,7 +568,7 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
-    public static class ApplicationBinderBuilder {
+    public static class Builder {
 
         private ExitManagerService exitManagerService;
         private OpenAPIConfiguration openAPIConfiguration;
@@ -594,117 +594,117 @@ public class ApplicationBinder extends AbstractBinder {
         private ValidationService validationService;
         private IOStrategyFactoryService ioStrategyFactoryService;
 
-        public ApplicationBinderBuilder setExitManagerService(ExitManagerService exitManagerService) {
+        public Builder setExitManagerService(ExitManagerService exitManagerService) {
             this.exitManagerService = exitManagerService;
             return this;
         }
 
-        public ApplicationBinderBuilder setOpenAPIConfiguration(OpenAPIConfiguration openAPIConfiguration) {
+        public Builder setOpenAPIConfiguration(OpenAPIConfiguration openAPIConfiguration) {
             this.openAPIConfiguration = openAPIConfiguration;
             return this;
         }
 
-        public ApplicationBinderBuilder setObjectMapper(ObjectMapper objectMapper) {
+        public Builder setObjectMapper(ObjectMapper objectMapper) {
             this.objectMapper = objectMapper;
             return this;
         }
 
-        public ApplicationBinderBuilder setXmlMapper(XmlMapper xmlMapper) {
+        public Builder setXmlMapper(XmlMapper xmlMapper) {
             this.xmlMapper = xmlMapper;
             return this;
         }
 
-        public ApplicationBinderBuilder setValidator(Validator validator) {
+        public Builder setValidator(Validator validator) {
             this.validator = validator;
             return this;
         }
 
-        public ApplicationBinderBuilder setConverterService(ConverterService converterService) {
+        public Builder setConverterService(ConverterService converterService) {
             this.converterService = converterService;
             return this;
         }
 
-        public ApplicationBinderBuilder setGenerationService(GenerationService generationService) {
+        public Builder setGenerationService(GenerationService generationService) {
             this.generationService = generationService;
             return this;
         }
 
-        public ApplicationBinderBuilder setErrorResponseBuilderService(ErrorResponseBuilderService errorResponseBuilderService) {
+        public Builder setErrorResponseBuilderService(ErrorResponseBuilderService errorResponseBuilderService) {
             this.errorResponseBuilderService = errorResponseBuilderService;
             return this;
         }
 
-        public ApplicationBinderBuilder setPrometheusMeterRegistry(PrometheusMeterRegistry prometheusMeterRegistry) {
+        public Builder setPrometheusMeterRegistry(PrometheusMeterRegistry prometheusMeterRegistry) {
             this.prometheusMeterRegistry = prometheusMeterRegistry;
             return this;
         }
 
-        public ApplicationBinderBuilder setCodecRegistry(CodecRegistry codecRegistry) {
+        public Builder setCodecRegistry(CodecRegistry codecRegistry) {
             this.codecRegistry = codecRegistry;
             return this;
         }
 
-        public ApplicationBinderBuilder setDatabaseConnectorService(DatabaseConnectorService databaseConnectorService) {
+        public Builder setDatabaseConnectorService(DatabaseConnectorService databaseConnectorService) {
             this.databaseConnectorService = databaseConnectorService;
             return this;
         }
 
-        public ApplicationBinderBuilder setSyncMongoDatabase(com.mongodb.client.MongoDatabase syncMongoDatabase) {
+        public Builder setSyncMongoDatabase(com.mongodb.client.MongoDatabase syncMongoDatabase) {
             this.syncMongoDatabase = syncMongoDatabase;
             return this;
         }
 
-        public ApplicationBinderBuilder setAsyncMongoDatabase(com.mongodb.async.client.MongoDatabase asyncMongoDatabase) {
+        public Builder setAsyncMongoDatabase(com.mongodb.async.client.MongoDatabase asyncMongoDatabase) {
             this.asyncMongoDatabase = asyncMongoDatabase;
             return this;
         }
 
-        public ApplicationBinderBuilder setJedisPool(JedisPool jedisPool) {
+        public Builder setJedisPool(JedisPool jedisPool) {
             this.jedisPool = jedisPool;
             return this;
         }
 
-        public ApplicationBinderBuilder setJedisCluster(JedisCluster jedisCluster) {
+        public Builder setJedisCluster(JedisCluster jedisCluster) {
             this.jedisCluster = jedisCluster;
             return this;
         }
 
-        public ApplicationBinderBuilder setMongoRepositorySync(MongoRepositorySync mongoRepositorySync) {
+        public Builder setMongoRepositorySync(MongoRepositorySync mongoRepositorySync) {
             this.mongoRepositorySync = mongoRepositorySync;
             return this;
         }
 
-        public ApplicationBinderBuilder setMongoRepositoryAsync(MongoRepositoryAsync mongoRepositoryAsync) {
+        public Builder setMongoRepositoryAsync(MongoRepositoryAsync mongoRepositoryAsync) {
             this.mongoRepositoryAsync = mongoRepositoryAsync;
             return this;
         }
 
-        public ApplicationBinderBuilder setRedisRepository(RedisRepository redisRepository) {
+        public Builder setRedisRepository(RedisRepository redisRepository) {
             this.redisRepository = redisRepository;
             return this;
         }
 
-        public ApplicationBinderBuilder setHashService(HashService hashService) {
+        public Builder setHashService(HashService hashService) {
             this.hashService = hashService;
             return this;
         }
 
-        public ApplicationBinderBuilder setKeyBuilderService(KeyBuilderService keyBuilderService) {
+        public Builder setKeyBuilderService(KeyBuilderService keyBuilderService) {
             this.keyBuilderService = keyBuilderService;
             return this;
         }
 
-        public ApplicationBinderBuilder setGeneralExceptionMapper(GeneralExceptionMapper generalExceptionMapper) {
+        public Builder setGeneralExceptionMapper(GeneralExceptionMapper generalExceptionMapper) {
             this.generalExceptionMapper = generalExceptionMapper;
             return this;
         }
 
-        public ApplicationBinderBuilder setValidationService(ValidationService validationService) {
+        public Builder setValidationService(ValidationService validationService) {
             this.validationService = validationService;
             return this;
         }
 
-        public ApplicationBinderBuilder setIoStrategyFactoryService(IOStrategyFactoryService ioStrategyFactoryService) {
+        public Builder setIoStrategyFactoryService(IOStrategyFactoryService ioStrategyFactoryService) {
             this.ioStrategyFactoryService = ioStrategyFactoryService;
             return this;
         }
