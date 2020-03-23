@@ -54,7 +54,7 @@ class BaseSpecificationUnitTest extends Specification {
     }
 
     def setupApplicationConfig() {
-        System.setProperty("config.properties", getAbsolutePath("src/main/resources/config.properties"))
+        System.setProperty("config.properties", getAbsolutePath("src/test/resources/config-test.properties"))
         applicationConfig = new ApplicationConfig()
         applicationConfig.init()
     }
