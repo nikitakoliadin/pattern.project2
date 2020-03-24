@@ -5,7 +5,7 @@ import com.qthegamep.pattern.project2.binder.property.PropertyBinder;
 import com.qthegamep.pattern.project2.config.*;
 import com.qthegamep.pattern.project2.probe.GrizzlyThreadPoolProbe;
 import com.qthegamep.pattern.project2.probe.TaskQueueSizeProbe;
-import com.qthegamep.pattern.project2.exception.initialization.ApplicationConfigInitializationException;
+import com.qthegamep.pattern.project2.exception.compile.ApplicationConfigInitializationException;
 import com.qthegamep.pattern.project2.model.container.IoStrategy;
 import com.qthegamep.pattern.project2.service.IOStrategyFactoryServiceImpl;
 import com.qthegamep.pattern.project2.controller.HealthCheckerControllerImpl;

@@ -7,6 +7,11 @@ public abstract class GeneralServiceException extends Exception implements Servi
 
     private final Error error;
 
+    GeneralServiceException(Throwable cause) {
+        super(cause);
+        this.error = Error.UNKNOWN_ERROR;
+    }
+
     GeneralServiceException(Error error) {
         this.error = error;
     }
