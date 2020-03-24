@@ -13,11 +13,10 @@ import com.mongodb.event.ConnectionPoolListener;
 import com.qthegamep.pattern.project2.binder.property.Property;
 import com.qthegamep.pattern.project2.model.container.MongoConnection;
 import com.qthegamep.pattern.project2.repository.mongo.callback.ShutdownServerCallback;
-import com.qthegamep.pattern.project2.exception.runtime.AsyncMongoDatabaseConnectorServiceRuntimeException;
-import com.qthegamep.pattern.project2.exception.runtime.CloseRedisClustersDatabaseConnectorServiceRuntimeException;
-import com.qthegamep.pattern.project2.exception.runtime.RedisDatabaseConnectorServiceRuntimeException;
-import com.qthegamep.pattern.project2.exception.runtime.SyncMongoDatabaseConnectorServiceRuntimeException;
-import com.qthegamep.pattern.project2.model.container.Error;
+import com.qthegamep.pattern.project2.exception.runtime.AsyncMongoDatabaseConnectorServiceInitializationRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.CloseRedisClustersDatabaseConnectorServiceInitializationRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.RedisDatabaseConnectorServiceInitializationRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.SyncMongoDatabaseConnectorServiceInitializationRuntimeException;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.slf4j.Logger;
@@ -207,7 +206,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                     return connectToStandaloneSyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             }
         } catch (Exception e) {
-            throw new SyncMongoDatabaseConnectorServiceRuntimeException(e, Error.SYNC_MONGO_DB_CONNECTOR_ERROR);
+            throw new SyncMongoDatabaseConnectorServiceInitializationRuntimeException(e);
         }
     }
 
@@ -284,7 +283,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                     return connectToStandaloneAsyncMongoDB(commandListener, connectionPoolListener, codecRegistry);
             }
         } catch (Exception e) {
-            throw new AsyncMongoDatabaseConnectorServiceRuntimeException(e, Error.ASYNC_MONGO_DB_CONNECTOR_ERROR);
+            throw new AsyncMongoDatabaseConnectorServiceInitializationRuntimeException(e);
         }
     }
 
@@ -318,7 +317,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             redisPools.add(jedisPool);
             return jedisPool;
         } catch (Exception e) {
-            throw new RedisDatabaseConnectorServiceRuntimeException(e, Error.REDIS_POOL_CONNECTOR_ERROR);
+            throw new RedisDatabaseConnectorServiceInitializationRuntimeException(e);
         }
     }
 
@@ -347,7 +346,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             redisClusters.add(jedisCluster);
             return jedisCluster;
         } catch (Exception e) {
-            throw new RedisDatabaseConnectorServiceRuntimeException(e, Error.REDIS_CLUSTER_CONNECTOR_ERROR);
+            throw new RedisDatabaseConnectorServiceInitializationRuntimeException(e);
         }
     }
 
@@ -377,7 +376,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             }
             redisClusters.clear();
         } catch (Exception e) {
-            throw new CloseRedisClustersDatabaseConnectorServiceRuntimeException(e, Error.CLOSE_CLUSTER_REDIS_ERROR);
+            throw new CloseRedisClustersDatabaseConnectorServiceInitializationRuntimeException(e);
         }
     }
 

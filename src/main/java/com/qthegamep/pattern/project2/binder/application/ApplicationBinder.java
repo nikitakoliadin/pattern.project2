@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mongodb.MongoClient;
-import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicationBinderRuntimeException;
+import com.qthegamep.pattern.project2.exception.runtime.RedisRepositoryApplicationBinderInitializationRuntimeException;
 import com.qthegamep.pattern.project2.exception.mapper.GeneralExceptionMapper;
 import com.qthegamep.pattern.project2.model.container.MongoConnection;
 import com.qthegamep.pattern.project2.model.container.RedisConnection;
@@ -13,7 +13,6 @@ import com.qthegamep.pattern.project2.service.adapter.IsoDateJsonModuleAdapter;
 import com.qthegamep.pattern.project2.service.adapter.NullJsonConventionAdapter;
 import com.qthegamep.pattern.project2.service.adapter.ObjectIdJsonModuleAdapter;
 import com.qthegamep.pattern.project2.statistics.meter.*;
-import com.qthegamep.pattern.project2.model.container.Error;
 import com.qthegamep.pattern.project2.repository.mongo.MongoRepositoryAsync;
 import com.qthegamep.pattern.project2.repository.mongo.MongoRepositoryAsyncImpl;
 import com.qthegamep.pattern.project2.repository.mongo.MongoRepositorySync;
@@ -521,7 +520,7 @@ public class ApplicationBinder extends AbstractBinder {
             } else if (RedisConnection.CLUSTER_REDIS_CONNECTION.getType().equalsIgnoreCase(redisType)) {
                 bind(RedisRepositoryClusterImpl.class).to(RedisRepository.class).in(Singleton.class);
             } else {
-                throw new RedisRepositoryApplicationBinderRuntimeException(Error.REDIS_NOT_EXISTING_TYPE_ERROR);
+                throw new RedisRepositoryApplicationBinderInitializationRuntimeException("Not existing redis type!");
             }
         } else {
             bind(redisRepository).to(RedisRepository.class).in(Singleton.class);

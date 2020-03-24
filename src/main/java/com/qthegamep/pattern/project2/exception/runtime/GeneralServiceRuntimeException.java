@@ -9,7 +9,12 @@ public abstract class GeneralServiceRuntimeException extends RuntimeException im
 
     GeneralServiceRuntimeException(String message) {
         super(message);
-        this.error = Error.INTERNAL_ERROR;
+        this.error = Error.UNKNOWN_ERROR;
+    }
+
+    GeneralServiceRuntimeException(Throwable cause) {
+        super(cause);
+        this.error = Error.UNKNOWN_ERROR;
     }
 
     GeneralServiceRuntimeException(Error error) {
