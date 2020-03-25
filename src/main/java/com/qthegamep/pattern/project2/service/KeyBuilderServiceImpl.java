@@ -17,26 +17,26 @@ public class KeyBuilderServiceImpl implements KeyBuilderService {
         LOG.debug("Cache key algorithm: {}", keyAlgorithm);
         switch (keyAlgorithm) {
             case FULL_SIGNATURE_KEY_ALGORITHM:
-                return keyWithFullSignatureKeyAlgorithm(thisJoinPoint);
+                return keyWithFullSignature(thisJoinPoint);
             case FULL_ARGUMENTS_KEY_ALGORITHM:
-                return keyWithFullArgumentsKeyAlgorithm(thisJoinPoint);
+                return keyWithFullArguments(thisJoinPoint);
             case FULL_SIGNATURE_WITH_FULL_ARGUMENTS_KEY_ALGORITHM:
             default:
-                return keyWithSignatureWithFullArgumentsKeyAlgorithm(thisJoinPoint);
+                return keyWithFullSignatureWithFullArguments(thisJoinPoint);
         }
     }
 
-    private String keyWithFullSignatureKeyAlgorithm(ProceedingJoinPoint thisJoinPoint) {
+    private String keyWithFullSignature(ProceedingJoinPoint thisJoinPoint) {
         Signature signature = thisJoinPoint.getSignature();
         return signature.toString();
     }
 
-    private String keyWithFullArgumentsKeyAlgorithm(ProceedingJoinPoint thisJoinPoint) {
+    private String keyWithFullArguments(ProceedingJoinPoint thisJoinPoint) {
         Object[] arguments = thisJoinPoint.getArgs();
         return Arrays.toString(arguments);
     }
 
-    private String keyWithSignatureWithFullArgumentsKeyAlgorithm(ProceedingJoinPoint thisJoinPoint) {
+    private String keyWithFullSignatureWithFullArguments(ProceedingJoinPoint thisJoinPoint) {
         Signature signature = thisJoinPoint.getSignature();
         Object[] arguments = thisJoinPoint.getArgs();
         return signature.toString() + Arrays.toString(arguments);
