@@ -531,9 +531,9 @@
             </build>
         </profile>
 
-        <!-- Skip unit test profile -->
+        <!-- Skip all test profile -->
         <profile>
-            <id>skip-unit-test</id>
+            <id>skip-all-test</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -548,6 +548,7 @@
                             <testFailureIgnore>${surefire-plugin.testFailureIgnore}</testFailureIgnore>
                             <excludes>
                                 <exclude>**/*UnitTest*</exclude>
+                                <exclude>**/*IntegrationTest*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -579,9 +580,9 @@
             </build>
         </profile>
 
-        <!-- Skip all test profile -->
+        <!-- Skip unit test profile -->
         <profile>
-            <id>skip-all-test</id>
+            <id>skip-unit-test</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -596,7 +597,6 @@
                             <testFailureIgnore>${surefire-plugin.testFailureIgnore}</testFailureIgnore>
                             <excludes>
                                 <exclude>**/*UnitTest*</exclude>
-                                <exclude>**/*IntegrationTest*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
