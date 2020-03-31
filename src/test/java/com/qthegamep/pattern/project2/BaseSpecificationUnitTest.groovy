@@ -19,7 +19,7 @@ import com.qthegamep.pattern.project2.service.ErrorResponseBuilderService
 import com.qthegamep.pattern.project2.service.GenerationService
 import com.qthegamep.pattern.project2.service.IOStrategyFactoryService
 import com.qthegamep.pattern.project2.service.KeyBuilderService
-import com.qthegamep.pattern.project2.service.ValidationService
+import com.qthegamep.pattern.project2.service.BeanValidationService
 import com.qthegamep.pattern.project2.statistics.Meters
 import io.micrometer.core.instrument.Clock
 import io.micrometer.prometheus.PrometheusConfig
@@ -88,7 +88,7 @@ class BaseSpecificationUnitTest extends Specification {
         HashService hashServiceMock = Mock()
         KeyBuilderService keyBuilderServiceMock = Mock()
         GeneralExceptionMapper generalExceptionMapperMock = Mock()
-        ValidationService validationServiceMock = Mock()
+        BeanValidationService beanValidationServiceMock = Mock()
         IOStrategyFactoryService ioStrategyFactoryServiceMock = Mock()
         applicationBinderBuilder = ApplicationBinder.builder()
                 .setExitManagerService(exitManagerServiceMock)
@@ -112,7 +112,7 @@ class BaseSpecificationUnitTest extends Specification {
                 .setHashService(hashServiceMock)
                 .setKeyBuilderService(keyBuilderServiceMock)
                 .setGeneralExceptionMapper(generalExceptionMapperMock)
-                .setValidationService(validationServiceMock)
+                .setBeanValidationService(beanValidationServiceMock)
                 .setIoStrategyFactoryService(ioStrategyFactoryServiceMock)
         applicationBinder = applicationBinderBuilder.build()
     }
@@ -178,7 +178,7 @@ class BaseSpecificationUnitTest extends Specification {
         applicationBinder.getHashService() != null
         applicationBinder.getKeyBuilderService() != null
         applicationBinder.getGeneralExceptionMapper() != null
-        applicationBinder.getValidationService() != null
+        applicationBinder.getBeanValidationService() != null
         applicationBinder.getIoStrategyFactoryService() != null
         and: "correct injection manager"
         getInstance(propertyBinder.getPropertyInjectionResolver().getClass()) != null
@@ -203,7 +203,7 @@ class BaseSpecificationUnitTest extends Specification {
         getInstance(applicationBinder.getHashService().getClass()) != null
         getInstance(applicationBinder.getKeyBuilderService().getClass()) != null
         getInstance(applicationBinder.getGeneralExceptionMapper().getClass()) != null
-        getInstance(applicationBinder.getValidationService().getClass()) != null
+        getInstance(applicationBinder.getBeanValidationService().getClass()) != null
         getInstance(applicationBinder.getIoStrategyFactoryService().getClass()) != null
         and: "correct metrics"
         Meters.TASK_QUEUE_SIZE_METER.get() == 0L

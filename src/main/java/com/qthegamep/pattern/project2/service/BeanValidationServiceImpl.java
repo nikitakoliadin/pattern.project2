@@ -9,25 +9,25 @@ import javax.inject.Inject;
 import javax.validation.Validator;
 import java.util.stream.Collectors;
 
-public class ValidationServiceImpl implements ValidationService {
+public class BeanValidationServiceImpl implements BeanValidationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ValidationServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BeanValidationServiceImpl.class);
 
     private Validator validator;
 
     @Inject
-    public ValidationServiceImpl(Validator validator) {
+    public BeanValidationServiceImpl(Validator validator) {
         this.validator = validator;
     }
 
     @Override
-    public <T> void validate(T object) {
+    public <T> void validateBean(T object) {
         if (object != null) {
             String error = validator.validate(object)
                     .stream()
                     .map(value -> String.format("'%s' %s", value.getPropertyPath(), value.getMessage()))
                     .collect(Collectors.joining("; "));
-            LOG.debug("Validate error: {}", error);
+            LOG.debug("Validate bean error: {}", error);
             if (!error.isEmpty()) {
                 throw new ValidationServiceRuntimeException(error, Error.VALIDATION_ERROR);
             }

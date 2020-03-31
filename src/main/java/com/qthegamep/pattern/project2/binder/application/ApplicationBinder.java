@@ -73,7 +73,7 @@ public class ApplicationBinder extends AbstractBinder {
     private HashService hashService;
     private KeyBuilderService keyBuilderService;
     private GeneralExceptionMapper generalExceptionMapper;
-    private ValidationService validationService;
+    private BeanValidationService beanValidationService;
     private IOStrategyFactoryService ioStrategyFactoryService;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
@@ -100,7 +100,7 @@ public class ApplicationBinder extends AbstractBinder {
                               HashService hashService,
                               KeyBuilderService keyBuilderService,
                               GeneralExceptionMapper generalExceptionMapper,
-                              ValidationService validationService,
+                              BeanValidationService beanValidationService,
                               IOStrategyFactoryService ioStrategyFactoryService) {
         this.exitManagerService = exitManagerService;
         this.openAPIConfiguration = openAPIConfiguration;
@@ -123,7 +123,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.hashService = hashService;
         this.keyBuilderService = keyBuilderService;
         this.generalExceptionMapper = generalExceptionMapper;
-        this.validationService = validationService;
+        this.beanValidationService = beanValidationService;
         this.ioStrategyFactoryService = ioStrategyFactoryService;
     }
 
@@ -211,8 +211,8 @@ public class ApplicationBinder extends AbstractBinder {
         return generalExceptionMapper;
     }
 
-    public ValidationService getValidationService() {
-        return validationService;
+    public BeanValidationService getBeanValidationService() {
+        return beanValidationService;
     }
 
     public IOStrategyFactoryService getIoStrategyFactoryService() {
@@ -246,7 +246,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindHashService();
         bindKeyBuilder();
         bindGeneralExceptionMapper();
-        bindValidationService();
+        bindBeanValidationService();
         bindIOStrategyFactoryService();
     }
 
@@ -551,11 +551,11 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
-    private void bindValidationService() {
-        if (validationService == null) {
-            bind(ValidationServiceImpl.class).to(ValidationService.class).in(Singleton.class);
+    private void bindBeanValidationService() {
+        if (beanValidationService == null) {
+            bind(BeanValidationServiceImpl.class).to(BeanValidationService.class).in(Singleton.class);
         } else {
-            bind(validationService).to(ValidationService.class).in(Singleton.class);
+            bind(beanValidationService).to(BeanValidationService.class).in(Singleton.class);
         }
     }
 
@@ -590,7 +590,7 @@ public class ApplicationBinder extends AbstractBinder {
         private HashService hashService;
         private KeyBuilderService keyBuilderService;
         private GeneralExceptionMapper generalExceptionMapper;
-        private ValidationService validationService;
+        private BeanValidationService beanValidationService;
         private IOStrategyFactoryService ioStrategyFactoryService;
 
         public Builder setExitManagerService(ExitManagerService exitManagerService) {
@@ -698,8 +698,8 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
-        public Builder setValidationService(ValidationService validationService) {
-            this.validationService = validationService;
+        public Builder setBeanValidationService(BeanValidationService beanValidationService) {
+            this.beanValidationService = beanValidationService;
             return this;
         }
 
@@ -731,7 +731,7 @@ public class ApplicationBinder extends AbstractBinder {
                     hashService,
                     keyBuilderService,
                     generalExceptionMapper,
-                    validationService,
+                    beanValidationService,
                     ioStrategyFactoryService);
         }
     }
