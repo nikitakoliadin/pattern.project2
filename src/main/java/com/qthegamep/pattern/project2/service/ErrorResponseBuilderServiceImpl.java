@@ -6,6 +6,7 @@ import com.qthegamep.pattern.project2.model.container.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,9 +16,10 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
 
     private static final String ERROR_MESSAGES_LOCALIZATION = "localization.error_messages";
 
-    private final List<Locale> availableLocales;
-    private final Locale defaultLocale;
+    private List<Locale> availableLocales;
+    private Locale defaultLocale;
 
+    @Inject
     public ErrorResponseBuilderServiceImpl() {
         availableLocales = Arrays.stream(ServiceLocale.values())
                 .map(ServiceLocale::getLocale)
@@ -57,8 +59,7 @@ public class ErrorResponseBuilderServiceImpl implements ErrorResponseBuilderServ
         if (requestAvailableLocales.isEmpty()) {
             return defaultLocale;
         } else {
-            String language = requestAvailableLocales.get(0).getLanguage();
-            return new Locale(language);
+            return requestAvailableLocales.get(0);
         }
     }
 }

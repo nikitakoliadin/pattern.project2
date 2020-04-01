@@ -11,7 +11,7 @@ public class AspectRegistrarConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(AspectRegistrarConfig.class);
 
-    private final boolean registerCacheAspect = Boolean.parseBoolean(System.getProperty("aop.register.cache.aspect"));
+    private boolean registerCacheAspect = Boolean.parseBoolean(System.getProperty("aop.register.cache.aspect"));
 
     public void register(ResourceConfig resourceConfig) {
         try {
