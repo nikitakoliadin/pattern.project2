@@ -1,5 +1,6 @@
 package com.qthegamep.pattern.project2.service;
 
+import com.google.common.base.Strings;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
@@ -38,21 +39,6 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     private List<JedisPool> redisPools = new CopyOnWriteArrayList<>();
     private List<JedisCluster> redisClusters = new CopyOnWriteArrayList<>();
 
-    private String redisPoolHost;
-    private String redisPoolPort;
-    private String redisPoolPassword;
-    private String redisPoolMaxTotal;
-    private String redisPoolMaxIdle;
-    private String redisPoolTimeout;
-    private String redisClusterPassword;
-    private String redisClusterTestOnBorrow;
-    private String redisClusterTestOnReturn;
-    private String redisClusterMaxTotal;
-    private String redisClusterMaxIdle;
-    private String redisClusterMinIdle;
-    private String redisClusterConnectionTimeout;
-    private String redisClusterSoTimeout;
-    private String redisClusterMaxAttempts;
     private String syncMongoDbStandaloneHost;
     private String syncMongoDbStandalonePort;
     private String syncMongoDbStandaloneUser;
@@ -71,25 +57,25 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     private String asyncMongoDbClusterUser;
     private String asyncMongoDbClusterDb;
     private String asyncMongoDbClusterPassword;
+    private String redisPoolHost;
+    private String redisPoolPort;
+    private String redisPoolPassword;
+    private String redisPoolMaxTotal;
+    private String redisPoolMaxIdle;
+    private String redisPoolTimeout;
+    private String redisClusterPassword;
+    private String redisClusterTestOnBorrow;
+    private String redisClusterTestOnReturn;
+    private String redisClusterMaxTotal;
+    private String redisClusterMaxIdle;
+    private String redisClusterMinIdle;
+    private String redisClusterConnectionTimeout;
+    private String redisClusterSoTimeout;
+    private String redisClusterMaxAttempts;
     private ExitManagerService exitManagerService;
 
     @Inject
-    public DatabaseConnectorServiceImpl(@Property(value = "redis.pool.host") String redisPoolHost,
-                                        @Property(value = "redis.pool.port") String redisPoolPort,
-                                        @Property(value = "redis.pool.password") String redisPoolPassword,
-                                        @Property(value = "redis.pool.max.total") String redisPoolMaxTotal,
-                                        @Property(value = "redis.pool.max.idle") String redisPoolMaxIdle,
-                                        @Property(value = "redis.pool.timeout") String redisPoolTimeout,
-                                        @Property(value = "redis.cluster.password") String redisClusterPassword,
-                                        @Property(value = "redis.cluster.test.on.borrow") String redisClusterTestOnBorrow,
-                                        @Property(value = "redis.cluster.test.on.return") String redisClusterTestOnReturn,
-                                        @Property(value = "redis.cluster.max.total") String redisClusterMaxTotal,
-                                        @Property(value = "redis.cluster.max.idle") String redisClusterMaxIdle,
-                                        @Property(value = "redis.cluster.min.idle") String redisClusterMinIdle,
-                                        @Property(value = "redis.cluster.connection.timeout") String redisClusterConnectionTimeout,
-                                        @Property(value = "redis.cluster.so.timeout") String redisClusterSoTimeout,
-                                        @Property(value = "redis.cluster.max.attempts") String redisClusterMaxAttempts,
-                                        @Property(value = "sync.mongodb.standalone.host") String syncMongoDbStandaloneHost,
+    public DatabaseConnectorServiceImpl(@Property(value = "sync.mongodb.standalone.host") String syncMongoDbStandaloneHost,
                                         @Property(value = "sync.mongodb.standalone.port") String syncMongoDbStandalonePort,
                                         @Property(value = "sync.mongodb.standalone.user") String syncMongoDbStandaloneUser,
                                         @Property(value = "sync.mongodb.standalone.db") String syncMongoDbStandaloneDb,
@@ -107,22 +93,22 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                                         @Property(value = "async.mongodb.cluster.user") String asyncMongoDbClusterUser,
                                         @Property(value = "async.mongodb.cluster.db") String asyncMongoDbClusterDb,
                                         @Property(value = "async.mongodb.cluster.pass") String asyncMongoDbClusterPassword,
+                                        @Property(value = "redis.pool.host") String redisPoolHost,
+                                        @Property(value = "redis.pool.port") String redisPoolPort,
+                                        @Property(value = "redis.pool.password") String redisPoolPassword,
+                                        @Property(value = "redis.pool.max.total") String redisPoolMaxTotal,
+                                        @Property(value = "redis.pool.max.idle") String redisPoolMaxIdle,
+                                        @Property(value = "redis.pool.timeout") String redisPoolTimeout,
+                                        @Property(value = "redis.cluster.password") String redisClusterPassword,
+                                        @Property(value = "redis.cluster.test.on.borrow") String redisClusterTestOnBorrow,
+                                        @Property(value = "redis.cluster.test.on.return") String redisClusterTestOnReturn,
+                                        @Property(value = "redis.cluster.max.total") String redisClusterMaxTotal,
+                                        @Property(value = "redis.cluster.max.idle") String redisClusterMaxIdle,
+                                        @Property(value = "redis.cluster.min.idle") String redisClusterMinIdle,
+                                        @Property(value = "redis.cluster.connection.timeout") String redisClusterConnectionTimeout,
+                                        @Property(value = "redis.cluster.so.timeout") String redisClusterSoTimeout,
+                                        @Property(value = "redis.cluster.max.attempts") String redisClusterMaxAttempts,
                                         ExitManagerService exitManagerService) {
-        this.redisPoolHost = redisPoolHost;
-        this.redisPoolPort = redisPoolPort;
-        this.redisPoolPassword = redisPoolPassword;
-        this.redisPoolMaxTotal = redisPoolMaxTotal;
-        this.redisPoolMaxIdle = redisPoolMaxIdle;
-        this.redisPoolTimeout = redisPoolTimeout;
-        this.redisClusterPassword = redisClusterPassword;
-        this.redisClusterTestOnBorrow = redisClusterTestOnBorrow;
-        this.redisClusterTestOnReturn = redisClusterTestOnReturn;
-        this.redisClusterMaxTotal = redisClusterMaxTotal;
-        this.redisClusterMaxIdle = redisClusterMaxIdle;
-        this.redisClusterMinIdle = redisClusterMinIdle;
-        this.redisClusterConnectionTimeout = redisClusterConnectionTimeout;
-        this.redisClusterSoTimeout = redisClusterSoTimeout;
-        this.redisClusterMaxAttempts = redisClusterMaxAttempts;
         this.syncMongoDbStandaloneHost = syncMongoDbStandaloneHost;
         this.syncMongoDbStandalonePort = syncMongoDbStandalonePort;
         this.syncMongoDbStandaloneUser = syncMongoDbStandaloneUser;
@@ -141,6 +127,21 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         this.asyncMongoDbClusterUser = asyncMongoDbClusterUser;
         this.asyncMongoDbClusterDb = asyncMongoDbClusterDb;
         this.asyncMongoDbClusterPassword = asyncMongoDbClusterPassword;
+        this.redisPoolHost = redisPoolHost;
+        this.redisPoolPort = redisPoolPort;
+        this.redisPoolPassword = redisPoolPassword;
+        this.redisPoolMaxTotal = redisPoolMaxTotal;
+        this.redisPoolMaxIdle = redisPoolMaxIdle;
+        this.redisPoolTimeout = redisPoolTimeout;
+        this.redisClusterPassword = redisClusterPassword;
+        this.redisClusterTestOnBorrow = redisClusterTestOnBorrow;
+        this.redisClusterTestOnReturn = redisClusterTestOnReturn;
+        this.redisClusterMaxTotal = redisClusterMaxTotal;
+        this.redisClusterMaxIdle = redisClusterMaxIdle;
+        this.redisClusterMinIdle = redisClusterMinIdle;
+        this.redisClusterConnectionTimeout = redisClusterConnectionTimeout;
+        this.redisClusterSoTimeout = redisClusterSoTimeout;
+        this.redisClusterMaxAttempts = redisClusterMaxAttempts;
         this.exitManagerService = exitManagerService;
     }
 
@@ -211,18 +212,6 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     }
 
     @Override
-    public List<com.mongodb.MongoClient> getSyncMongoDBConnections() {
-        return syncMongoClients;
-    }
-
-    @Override
-    public void closeSyncMongoDBConnections() {
-        LOG.info("Sync MongoDB's to close: {}", syncMongoClients.size());
-        syncMongoClients.forEach(Mongo::close);
-        syncMongoClients.clear();
-    }
-
-    @Override
     public com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB() {
         return connectToAsyncMongoDB(null, null, null, MongoConnection.STANDALONE_MONGO_CONNECTION);
     }
@@ -288,30 +277,13 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     }
 
     @Override
-    public List<com.mongodb.async.client.MongoClient> getAsyncMongoDBConnections() {
-        return asyncMongoClients;
-    }
-
-    @Override
-    public void closeAsyncMongoDBConnections() {
-        LOG.info("Async MongoDB's to close: {}", asyncMongoClients.size());
-        asyncMongoClients.forEach(com.mongodb.async.client.MongoClient::close);
-        asyncMongoClients.clear();
-    }
-
-    @Override
     public JedisPool connectToPoolRedis() {
         try {
             LOG.debug("Pool Redis properties -> Host: {} Port: {} Password: {} Max Total: {} Max Idle: {} Timeout: {}", redisPoolHost, redisPoolPort, redisPoolPassword, redisPoolMaxTotal, redisPoolMaxIdle, redisPoolTimeout);
             JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
             jedisPoolConfig.setMaxTotal(Integer.parseInt(redisPoolMaxTotal));
             jedisPoolConfig.setMaxIdle(Integer.parseInt(redisPoolMaxIdle));
-            JedisPool jedisPool;
-            if (redisPoolPassword == null || redisPoolPassword.isEmpty()) {
-                jedisPool = new JedisPool(jedisPoolConfig, redisPoolHost, Integer.parseInt(redisPoolPort), Integer.parseInt(redisPoolTimeout));
-            } else {
-                jedisPool = new JedisPool(jedisPoolConfig, redisPoolHost, Integer.parseInt(redisPoolPort), Integer.parseInt(redisPoolTimeout), redisPoolPassword);
-            }
+            JedisPool jedisPool = createJedisPool(jedisPoolConfig);
             checkRedisPoolConnection(jedisPool);
             LOG.info("Pool Redis {}:{} was connected", redisPoolHost, redisPoolPort);
             redisPools.add(jedisPool);
@@ -334,12 +306,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
             genericObjectPoolConfig.setMaxTotal(Integer.parseInt(redisClusterMaxTotal));
             genericObjectPoolConfig.setMaxIdle(Integer.parseInt(redisClusterMaxIdle));
             genericObjectPoolConfig.setMinIdle(Integer.parseInt(redisClusterMinIdle));
-            JedisCluster jedisCluster;
-            if (redisClusterPassword == null || redisClusterPassword.isEmpty()) {
-                jedisCluster = new JedisCluster(clusterRedisNodes, Integer.parseInt(redisClusterConnectionTimeout), Integer.parseInt(redisClusterSoTimeout), Integer.parseInt(redisClusterMaxAttempts), genericObjectPoolConfig);
-            } else {
-                jedisCluster = new JedisCluster(clusterRedisNodes, Integer.parseInt(redisClusterConnectionTimeout), Integer.parseInt(redisClusterSoTimeout), Integer.parseInt(redisClusterMaxAttempts), redisClusterPassword, genericObjectPoolConfig);
-            }
+            JedisCluster jedisCluster = createJedisCluster(clusterRedisNodes, genericObjectPoolConfig);
             LOG.info("Cluster Redis were connected:");
             IntStream.range(0, hosts.size())
                     .forEach(i -> LOG.info("{}:{}", hosts.get(i), ports.get(i)));
@@ -351,6 +318,16 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     }
 
     @Override
+    public List<com.mongodb.MongoClient> getSyncMongoDBConnections() {
+        return syncMongoClients;
+    }
+
+    @Override
+    public List<com.mongodb.async.client.MongoClient> getAsyncMongoDBConnections() {
+        return asyncMongoClients;
+    }
+
+    @Override
     public List<JedisPool> getRedisPools() {
         return redisPools;
     }
@@ -358,6 +335,20 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     @Override
     public List<JedisCluster> getRedisClusters() {
         return redisClusters;
+    }
+
+    @Override
+    public void closeSyncMongoDBConnections() {
+        LOG.info("Sync MongoDB's to close: {}", syncMongoClients.size());
+        syncMongoClients.forEach(Mongo::close);
+        syncMongoClients.clear();
+    }
+
+    @Override
+    public void closeAsyncMongoDBConnections() {
+        LOG.info("Async MongoDB's to close: {}", asyncMongoClients.size());
+        asyncMongoClients.forEach(com.mongodb.async.client.MongoClient::close);
+        asyncMongoClients.clear();
     }
 
     @Override
@@ -392,9 +383,8 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     private com.mongodb.client.MongoDatabase connectToStandaloneSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
         LOG.debug("Standalone sync MongoDB properties -> Host: {} Port: {} User: {} DB: {} Password: {}", syncMongoDbStandaloneHost, syncMongoDbStandalonePort, syncMongoDbStandaloneUser, syncMongoDbStandaloneDb, syncMongoDbStandalonePassword);
         ServerAddress serverAddress = new ServerAddress(syncMongoDbStandaloneHost, Integer.parseInt(syncMongoDbStandalonePort));
-        MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(syncMongoDbStandaloneUser, syncMongoDbStandaloneDb, syncMongoDbStandalonePassword.toCharArray());
         MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener, codecRegistry);
-        com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(serverAddress, Collections.singletonList(mongoCredential), mongoClientOptions);
+        com.mongodb.MongoClient mongoClient = createStandaloneSyncMongoClient(serverAddress, mongoClientOptions);
         com.mongodb.client.MongoDatabase database = mongoClient.getDatabase(syncMongoDbStandaloneDb);
         checkSyncMongoDBConnection(database);
         LOG.info("Standalone sync MongoDB {}:{} was connected", syncMongoDbStandaloneHost, syncMongoDbStandalonePort);
@@ -408,9 +398,8 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         List<ServerAddress> serverAddresses = hosts.stream()
                 .map(host -> new ServerAddress(host, Integer.parseInt(syncMongoDbClusterPort)))
                 .collect(Collectors.toList());
-        MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(syncMongoDbClusterUser, syncMongoDbClusterDb, syncMongoDbClusterPassword.toCharArray());
         MongoClientOptions mongoClientOptions = buildSyncMongoClientOptions(commandListener, connectionPoolListener, codecRegistry);
-        com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(serverAddresses, Collections.singletonList(mongoCredential), mongoClientOptions);
+        com.mongodb.MongoClient mongoClient = createdClusterSyncMongoClient(serverAddresses, mongoClientOptions);
         com.mongodb.client.MongoDatabase database = mongoClient.getDatabase(syncMongoDbClusterDb);
         checkSyncMongoDBConnection(database);
         LOG.info("Cluster sync MongoDB were connected:");
@@ -422,11 +411,11 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
     private com.mongodb.async.client.MongoDatabase connectToStandaloneAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
         LOG.debug("Standalone async MongoDB properties -> Host: {} Port: {} User: {} DB: {} Password: {}", asyncMongoDbStandaloneHost, asyncMongoDbStandalonePort, asyncMongoDbStandaloneUser, asyncMongoDbStandaloneDb, asyncMongoDbStandalonePassword);
         ServerAddress serverAddress = new ServerAddress(asyncMongoDbStandaloneHost, Integer.parseInt(asyncMongoDbStandalonePort));
-        MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(asyncMongoDbStandaloneUser, asyncMongoDbStandaloneDb, asyncMongoDbStandalonePassword.toCharArray());
         ClusterSettings clusterSettings = ClusterSettings.builder()
                 .hosts(Collections.singletonList(serverAddress))
                 .build();
-        MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, codecRegistry, mongoCredential, clusterSettings);
+        MongoClientSettings.Builder mongoClientSettingsBuilder = buildAsyncMongoClientSettingsBuilder(commandListener, connectionPoolListener, codecRegistry, clusterSettings);
+        MongoClientSettings mongoClientSettings = createStandaloneAsyncMongoClientSettings(mongoClientSettingsBuilder);
         com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
         com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(asyncMongoDbStandaloneDb);
         checkAsyncMongoDBConnection(database);
@@ -441,11 +430,11 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         List<ServerAddress> serverAddresses = hosts.stream()
                 .map(host -> new ServerAddress(host, Integer.parseInt(asyncMongoDbClusterPort)))
                 .collect(Collectors.toList());
-        MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(asyncMongoDbClusterUser, asyncMongoDbClusterDb, asyncMongoDbClusterPassword.toCharArray());
         ClusterSettings clusterSettings = ClusterSettings.builder()
                 .hosts(serverAddresses)
                 .build();
-        MongoClientSettings mongoClientSettings = buildAsyncMongoClientSettings(commandListener, connectionPoolListener, codecRegistry, mongoCredential, clusterSettings);
+        MongoClientSettings.Builder mongoClientSettingsBuilder = buildAsyncMongoClientSettingsBuilder(commandListener, connectionPoolListener, codecRegistry, clusterSettings);
+        MongoClientSettings mongoClientSettings = createClusterAsyncMongoClientSettings(mongoClientSettingsBuilder);
         com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
         com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(asyncMongoDbClusterDb);
         checkAsyncMongoDBConnection(database);
@@ -453,6 +442,60 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         hosts.forEach(host -> LOG.info("{}:{}", host, asyncMongoDbClusterPort));
         asyncMongoClients.add(mongoClient);
         return database;
+    }
+
+    private com.mongodb.MongoClient createStandaloneSyncMongoClient(ServerAddress serverAddress, MongoClientOptions mongoClientOptions) {
+        if (Strings.isNullOrEmpty(syncMongoDbStandaloneUser)) {
+            return new com.mongodb.MongoClient(serverAddress, mongoClientOptions);
+        } else {
+            MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(syncMongoDbStandaloneUser, syncMongoDbStandaloneDb, syncMongoDbStandalonePassword.toCharArray());
+            return new com.mongodb.MongoClient(serverAddress, Collections.singletonList(mongoCredential), mongoClientOptions);
+        }
+    }
+
+    private com.mongodb.MongoClient createdClusterSyncMongoClient(List<ServerAddress> serverAddresses, MongoClientOptions mongoClientOptions) {
+        if (Strings.isNullOrEmpty(syncMongoDbClusterUser)) {
+            return new com.mongodb.MongoClient(serverAddresses, mongoClientOptions);
+        } else {
+            MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(syncMongoDbClusterUser, syncMongoDbClusterDb, syncMongoDbClusterPassword.toCharArray());
+            return new com.mongodb.MongoClient(serverAddresses, Collections.singletonList(mongoCredential), mongoClientOptions);
+        }
+    }
+
+    private MongoClientSettings createStandaloneAsyncMongoClientSettings(MongoClientSettings.Builder mongoClientSettingsBuilder) {
+        if (Strings.isNullOrEmpty(asyncMongoDbStandaloneUser)) {
+            return mongoClientSettingsBuilder.build();
+        } else {
+            MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(asyncMongoDbStandaloneUser, asyncMongoDbStandaloneDb, asyncMongoDbStandalonePassword.toCharArray());
+            return mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
+                    .build();
+        }
+    }
+
+    private MongoClientSettings createClusterAsyncMongoClientSettings(MongoClientSettings.Builder mongoClientSettingsBuilder) {
+        if (Strings.isNullOrEmpty(asyncMongoDbClusterUser)) {
+            return mongoClientSettingsBuilder.build();
+        } else {
+            MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(asyncMongoDbClusterUser, asyncMongoDbClusterDb, asyncMongoDbClusterPassword.toCharArray());
+            return mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
+                    .build();
+        }
+    }
+
+    private JedisPool createJedisPool(JedisPoolConfig jedisPoolConfig) {
+        if (redisPoolPassword == null || redisPoolPassword.isEmpty()) {
+            return new JedisPool(jedisPoolConfig, redisPoolHost, Integer.parseInt(redisPoolPort), Integer.parseInt(redisPoolTimeout));
+        } else {
+            return new JedisPool(jedisPoolConfig, redisPoolHost, Integer.parseInt(redisPoolPort), Integer.parseInt(redisPoolTimeout), redisPoolPassword);
+        }
+    }
+
+    private JedisCluster createJedisCluster(Set<HostAndPort> clusterRedisNodes, GenericObjectPoolConfig genericObjectPoolConfig) {
+        if (redisClusterPassword == null || redisClusterPassword.isEmpty()) {
+            return new JedisCluster(clusterRedisNodes, Integer.parseInt(redisClusterConnectionTimeout), Integer.parseInt(redisClusterSoTimeout), Integer.parseInt(redisClusterMaxAttempts), genericObjectPoolConfig);
+        } else {
+            return new JedisCluster(clusterRedisNodes, Integer.parseInt(redisClusterConnectionTimeout), Integer.parseInt(redisClusterSoTimeout), Integer.parseInt(redisClusterMaxAttempts), redisClusterPassword, genericObjectPoolConfig);
+        }
     }
 
     private MongoClientOptions buildSyncMongoClientOptions(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry) {
@@ -469,7 +512,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         return mongoClientOptionsBuilder.build();
     }
 
-    private MongoClientSettings buildAsyncMongoClientSettings(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, MongoCredential mongoCredential, ClusterSettings clusterSettings) {
+    private MongoClientSettings.Builder buildAsyncMongoClientSettingsBuilder(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, ClusterSettings clusterSettings) {
         MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder();
         if (commandListener != null) {
             mongoClientSettingsBuilder.addCommandListener(commandListener);
@@ -483,9 +526,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         if (codecRegistry != null) {
             mongoClientSettingsBuilder.codecRegistry(codecRegistry);
         }
-        return mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
-                .clusterSettings(clusterSettings)
-                .build();
+        return mongoClientSettingsBuilder.clusterSettings(clusterSettings);
     }
 
     private Set<HostAndPort> buildClusterRedisNodes(List<String> hosts, List<String> ports) {
@@ -520,7 +561,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         int i = 1;
         while (true) {
             String host = System.getProperty(property + "." + i);
-            if (host == null || host.isEmpty()) {
+            if (Strings.isNullOrEmpty(host)) {
                 break;
             } else {
                 hosts.add(host);

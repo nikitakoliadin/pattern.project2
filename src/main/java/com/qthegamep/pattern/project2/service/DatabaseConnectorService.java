@@ -33,10 +33,6 @@ public interface DatabaseConnectorService {
 
     com.mongodb.client.MongoDatabase connectToSyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, MongoConnection connectionType);
 
-    List<com.mongodb.MongoClient> getSyncMongoDBConnections();
-
-    void closeSyncMongoDBConnections();
-
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB();
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(MongoConnection connectionType);
@@ -59,17 +55,21 @@ public interface DatabaseConnectorService {
 
     com.mongodb.async.client.MongoDatabase connectToAsyncMongoDB(CommandListener commandListener, ConnectionPoolListener connectionPoolListener, CodecRegistry codecRegistry, MongoConnection connectionType);
 
-    List<com.mongodb.async.client.MongoClient> getAsyncMongoDBConnections();
-
-    void closeAsyncMongoDBConnections();
-
     JedisPool connectToPoolRedis();
 
     JedisCluster connectToClusterRedis();
 
+    List<com.mongodb.MongoClient> getSyncMongoDBConnections();
+
+    List<com.mongodb.async.client.MongoClient> getAsyncMongoDBConnections();
+
     List<JedisPool> getRedisPools();
 
     List<JedisCluster> getRedisClusters();
+
+    void closeSyncMongoDBConnections();
+
+    void closeAsyncMongoDBConnections();
 
     void closeRedisPools();
 

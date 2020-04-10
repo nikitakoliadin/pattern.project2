@@ -359,21 +359,6 @@ public class ApplicationBinder extends AbstractBinder {
 
     private void bindDatabaseConnector() {
         if (databaseConnectorService == null) {
-            String redisPoolHost = System.getProperty("redis.pool.host");
-            String redisPoolPort = System.getProperty("redis.pool.port");
-            String redisPoolPassword = System.getProperty("redis.pool.password");
-            String redisPoolMaxTotal = System.getProperty("redis.pool.max.total");
-            String redisPoolMaxIdle = System.getProperty("redis.pool.max.idle");
-            String redisPoolTimeout = System.getProperty("redis.pool.timeout");
-            String redisClusterPassword = System.getProperty("redis.cluster.password");
-            String redisClusterTestOnBorrow = System.getProperty("redis.cluster.test.on.borrow");
-            String redisClusterTestOnReturn = System.getProperty("redis.cluster.test.on.return");
-            String redisClusterMaxTotal = System.getProperty("redis.cluster.max.total");
-            String redisClusterMaxIdle = System.getProperty("redis.cluster.max.idle");
-            String redisClusterMinIdle = System.getProperty("redis.cluster.min.idle");
-            String redisClusterConnectionTimeout = System.getProperty("redis.cluster.connection.timeout");
-            String redisClusterSoTimeout = System.getProperty("redis.cluster.so.timeout");
-            String redisClusterMaxAttempts = System.getProperty("redis.cluster.max.attempts");
             String syncMongoDbStandaloneHost = System.getProperty("sync.mongodb.standalone.host");
             String syncMongoDbStandalonePort = System.getProperty("sync.mongodb.standalone.port");
             String syncMongoDbStandaloneUser = System.getProperty("sync.mongodb.standalone.user");
@@ -392,22 +377,22 @@ public class ApplicationBinder extends AbstractBinder {
             String asyncMongoDbClusterUser = System.getProperty("async.mongodb.cluster.user");
             String asyncMongoDbClusterDb = System.getProperty("async.mongodb.cluster.db");
             String asyncMongoDbClusterPassword = System.getProperty("async.mongodb.cluster.pass");
+            String redisPoolHost = System.getProperty("redis.pool.host");
+            String redisPoolPort = System.getProperty("redis.pool.port");
+            String redisPoolPassword = System.getProperty("redis.pool.password");
+            String redisPoolMaxTotal = System.getProperty("redis.pool.max.total");
+            String redisPoolMaxIdle = System.getProperty("redis.pool.max.idle");
+            String redisPoolTimeout = System.getProperty("redis.pool.timeout");
+            String redisClusterPassword = System.getProperty("redis.cluster.password");
+            String redisClusterTestOnBorrow = System.getProperty("redis.cluster.test.on.borrow");
+            String redisClusterTestOnReturn = System.getProperty("redis.cluster.test.on.return");
+            String redisClusterMaxTotal = System.getProperty("redis.cluster.max.total");
+            String redisClusterMaxIdle = System.getProperty("redis.cluster.max.idle");
+            String redisClusterMinIdle = System.getProperty("redis.cluster.min.idle");
+            String redisClusterConnectionTimeout = System.getProperty("redis.cluster.connection.timeout");
+            String redisClusterSoTimeout = System.getProperty("redis.cluster.so.timeout");
+            String redisClusterMaxAttempts = System.getProperty("redis.cluster.max.attempts");
             databaseConnectorService = new DatabaseConnectorServiceImpl(
-                    redisPoolHost,
-                    redisPoolPort,
-                    redisPoolPassword,
-                    redisPoolMaxTotal,
-                    redisPoolMaxIdle,
-                    redisPoolTimeout,
-                    redisClusterPassword,
-                    redisClusterTestOnBorrow,
-                    redisClusterTestOnReturn,
-                    redisClusterMaxTotal,
-                    redisClusterMaxIdle,
-                    redisClusterMinIdle,
-                    redisClusterConnectionTimeout,
-                    redisClusterSoTimeout,
-                    redisClusterMaxAttempts,
                     syncMongoDbStandaloneHost,
                     syncMongoDbStandalonePort,
                     syncMongoDbStandaloneUser,
@@ -426,6 +411,21 @@ public class ApplicationBinder extends AbstractBinder {
                     asyncMongoDbClusterUser,
                     asyncMongoDbClusterDb,
                     asyncMongoDbClusterPassword,
+                    redisPoolHost,
+                    redisPoolPort,
+                    redisPoolPassword,
+                    redisPoolMaxTotal,
+                    redisPoolMaxIdle,
+                    redisPoolTimeout,
+                    redisClusterPassword,
+                    redisClusterTestOnBorrow,
+                    redisClusterTestOnReturn,
+                    redisClusterMaxTotal,
+                    redisClusterMaxIdle,
+                    redisClusterMinIdle,
+                    redisClusterConnectionTimeout,
+                    redisClusterSoTimeout,
+                    redisClusterMaxAttempts,
                     exitManagerService);
         }
         bind(databaseConnectorService).to(DatabaseConnectorService.class).in(Singleton.class);
