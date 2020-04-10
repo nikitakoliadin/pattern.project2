@@ -21,20 +21,38 @@ import com.qthegamep.pattern.project2.service.IOStrategyFactoryService
 import com.qthegamep.pattern.project2.service.KeyBuilderService
 import com.qthegamep.pattern.project2.service.BeanValidationService
 import com.qthegamep.pattern.project2.statistics.Meters
+import de.flapdoodle.embed.mongo.Command
+import de.flapdoodle.embed.mongo.MongodProcess
+import de.flapdoodle.embed.mongo.MongodStarter
+import de.flapdoodle.embed.mongo.config.DownloadConfigBuilder
+import de.flapdoodle.embed.mongo.config.ExtractedArtifactStoreBuilder
+import de.flapdoodle.embed.mongo.config.IMongodConfig
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
+import de.flapdoodle.embed.mongo.config.Net
+import de.flapdoodle.embed.mongo.config.RuntimeConfigBuilder
+import de.flapdoodle.embed.mongo.distribution.Version
+import de.flapdoodle.embed.process.config.IRuntimeConfig
+import de.flapdoodle.embed.process.config.store.HttpProxyFactory
+import de.flapdoodle.embed.process.runtime.Network
 import io.micrometer.core.instrument.Clock
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.CollectorRegistry
 import io.swagger.v3.oas.integration.api.OpenAPIConfiguration
+import org.aspectj.util.FileUtil
 import org.bson.codecs.configuration.CodecRegistry
 import org.glassfish.jersey.internal.inject.InjectionManager
 import org.glassfish.jersey.internal.inject.Injections
 import redis.clients.jedis.JedisCluster
 import redis.clients.jedis.JedisPool
+import redis.embedded.RedisServer
 import spock.lang.Specification
 
 import javax.validation.Validator
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.stream.Collectors
 
 class BaseSpecificationUnitTest extends Specification {
 
@@ -44,6 +62,9 @@ class BaseSpecificationUnitTest extends Specification {
     protected ApplicationBinder.Builder applicationBinderBuilder
     protected ApplicationBinder applicationBinder
     protected InjectionManager injectionManager
+
+    private MongodProcess mongoProcess
+    private RedisServer redisServer
 
     void setup() {
         setupApplicationConfig()
@@ -141,6 +162,83 @@ class BaseSpecificationUnitTest extends Specification {
         return Paths.get(path)
                 .toAbsolutePath()
                 .toString()
+    }
+
+    def createDirectory(String path) {
+        File directory = new File(path)
+        directory.mkdirs()
+    }
+
+    def createFile(String path, String data) {
+        File file = new File(path)
+        FileUtil.writeAsString(file, data)
+    }
+
+    def createCertificate(String path, String data) {
+        Base64.Encoder encoder = Base64.getEncoder()
+        String base64Data = encoder.encodeToString(data.getBytes())
+        createFile(path, base64Data)
+    }
+
+    def readFromFile(String path) {
+        return Files.lines(Paths.get(path), StandardCharsets.UTF_8)
+                .collect(Collectors.toList())
+                .join("")
+    }
+
+    def deleteDirectory(String path) {
+        File directory = new File(path)
+        deleteDirectory(directory)
+    }
+
+    def deleteDirectory(File directory) {
+        File[] files = directory.listFiles()
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file)
+                } else {
+                    file.delete()
+                }
+            }
+        }
+        return directory.delete()
+    }
+
+    def deleteFile(String path) {
+        File file = new File(path)
+        FileUtil.deleteContents(file)
+    }
+
+    def startEmbeddedMongoDB(String host, Integer port) {
+        IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
+                .defaults(Command.MongoD)
+                .artifactStore(new ExtractedArtifactStoreBuilder()
+                        .defaults(Command.MongoD)
+                        .download(new DownloadConfigBuilder()
+                                .defaultsForCommand(Command.MongoD)
+                                .proxyFactory(new HttpProxyFactory("test.proxy", 8080))))
+                .build()
+        IMongodConfig mongoConfig = new MongodConfigBuilder()
+                .version(Version.Main.V3_2)
+                .net(new Net(host, port, Network.localhostIsIPv6()))
+                .build()
+        mongoProcess = MongodStarter.getInstance(runtimeConfig)
+                .prepare(mongoConfig)
+                .start()
+    }
+
+    def stopEmbeddedMongoDB() {
+        mongoProcess.stop()
+    }
+
+    def startEmbeddedRedis(Integer port) {
+        redisServer = new RedisServer(port)
+        redisServer.start()
+    }
+
+    def stopEmbeddedRedis() {
+        redisServer.stop()
     }
 
     def "Should create objects for tests"() {
