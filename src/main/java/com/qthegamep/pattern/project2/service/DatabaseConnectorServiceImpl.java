@@ -415,8 +415,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                 .hosts(Collections.singletonList(serverAddress))
                 .build();
         MongoClientSettings.Builder mongoClientSettingsBuilder = buildAsyncMongoClientSettingsBuilder(commandListener, connectionPoolListener, codecRegistry, clusterSettings);
-        MongoClientSettings mongoClientSettings = createStandaloneAsyncMongoClientSettings(mongoClientSettingsBuilder);
-        com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
+        com.mongodb.async.client.MongoClient mongoClient = createStandaloneAsyncMongoClient(mongoClientSettingsBuilder);
         com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(asyncMongoDbStandaloneDb);
         checkAsyncMongoDBConnection(database);
         LOG.info("Standalone async MongoDB {}:{} was connected", asyncMongoDbStandaloneHost, asyncMongoDbStandalonePort);
@@ -434,8 +433,7 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
                 .hosts(serverAddresses)
                 .build();
         MongoClientSettings.Builder mongoClientSettingsBuilder = buildAsyncMongoClientSettingsBuilder(commandListener, connectionPoolListener, codecRegistry, clusterSettings);
-        MongoClientSettings mongoClientSettings = createClusterAsyncMongoClientSettings(mongoClientSettingsBuilder);
-        com.mongodb.async.client.MongoClient mongoClient = MongoClients.create(mongoClientSettings);
+        com.mongodb.async.client.MongoClient mongoClient = createClusterAsyncMongoClient(mongoClientSettingsBuilder);
         com.mongodb.async.client.MongoDatabase database = mongoClient.getDatabase(asyncMongoDbClusterDb);
         checkAsyncMongoDBConnection(database);
         LOG.info("Cluster async MongoDB were connected:");
@@ -462,24 +460,28 @@ public class DatabaseConnectorServiceImpl implements DatabaseConnectorService {
         }
     }
 
-    private MongoClientSettings createStandaloneAsyncMongoClientSettings(MongoClientSettings.Builder mongoClientSettingsBuilder) {
+    private com.mongodb.async.client.MongoClient createStandaloneAsyncMongoClient(MongoClientSettings.Builder mongoClientSettingsBuilder) {
+        MongoClientSettings mongoClientSettings;
         if (Strings.isNullOrEmpty(asyncMongoDbStandaloneUser)) {
-            return mongoClientSettingsBuilder.build();
+            mongoClientSettings = mongoClientSettingsBuilder.build();
         } else {
             MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(asyncMongoDbStandaloneUser, asyncMongoDbStandaloneDb, asyncMongoDbStandalonePassword.toCharArray());
-            return mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
+            mongoClientSettings = mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
                     .build();
         }
+        return MongoClients.create(mongoClientSettings);
     }
 
-    private MongoClientSettings createClusterAsyncMongoClientSettings(MongoClientSettings.Builder mongoClientSettingsBuilder) {
+    private com.mongodb.async.client.MongoClient createClusterAsyncMongoClient(MongoClientSettings.Builder mongoClientSettingsBuilder) {
+        MongoClientSettings mongoClientSettings;
         if (Strings.isNullOrEmpty(asyncMongoDbClusterUser)) {
-            return mongoClientSettingsBuilder.build();
+            mongoClientSettings = mongoClientSettingsBuilder.build();
         } else {
             MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(asyncMongoDbClusterUser, asyncMongoDbClusterDb, asyncMongoDbClusterPassword.toCharArray());
-            return mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
+            mongoClientSettings = mongoClientSettingsBuilder.credentialList(Collections.singletonList(mongoCredential))
                     .build();
         }
+        return MongoClients.create(mongoClientSettings);
     }
 
     private JedisPool createJedisPool(JedisPoolConfig jedisPoolConfig) {
