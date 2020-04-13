@@ -63,7 +63,7 @@ class BaseSpecificationUnitTest extends Specification {
     protected ApplicationBinder applicationBinder
     protected InjectionManager injectionManager
 
-    private MongodProcess mongoProcess
+    private MongodProcess mongoServer
     private RedisServer redisServer
 
     void setup() {
@@ -210,7 +210,7 @@ class BaseSpecificationUnitTest extends Specification {
         FileUtil.deleteContents(file)
     }
 
-    def startEmbeddedMongoDB(String host, Integer port) {
+    def startEmbeddedMongo(String host, Integer port) {
         IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
                 .defaults(Command.MongoD)
                 .artifactStore(new ExtractedArtifactStoreBuilder()
@@ -223,13 +223,15 @@ class BaseSpecificationUnitTest extends Specification {
                 .version(Version.Main.V3_2)
                 .net(new Net(host, port, Network.localhostIsIPv6()))
                 .build()
-        mongoProcess = MongodStarter.getInstance(runtimeConfig)
+        mongoServer = MongodStarter.getInstance(runtimeConfig)
                 .prepare(mongoConfig)
                 .start()
     }
 
-    def stopEmbeddedMongoDB() {
-        mongoProcess.stop()
+    def stopEmbeddedMongo() {
+        if (mongoServer != null) {
+            mongoServer.stop()
+        }
     }
 
     def startEmbeddedRedis(Integer port) {
@@ -238,7 +240,9 @@ class BaseSpecificationUnitTest extends Specification {
     }
 
     def stopEmbeddedRedis() {
-        redisServer.stop()
+        if (redisServer != null) {
+            redisServer.stop()
+        }
     }
 
     def "Should create objects for tests"() {
