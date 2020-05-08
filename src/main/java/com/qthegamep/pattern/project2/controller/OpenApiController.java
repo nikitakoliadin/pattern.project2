@@ -22,7 +22,7 @@ import javax.ws.rs.core.*;
 
 @Tag(name = "Swagger Open API")
 @OpenAPIDefinition(
-        info = @Info(title = "Cloud Api Back"),
+        info = @Info(title = "Pattern Project 2"),
         security = {@SecurityRequirement(name = "Authorization")})
 @SecurityScheme(
         name = "Authorization",
