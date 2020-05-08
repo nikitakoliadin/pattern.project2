@@ -1,6 +1,7 @@
 package com.qthegamep.pattern.project2.repository.redis;
 
 import com.qthegamep.pattern.project2.binder.property.Property;
+import com.qthegamep.pattern.project2.duration.Durationable;
 import com.qthegamep.pattern.project2.exception.compile.RedisRepositoryException;
 import com.qthegamep.pattern.project2.statistics.Meters;
 import com.qthegamep.pattern.project2.model.container.Error;
@@ -31,21 +32,25 @@ public class RedisRepositoryPoolImpl implements RedisRepository {
     }
 
     @Override
+    @Durationable
     public void save(String key, String value) throws RedisRepositoryException {
         save(key, value, defaultTtl, null);
     }
 
     @Override
+    @Durationable
     public void save(String key, String value, String requestId) throws RedisRepositoryException {
         save(key, value, defaultTtl, requestId);
     }
 
     @Override
+    @Durationable
     public void save(String key, String value, Integer ttl) throws RedisRepositoryException {
         save(key, value, ttl, null);
     }
 
     @Override
+    @Durationable
     public void save(String key, String value, Integer ttl, String requestId) throws RedisRepositoryException {
         LOG.debug("Save -> Key: {} Value: {} TTL: {} RequestId: {}", key, value, ttl, requestId);
         try (Jedis jedis = jedisPool.getResource()) {
@@ -62,21 +67,25 @@ public class RedisRepositoryPoolImpl implements RedisRepository {
     }
 
     @Override
+    @Durationable
     public void saveAll(String key, Map<String, String> value) throws RedisRepositoryException {
         saveAll(key, value, defaultTtl, null);
     }
 
     @Override
+    @Durationable
     public void saveAll(String key, Map<String, String> value, String requestId) throws RedisRepositoryException {
         saveAll(key, value, defaultTtl, requestId);
     }
 
     @Override
+    @Durationable
     public void saveAll(String key, Map<String, String> value, Integer ttl) throws RedisRepositoryException {
         saveAll(key, value, ttl, null);
     }
 
     @Override
+    @Durationable
     public void saveAll(String key, Map<String, String> value, Integer ttl, String requestId) throws RedisRepositoryException {
         LOG.debug("Save all -> Key: {} Values: {} TTL: {} RequestId: {}", key, value, ttl, requestId);
         try (Jedis jedis = jedisPool.getResource()) {
@@ -93,11 +102,13 @@ public class RedisRepositoryPoolImpl implements RedisRepository {
     }
 
     @Override
+    @Durationable
     public Optional<String> read(String key) throws RedisRepositoryException {
         return read(key, null);
     }
 
     @Override
+    @Durationable
     public Optional<String> read(String key, String requestId) throws RedisRepositoryException {
         LOG.debug("Read -> Key: {} RequestId: {}", key, requestId);
         try (Jedis jedis = jedisPool.getResource()) {
@@ -120,11 +131,13 @@ public class RedisRepositoryPoolImpl implements RedisRepository {
     }
 
     @Override
+    @Durationable
     public Optional<Map<String, String>> readAll(String key) throws RedisRepositoryException {
         return readAll(key, null);
     }
 
     @Override
+    @Durationable
     public Optional<Map<String, String>> readAll(String key, String requestId) throws RedisRepositoryException {
         LOG.debug("Read all -> Key: {} RequestId: {}", key, requestId);
         try (Jedis jedis = jedisPool.getResource()) {
@@ -147,11 +160,13 @@ public class RedisRepositoryPoolImpl implements RedisRepository {
     }
 
     @Override
+    @Durationable
     public void remove(String key) throws RedisRepositoryException {
         remove(key, null);
     }
 
     @Override
+    @Durationable
     public void remove(String key, String requestId) throws RedisRepositoryException {
         LOG.debug("Remove from Redis -> Key: {} RequestId: {}", key, requestId);
         try (Jedis jedis = jedisPool.getResource()) {

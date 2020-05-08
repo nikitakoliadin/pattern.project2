@@ -3,6 +3,7 @@ package com.qthegamep.pattern.project2.repository.mongo;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
 import com.qthegamep.pattern.project2.binder.property.Property;
+import com.qthegamep.pattern.project2.duration.Durationable;
 import com.qthegamep.pattern.project2.repository.mongo.callback.AsyncInsertCallback;
 import com.qthegamep.pattern.project2.exception.compile.MongoRepositoryAsyncException;
 import com.qthegamep.pattern.project2.model.entity.Error;
@@ -26,6 +27,7 @@ public class MongoRepositoryAsyncImpl implements MongoRepositoryAsync {
     }
 
     @Override
+    @Durationable
     public void saveError(Error error) throws MongoRepositoryAsyncException {
         try {
             MongoCollection<Error> errorCollection = mongoDatabase.getCollection(errorCollectionName, Error.class);
