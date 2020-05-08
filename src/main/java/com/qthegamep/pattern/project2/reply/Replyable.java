@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(value = {ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface Reply {
+public @interface Replyable {
 
     int times() default 1;
 }
