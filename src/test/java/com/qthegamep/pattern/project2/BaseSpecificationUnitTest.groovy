@@ -88,6 +88,7 @@ class BaseSpecificationUnitTest extends Specification {
     }
 
     def setupApplicationBinder() {
+        Runtime runtimeMock = Mock()
         ExitManagerService exitManagerServiceMock = Mock()
         OpenAPIConfiguration openAPIConfigurationMock = Mock()
         ObjectMapper objectMapperMock = Mock()
@@ -112,6 +113,7 @@ class BaseSpecificationUnitTest extends Specification {
         BeanValidationService beanValidationServiceMock = Mock()
         IOStrategyFactoryService ioStrategyFactoryServiceMock = Mock()
         applicationBinderBuilder = ApplicationBinder.builder()
+                .setRuntime(runtimeMock)
                 .setExitManagerService(exitManagerServiceMock)
                 .setOpenAPIConfiguration(openAPIConfigurationMock)
                 .setObjectMapper(objectMapperMock)
@@ -259,6 +261,7 @@ class BaseSpecificationUnitTest extends Specification {
         and: "correct property binder"
         propertyBinder.getPropertyInjectionResolver() != null
         and: "correct application binder"
+        applicationBinder.getRuntime() != null
         applicationBinder.getExitManagerService() != null
         applicationBinder.getOpenAPIConfiguration() != null
         applicationBinder.getObjectMapper() != null
@@ -284,6 +287,7 @@ class BaseSpecificationUnitTest extends Specification {
         applicationBinder.getIoStrategyFactoryService() != null
         and: "correct injection manager"
         getInstance(propertyBinder.getPropertyInjectionResolver().getClass()) != null
+        getInstance(applicationBinder.getRuntime().getClass()) != null
         getInstance(applicationBinder.getExitManagerService().getClass()) != null
         getInstance(applicationBinder.getOpenAPIConfiguration().getClass()) != null
         getInstance(applicationBinder.getObjectMapper().getClass()) != null

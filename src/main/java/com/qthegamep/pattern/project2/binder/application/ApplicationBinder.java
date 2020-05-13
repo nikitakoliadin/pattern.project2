@@ -52,6 +52,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationBinder.class);
 
+    private Runtime runtime;
     private ExitManagerService exitManagerService;
     private OpenAPIConfiguration openAPIConfiguration;
     private ObjectMapper objectMapper;
@@ -79,7 +80,8 @@ public class ApplicationBinder extends AbstractBinder {
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
 
-    private ApplicationBinder(ExitManagerService exitManagerService,
+    private ApplicationBinder(Runtime runtime,
+                              ExitManagerService exitManagerService,
                               OpenAPIConfiguration openAPIConfiguration,
                               ObjectMapper objectMapper,
                               XmlMapper xmlMapper,
@@ -102,6 +104,7 @@ public class ApplicationBinder extends AbstractBinder {
                               GeneralExceptionMapper generalExceptionMapper,
                               BeanValidationService beanValidationService,
                               IOStrategyFactoryService ioStrategyFactoryService) {
+        this.runtime = runtime;
         this.exitManagerService = exitManagerService;
         this.openAPIConfiguration = openAPIConfiguration;
         this.objectMapper = objectMapper;
@@ -125,6 +128,10 @@ public class ApplicationBinder extends AbstractBinder {
         this.generalExceptionMapper = generalExceptionMapper;
         this.beanValidationService = beanValidationService;
         this.ioStrategyFactoryService = ioStrategyFactoryService;
+    }
+
+    public Runtime getRuntime() {
+        return runtime;
     }
 
     public ExitManagerService getExitManagerService() {
@@ -225,6 +232,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     @Override
     protected void configure() {
+        bindRuntime();
         bindExitManagerService();
         bindOpenAPIConfiguration();
         bindObjectMapper();
@@ -250,9 +258,16 @@ public class ApplicationBinder extends AbstractBinder {
         bindIOStrategyFactoryService();
     }
 
+    private void bindRuntime() {
+        if (runtime == null) {
+            runtime = Runtime.getRuntime();
+        }
+        bind(runtime).to(Runtime.class).in(Singleton.class);
+    }
+
     private void bindExitManagerService() {
         if (exitManagerService == null) {
-            exitManagerService = new ExitManagerServiceImpl();
+            exitManagerService = new ExitManagerServiceImpl(runtime);
         }
         bind(exitManagerService).to(ExitManagerService.class).in(Singleton.class);
     }
@@ -569,6 +584,7 @@ public class ApplicationBinder extends AbstractBinder {
 
     public static class Builder {
 
+        private Runtime runtime;
         private ExitManagerService exitManagerService;
         private OpenAPIConfiguration openAPIConfiguration;
         private ObjectMapper objectMapper;
@@ -592,6 +608,11 @@ public class ApplicationBinder extends AbstractBinder {
         private GeneralExceptionMapper generalExceptionMapper;
         private BeanValidationService beanValidationService;
         private IOStrategyFactoryService ioStrategyFactoryService;
+
+        public Builder setRuntime(Runtime runtime) {
+            this.runtime = runtime;
+            return this;
+        }
 
         public Builder setExitManagerService(ExitManagerService exitManagerService) {
             this.exitManagerService = exitManagerService;
@@ -710,6 +731,7 @@ public class ApplicationBinder extends AbstractBinder {
 
         public ApplicationBinder build() {
             return new ApplicationBinder(
+                    runtime,
                     exitManagerService,
                     openAPIConfiguration,
                     objectMapper,
