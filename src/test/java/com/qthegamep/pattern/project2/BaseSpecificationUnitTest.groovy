@@ -20,6 +20,7 @@ import com.qthegamep.pattern.project2.service.GenerationService
 import com.qthegamep.pattern.project2.service.IOStrategyFactoryService
 import com.qthegamep.pattern.project2.service.KeyBuilderService
 import com.qthegamep.pattern.project2.service.BeanValidationService
+import com.qthegamep.pattern.project2.service.LocaleService
 import com.qthegamep.pattern.project2.statistics.Meters
 import de.flapdoodle.embed.mongo.Command
 import de.flapdoodle.embed.mongo.MongodProcess
@@ -112,6 +113,7 @@ class BaseSpecificationUnitTest extends Specification {
         GeneralExceptionMapper generalExceptionMapperMock = Mock()
         BeanValidationService beanValidationServiceMock = Mock()
         IOStrategyFactoryService ioStrategyFactoryServiceMock = Mock()
+        LocaleService localeServiceMock = Mock()
         applicationBinderBuilder = ApplicationBinder.builder()
                 .setRuntime(runtimeMock)
                 .setExitManagerService(exitManagerServiceMock)
@@ -137,6 +139,7 @@ class BaseSpecificationUnitTest extends Specification {
                 .setGeneralExceptionMapper(generalExceptionMapperMock)
                 .setBeanValidationService(beanValidationServiceMock)
                 .setIoStrategyFactoryService(ioStrategyFactoryServiceMock)
+                .setLocaleService(localeServiceMock)
         applicationBinder = applicationBinderBuilder.build()
     }
 
@@ -285,6 +288,7 @@ class BaseSpecificationUnitTest extends Specification {
         applicationBinder.getGeneralExceptionMapper() != null
         applicationBinder.getBeanValidationService() != null
         applicationBinder.getIoStrategyFactoryService() != null
+        applicationBinder.getLocaleService() != null
         and: "correct injection manager"
         getInstance(propertyBinder.getPropertyInjectionResolver().getClass()) != null
         getInstance(applicationBinder.getRuntime().getClass()) != null
@@ -311,6 +315,7 @@ class BaseSpecificationUnitTest extends Specification {
         getInstance(applicationBinder.getGeneralExceptionMapper().getClass()) != null
         getInstance(applicationBinder.getBeanValidationService().getClass()) != null
         getInstance(applicationBinder.getIoStrategyFactoryService().getClass()) != null
+        getInstance(applicationBinder.getLocaleService().getClass()) != null
         and: "correct metrics"
         Meters.TASK_QUEUE_SIZE_METER.get() == 0L
         Meters.AVAILABLE_GRIZZLY_THREADS_METER.get() == 0L

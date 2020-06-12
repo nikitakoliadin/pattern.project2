@@ -76,6 +76,7 @@ public class ApplicationBinder extends AbstractBinder {
     private GeneralExceptionMapper generalExceptionMapper;
     private BeanValidationService beanValidationService;
     private IOStrategyFactoryService ioStrategyFactoryService;
+    private LocaleService localeService;
 
     private MongoMetricsCommandListener mongoMetricsCommandListener;
     private MongoMetricsConnectionPoolListener mongoMetricsConnectionPoolListener;
@@ -103,7 +104,8 @@ public class ApplicationBinder extends AbstractBinder {
                               KeyBuilderService keyBuilderService,
                               GeneralExceptionMapper generalExceptionMapper,
                               BeanValidationService beanValidationService,
-                              IOStrategyFactoryService ioStrategyFactoryService) {
+                              IOStrategyFactoryService ioStrategyFactoryService,
+                              LocaleService localeService) {
         this.runtime = runtime;
         this.exitManagerService = exitManagerService;
         this.openAPIConfiguration = openAPIConfiguration;
@@ -128,6 +130,7 @@ public class ApplicationBinder extends AbstractBinder {
         this.generalExceptionMapper = generalExceptionMapper;
         this.beanValidationService = beanValidationService;
         this.ioStrategyFactoryService = ioStrategyFactoryService;
+        this.localeService = localeService;
     }
 
     public Runtime getRuntime() {
@@ -226,6 +229,10 @@ public class ApplicationBinder extends AbstractBinder {
         return ioStrategyFactoryService;
     }
 
+    public LocaleService getLocaleService() {
+        return localeService;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -256,6 +263,7 @@ public class ApplicationBinder extends AbstractBinder {
         bindGeneralExceptionMapper();
         bindBeanValidationService();
         bindIOStrategyFactoryService();
+        bindLocaleService();
     }
 
     private void bindRuntime() {
@@ -582,6 +590,14 @@ public class ApplicationBinder extends AbstractBinder {
         }
     }
 
+    private void bindLocaleService() {
+        if (localeService == null) {
+            bind(LocaleServiceImpl.class).to(LocaleService.class).to(Singleton.class);
+        } else {
+            bind(localeService).to(LocaleService.class).to(Singleton.class);
+        }
+    }
+
     public static class Builder {
 
         private Runtime runtime;
@@ -608,6 +624,7 @@ public class ApplicationBinder extends AbstractBinder {
         private GeneralExceptionMapper generalExceptionMapper;
         private BeanValidationService beanValidationService;
         private IOStrategyFactoryService ioStrategyFactoryService;
+        private LocaleService localeService;
 
         public Builder setRuntime(Runtime runtime) {
             this.runtime = runtime;
@@ -729,6 +746,11 @@ public class ApplicationBinder extends AbstractBinder {
             return this;
         }
 
+        public Builder setLocaleService(LocaleService localeService) {
+            this.localeService = localeService;
+            return this;
+        }
+
         public ApplicationBinder build() {
             return new ApplicationBinder(
                     runtime,
@@ -754,7 +776,8 @@ public class ApplicationBinder extends AbstractBinder {
                     keyBuilderService,
                     generalExceptionMapper,
                     beanValidationService,
-                    ioStrategyFactoryService);
+                    ioStrategyFactoryService,
+                    localeService);
         }
     }
 }
