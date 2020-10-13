@@ -103,7 +103,7 @@
         <prometheus.micrometer-registry-prometheus.version>1.3.0</prometheus.micrometer-registry-prometheus.version>
 
         <!-- Test -->
-        <test.junit.version>4.12</test.junit.version>
+        <test.junit.version>4.13.1</test.junit.version>
         <test.spock-core.version>1.3-groovy-2.5</test.spock-core.version>
         <test.assertj-core.version>3.11.1</test.assertj-core.version>
         <test.mockito-core.version>2.23.0</test.mockito-core.version>
